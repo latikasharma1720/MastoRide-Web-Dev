@@ -7,7 +7,7 @@ export default function Contact(){
       <Navbar />
       <main className="center-only">
         <h2 className="welcome">Contact us</h2>
-        <p className="lead">Have questions? Reach out and we’ll help.</p>
+        <p className="lead">Questions or feedback? We’re here to help.</p>
       </main>
       <Footer />
     </div>

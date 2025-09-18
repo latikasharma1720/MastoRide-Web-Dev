@@ -6,8 +6,8 @@ export default function Services(){
     <div className="page-wrapper">
       <Navbar />
       <main className="center-only">
-        <h2 className="welcome">Services / Pricing</h2>
-        <p className="lead">City runs, airport trips, and late-evening rides with student pricing.</p>
+        <h2 className="welcome">Services</h2>
+        <p className="lead">City trips, airport runs, late-evening rides—student pricing applies.</p>
       </main>
       <Footer />
     </div>
