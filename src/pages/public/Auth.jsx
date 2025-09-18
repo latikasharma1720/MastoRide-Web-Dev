@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { isPfwEmail, isStrongPassword } from "../../utils/validation";
+import QRDownload from "../../components/QRDownload"; // ✅ add this
 
 export default function Auth({ initialTab = "signup" }) {
   const signupRadio = useRef(null);
@@ -60,13 +61,30 @@ export default function Auth({ initialTab = "signup" }) {
 
         <section className="card-wrap">
           {/* radio tabs */}
-          <input ref={signupRadio} type="radio" name="auth-tab" id="tab-signup" className="tab-radio" defaultChecked />
-          <input ref={loginRadio}  type="radio" name="auth-tab" id="tab-login"  className="tab-radio" />
+          <input
+            ref={signupRadio}
+            type="radio"
+            name="auth-tab"
+            id="tab-signup"
+            className="tab-radio"
+            defaultChecked
+          />
+          <input
+            ref={loginRadio}
+            type="radio"
+            name="auth-tab"
+            id="tab-login"
+            className="tab-radio"
+          />
 
           <div className="auth-card-large">
             <div className="tablist" role="tablist" aria-label="Authentication">
-              <label className="tab" htmlFor="tab-signup" role="tab" aria-controls="panel-signup">Create account</label>
-              <label className="tab" htmlFor="tab-login"  role="tab" aria-controls="panel-login">Log in</label>
+              <label className="tab" htmlFor="tab-signup" role="tab" aria-controls="panel-signup">
+                Create account
+              </label>
+              <label className="tab" htmlFor="tab-login" role="tab" aria-controls="panel-login">
+                Log in
+              </label>
             </div>
 
             {/* Sign Up panel */}
@@ -80,34 +98,57 @@ export default function Auth({ initialTab = "signup" }) {
                 <div className="field">
                   <label htmlFor="su-email">PFW email</label>
                   <input
-                    id="su-email" type="email" placeholder="name@pfw.edu" autoComplete="email"
-                    value={suEmail} onChange={(e)=>setSuEmail(e.target.value)} aria-invalid={!!suErrors.email}
+                    id="su-email"
+                    type="email"
+                    placeholder="name@pfw.edu"
+                    autoComplete="email"
+                    value={suEmail}
+                    onChange={(e) => setSuEmail(e.target.value)}
+                    aria-invalid={!!suErrors.email}
                     aria-describedby="su-email-err su-email-hint"
                   />
                   {!suErrors.email && (
                     <div id="su-email-hint" className="hint">Use your @pfw.edu email address.</div>
                   )}
-                  {suErrors.email && <div id="su-email-err" className="error" role="alert">{suErrors.email}</div>}
+                  {suErrors.email && (
+                    <div id="su-email-err" className="error" role="alert">{suErrors.email}</div>
+                  )}
                 </div>
 
                 <div className="field">
                   <label htmlFor="su-password">Create password</label>
                   <input
-                    id="su-password" type="password" placeholder="8+ characters" minLength={8} autoComplete="new-password"
-                    value={suPw} onChange={(e)=>setSuPw(e.target.value)} aria-invalid={!!suErrors.password}
+                    id="su-password"
+                    type="password"
+                    placeholder="8+ characters"
+                    minLength={8}
+                    autoComplete="new-password"
+                    value={suPw}
+                    onChange={(e) => setSuPw(e.target.value)}
+                    aria-invalid={!!suErrors.password}
                     aria-describedby="su-pw-err"
                   />
-                  {suErrors.password && <div id="su-pw-err" className="error" role="alert">{suErrors.password}</div>}
+                  {suErrors.password && (
+                    <div id="su-pw-err" className="error" role="alert">{suErrors.password}</div>
+                  )}
                 </div>
 
                 <div className="field">
                   <label htmlFor="su-confirm">Confirm password</label>
                   <input
-                    id="su-confirm" type="password" placeholder="Re-enter password" minLength={8} autoComplete="new-password"
-                    value={suConfirm} onChange={(e)=>setSuConfirm(e.target.value)} aria-invalid={!!suErrors.confirm}
+                    id="su-confirm"
+                    type="password"
+                    placeholder="Re-enter password"
+                    minLength={8}
+                    autoComplete="new-password"
+                    value={suConfirm}
+                    onChange={(e) => setSuConfirm(e.target.value)}
+                    aria-invalid={!!suErrors.confirm}
                     aria-describedby="su-confirm-err"
                   />
-                  {suErrors.confirm && <div id="su-confirm-err" className="error" role="alert">{suErrors.confirm}</div>}
+                  {suErrors.confirm && (
+                    <div id="su-confirm-err" className="error" role="alert">{suErrors.confirm}</div>
+                  )}
                 </div>
 
                 <button className="btn btn-white btn-full" type="submit">Sign Up</button>
@@ -128,21 +169,35 @@ export default function Auth({ initialTab = "signup" }) {
                 <div className="field">
                   <label htmlFor="li-email">Email</label>
                   <input
-                    id="li-email" type="email" placeholder="name@pfw.edu" autoComplete="username"
-                    value={liEmail} onChange={(e)=>setLiEmail(e.target.value)} aria-invalid={!!liErrors.email}
+                    id="li-email"
+                    type="email"
+                    placeholder="name@pfw.edu"
+                    autoComplete="username"
+                    value={liEmail}
+                    onChange={(e) => setLiEmail(e.target.value)}
+                    aria-invalid={!!liErrors.email}
                     aria-describedby="li-email-err"
                   />
-                  {liErrors.email && <div id="li-email-err" className="error" role="alert">{liErrors.email}</div>}
+                  {liErrors.email && (
+                    <div id="li-email-err" className="error" role="alert">{liErrors.email}</div>
+                  )}
                 </div>
 
                 <div className="field">
                   <label htmlFor="li-password">Password</label>
                   <input
-                    id="li-password" type="password" autoComplete="current-password" placeholder="Your password"
-                    value={liPw} onChange={(e)=>setLiPw(e.target.value)} aria-invalid={!!liErrors.password}
+                    id="li-password"
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="Your password"
+                    value={liPw}
+                    onChange={(e) => setLiPw(e.target.value)}
+                    aria-invalid={!!liErrors.password}
                     aria-describedby="li-pw-err"
                   />
-                  {liErrors.password && <div id="li-pw-err" className="error" role="alert">{liErrors.password}</div>}
+                  {liErrors.password && (
+                    <div id="li-pw-err" className="error" role="alert">{liErrors.password}</div>
+                  )}
                 </div>
 
                 <button className="btn btn-white btn-full" type="submit">Log in</button>
@@ -151,6 +206,9 @@ export default function Auth({ initialTab = "signup" }) {
             </section>
           </div>
         </section>
+
+        {/* ✅ QR Download section */}
+        <QRDownload />
       </main>
 
       <Footer />
