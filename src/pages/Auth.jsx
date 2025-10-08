@@ -1,3 +1,5 @@
+import { setUser } from "../../utils/session";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -8,6 +10,7 @@ import QRDownload from "../../components/QRDownload"; // ✅ add this
 export default function Auth({ initialTab = "signup" }) {
   const signupRadio = useRef(null);
   const loginRadio = useRef(null);
+  const navigate = useNavigate(); // ✅ added navigation hook
 
   useEffect(() => {
     if (initialTab === "login") loginRadio.current.checked = true;
@@ -25,6 +28,7 @@ export default function Auth({ initialTab = "signup" }) {
   const [liPw, setLiPw] = useState("");
   const [liErrors, setLiErrors] = useState({});
 
+  // ✅ Updated signup handler
   const handleSignup = (e) => {
     e.preventDefault();
     const errs = {};
@@ -32,19 +36,48 @@ export default function Auth({ initialTab = "signup" }) {
     if (!isStrongPassword(suPw)) errs.password = "Password must be at least 8 characters.";
     if (suPw !== suConfirm) errs.confirm = "Passwords do not match.";
     setSuErrors(errs);
+
     if (Object.keys(errs).length === 0) {
-      alert("Sign up form valid ✅ (hook backend later)");
+      // ✅ Save user to session and redirect to profile
+      setUser({
+        id: "u1",
+        name: suEmail.split("@")[0],
+        email: suEmail.trim().toLowerCase(),
+        role: "user",
+      });
+      navigate("/user/profile", { replace: true });
     }
   };
 
+  // ✅ Updated login handler
   const handleLogin = (e) => {
     e.preventDefault();
     const errs = {};
     if (!/\S+@\S+\.\S+/.test(liEmail)) errs.email = "Enter a valid email.";
     if (!liPw) errs.password = "Enter your password.";
     setLiErrors(errs);
+
     if (Object.keys(errs).length === 0) {
-      alert("Login form valid ✅ (hook backend later)");
+      const emailLower = liEmail.trim().toLowerCase();
+
+      // ✅ Assign role: admin@mastoride.app → admin, others → user
+      if (emailLower === "admin@mastoride.app") {
+        setUser({
+          id: "a1",
+          name: "Admin",
+          email: "admin@mastoride.app",
+          role: "admin",
+        });
+        navigate("/admin/profile", { replace: true });
+      } else {
+        setUser({
+          id: "u1",
+          name: emailLower.split("@")[0],
+          email: emailLower,
+          role: "user",
+        });
+        navigate("/user/profile", { replace: true });
+      }
     }
   };
 

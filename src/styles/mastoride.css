@@ -168,3 +168,53 @@ body{
   .field input{height:50px}
   .qr-card{ width:min(100%, 92%); padding:1rem }
 }
+/* layout spacing so content isn't hidden under fixed navbar */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 88px 16px 24px; /* top padding = navbar height */
+}
+
+/* navbar */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: #111;
+  color: #fff;
+  z-index: 1000;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+.logo { width: 40px; height: 40px; border-radius: 10px; }
+
+.nav-links { display: flex; gap: 18px; }
+.nav-links a { color: #fff; text-decoration: none; opacity: .9; }
+.nav-links a.active { opacity: 1; border-bottom: 2px solid #fff; }
+
+.nav-actions { display: flex; gap: 10px; align-items: center; margin-left: 24px; }
+.btn { padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; background: #fff; color: #111; text-decoration: none; }
+.btn.ghost { background: transparent; color: #fff; border-color: #fff; }
+.btn.warn { background: #ffd87a; }
+.btn.danger { background: #ff7a7a; color: #111; border: none; }
+
+.admin-chip { display: flex; gap: 10px; align-items: center; }
+.badge { background: #79ffa8; color: #111; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.email { color: #fff; opacity: .85; font-size: 12px; }

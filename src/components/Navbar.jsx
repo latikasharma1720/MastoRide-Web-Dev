@@ -1,25 +1,35 @@
-import { NavLink, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isAdminLoggedIn, logoutAdmin, getAdmin } from "../utils/adminAuth";
 
 export default function Navbar() {
-  const navClass = ({ isActive }) => `nav-btn${isActive ? " active" : ""}`;
+  const nav = useNavigate();
+  const admin = getAdmin();
+  const isAdmin = isAdminLoggedIn();
+
+  const signOutAdmin = () => {
+    logoutAdmin();
+    nav("/", { replace: true });
+  };
 
   return (
-    <header className="site-header">
-      <div className="brand">
-        <Link className="brand-link" to="/" aria-label="MastoRide Home">
-          <img src="/images/ourlogos.jpeg" alt="MastoRide logo" className="brand-logo" />
-        </Link>
-      </div>
+    <header className="your-navbar-classes">
+      {/* ...your brand + normal nav links... */}
 
-      <nav className="site-nav" aria-label="Primary">
-        <ul>
-          <li><NavLink className={navClass} to="/">Home</NavLink></li>
-          <li><NavLink className={navClass} to="/about">About</NavLink></li>
-          <li><NavLink className={navClass} to="/services">Services</NavLink></li>
-          <li><NavLink className={navClass} to="/pricing">Pricing</NavLink></li>
-          <li><NavLink className={navClass} to="/contact">Contact us</NavLink></li>
-        </ul>
-      </nav>
+      <div className="auth-actions">
+        {!isAdmin ? (
+          <>
+            {/* your existing Log in / Sign up */}
+            <Link className="btn warn" to="/admin/login">Log in as Admin</Link>
+          </>
+        ) : (
+          <div className="admin-chip">
+            <span className="badge">Admin</span>
+            <span className="email">{admin?.email}</span>
+            <Link className="btn ghost" to="/admin">Dashboard</Link>
+            <button className="btn danger" onClick={signOutAdmin}>Sign out</button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
