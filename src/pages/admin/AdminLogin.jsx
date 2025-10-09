@@ -1,40 +1,96 @@
 import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { loginAdmin, isAdminLoggedIn } from "../../utils/adminAuth";
+import { setUser, getUser } from "../../utils/session";
+import Navbar from "../../components/Navbar";
 
 export default function AdminLogin() {
-  const nav = useNavigate();
+  const navigate = useNavigate();
+  const currentUser = getUser();
+  
   const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
 
-  if (isAdminLoggedIn()) return <Navigate to="/admin" replace />;
+  // If already logged in as admin, redirect to dashboard
+  if (currentUser && currentUser.role === "admin") {
+    return <Navigate to="/admin" replace />;
+  }
 
-  const submit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const res = loginAdmin(email.trim(), pass);
-    if (res.ok) nav("/admin", { replace: true });
-    else setErr(res.error || "Login failed");
+    setErr("");
+    
+    const emailLower = email.trim().toLowerCase();
+    
+    // Check if credentials are correct
+    if (emailLower === "admin@mastoride.edu" && password === "Admin#123") {
+      setUser({
+        id: "admin1",
+        name: "Administrator",
+        email: emailLower,
+        role: "admin",
+      });
+      navigate("/admin", { replace: true });
+    } else {
+      setErr("Invalid email or password");
+    }
   };
 
   return (
-    <div className="page-wrapper" style={{ maxWidth: 420 }}>
-      <h2>Admin Login</h2>
-      {err && <p style={{ color: "#b00020" }}>{err}</p>}
-      <form className="stack" onSubmit={submit}>
-        <label>
-          Email
-          <input value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </label>
-        <label>
-          Password
-          <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} required />
-        </label>
-        <button className="btn" type="submit">Log in</button>
-      </form>
-      <p style={{ marginTop: 8, opacity: .75 }}>
-        Demo: admin@mastoride.edu / Admin#123
-      </p>
-    </div>
+    <>
+      <Navbar />
+      <div className="page-container">
+        <div className="auth-stack">
+          {/* Main Login Card */}
+          <div className="card">
+            <div className="card-head">
+              <h2>Admin Login</h2>
+              <p className="sub">Access administrator dashboard</p>
+            </div>
+
+            {err && (
+              <div style={{ 
+                padding: '12px', 
+                background: '#ffebee', 
+                color: '#b00020', 
+                borderRadius: '8px',
+                fontSize: '14px',
+                marginTop: '16px'
+              }}>
+                {err}
+              </div>
+            )}
+
+            <form className="form-grid" onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+              <div className="field">
+                <label className="label">Email</label>
+                <input 
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@mastoride.edu"
+                  required
+                />
+              </div>
+
+              <div className="field">
+                <label className="label">Password</label>
+                <input 
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
+              <button className="btn-wide" type="submit">
+                Log in
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

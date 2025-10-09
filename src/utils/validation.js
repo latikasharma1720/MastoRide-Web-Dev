@@ -1,7 +1,17 @@
-export function isPfwEmail(email = "") {
-  return /^[^\s@]+@pfw\.edu$/i.test(email.trim());
-}
+// src/utils/validation.js
 
-export function isStrongPassword(pw = "") {
-  return typeof pw === "string" && pw.length >= 8;
-}
+export const isPfwEmail = (email) => {
+  if (!email) return false;
+  return email.toLowerCase().trim().endsWith('@pfw.edu');
+};
+
+export const isStrongPassword = (password) => {
+  if (!password) return false;
+  return password.length >= 8;
+};
+
+export const isValidEmail = (email) => {
+  if (!email) return false;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
