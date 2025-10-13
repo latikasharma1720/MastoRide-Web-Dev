@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - RideNow</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="Contact.css">
+</head>
+<body>
+
+  <header class="navbar">
+  <div class="logo">
+    <img src="images/logo.png" alt="MastoRide Logo">
+    <span>MastoRide</span>
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services / Pricing</a></li>
+      <li><a href="contact.html" class="active">Contact Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <main class="container">
+    <!-- Contact Form -->
+    <section class="contact-form">
+      <h2>Contact Us</h2>
+      <form action="#" method="post">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email / Phone</label>
+        <input type="text" id="email" name="email" required>
+
+        <label for="role">I am a:</label>
+        <select id="role" name="role" required>
+          <option value="">-- Select --</option>
+          <option value="rider">Rider</option>
+          <option value="driver">Driver</option>
+        </select>
+
+        <label for="booking">Booking ID (optional)</label>
+        <input type="text" id="booking" name="booking">
+
+        <label for="issue">Issue Type</label>
+        <select id="issue" name="issue" required>
+          <option value="">-- Select --</option>
+          <option value="payment">Payment Issue</option>
+          <option value="lost-item">Lost Item</option>
+          <option value="account">Account Issue</option>
+          <option value="ride">Ride Feedback</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <!-- Contact Info -->
+    <aside class="contact-info">
+      <h2>Get in Touch</h2>
+      <div class="info-item">
+        <strong>📍 Our Office</strong>
+        <p>Purdue University, Fort Wayne</p>
+      </div>
+      <div class="info-item">
+        <strong>📞 Customer Care</strong>
+        <p>+1 (260) 123-4567</p>
+      </div>
+      <div class="info-item">
+        <strong>✉️ Email Support</strong>
+        <p>support@pfw.edu</p>
+      </div>
+      <div class="info-item">
+        <img src="images/mastodon.jpg" alt="Mastodon Mascot" class="contact-img">
+        <p>Got a question or ran into a bump on your ride? 🚘 Don’t worry — we’ve got your back! 
+          Whether it’s payments, lost items, or just some feedback, drop us a message below and our team will get you moving again in no time. 💬✨</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 RideNow. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
