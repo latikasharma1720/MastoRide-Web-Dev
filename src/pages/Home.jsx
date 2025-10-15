@@ -1,10 +1,45 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 export default function Home() {
   return (
-    <section className="mr-hero">
-      <h1 className="mr-hero-title">Welcome to MastoRide</h1>
-      <p className="mr-hero-sub">
-        Affordable, safe campus rides for PFW students with a valid .edu email.
-      </p>
-    </section>
+    <main className="home-only-gallery">
+      <div className="home-content">
+        {/* Animated Image Gallery */}
+        <div className="hero-gallery">
+          <figure className="gallery-card">
+            <img
+              src="/assets/home/ride1.jpeg"
+              alt="Campus Ride"
+            />
+          </figure>
+
+          <figure className="gallery-card">
+            <img
+              src="/assets/home/ride2.jpeg"
+              alt="Affordable Ride"
+            />
+          </figure>
+
+          <figure className="gallery-card">
+            <img
+              src="/assets/home/ride3.jpeg"
+              alt="Safe Student Commute"
+            />
+          </figure>
+        </div>
+
+        {/* Welcome Message */}
+        <h1 className="welcome-message">
+          Welcome to the place for saving more on rides in Fort Wayne! <br />
+          Exclusive to PFW students.
+        </h1>
+
+        {/* CTA Button */}
+        <Link to="/signup" className="join-btn">
+          Join for Free
+        </Link>
+      </div>
+    </main>
   );
 }
