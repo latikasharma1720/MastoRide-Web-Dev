@@ -1,3 +1,4 @@
+// src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { setUser } from "../utils/session";
@@ -6,10 +7,11 @@ import Navbar from "../components/Navbar";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({});
+
+  const [email, setEmail]               = useState("");
+  const [password, setPassword]         = useState("");
+  const [confirmPassword, setConfirm]   = useState("");
+  const [errors, setErrors]             = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,102 +48,83 @@ export default function Signup() {
   return (
     <>
       <Navbar />
-      <div className="page-container">
-        <div className="auth-stack">
-          <div className="card">
-            <div className="card-head">
-              <h2>Create a new account</h2>
-              <p className="sub">It's quick and easy.</p>
+
+      {/* Same outer wrappers as Login */}
+      <div className="modern-login-page">
+        <div className="modern-login-container">
+          <div className="modern-login-card">
+            {/* Header (uses the same .login-header styles) */}
+            <div className="login-header">
+              <h1>Create your account</h1>
+              <p>It’s quick and easy — exclusive to PFW students.</p>
             </div>
 
-            <form
-              className="form-grid"
-              onSubmit={handleSubmit}
-              style={{ marginTop: "20px" }}
-            >
-              <div className="field">
-                <label className="label">PFW email</label>
+            {/* Form (same class names as Login) */}
+            <form className="modern-login-form" onSubmit={handleSubmit}>
+              {/* Email */}
+              <div className="modern-field">
+                <label htmlFor="email">PFW Email</label>
                 <input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@pfw.edu"
-                  required
+                  className={errors.email ? "error" : ""}
                 />
                 {!errors.email && (
-                  <p className="hint">Use your @pfw.edu email address.</p>
+                  <small className="hint">Use your @pfw.edu email address.</small>
                 )}
                 {errors.email && (
-                  <div
-                    style={{
-                      color: "#b00020",
-                      fontSize: "13px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {errors.email}
-                  </div>
+                  <span className="error-text">{errors.email}</span>
                 )}
               </div>
 
-              <div className="field">
-                <label className="label">Create password</label>
+              {/* Password */}
+              <div className="modern-field">
+                <label htmlFor="password">Create password</label>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="8+ characters"
-                  minLength={8}
-                  required
+                  className={errors.password ? "error" : ""}
                 />
                 {errors.password && (
-                  <div
-                    style={{
-                      color: "#b00020",
-                      fontSize: "13px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {errors.password}
-                  </div>
+                  <span className="error-text">{errors.password}</span>
                 )}
               </div>
 
-              <div className="field">
-                <label className="label">Confirm password</label>
+              {/* Confirm Password */}
+              <div className="modern-field">
+                <label htmlFor="confirm">Confirm password</label>
                 <input
+                  id="confirm"
                   type="password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => setConfirm(e.target.value)}
                   placeholder="Re-enter password"
-                  minLength={8}
-                  required
+                  className={errors.confirm ? "error" : ""}
                 />
                 {errors.confirm && (
-                  <div
-                    style={{
-                      color: "#b00020",
-                      fontSize: "13px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {errors.confirm}
-                  </div>
+                  <span className="error-text">{errors.confirm}</span>
                 )}
               </div>
 
-              <button className="btn-wide" type="submit">
+              {/* Submit */}
+              <button type="submit" className="modern-login-btn">
                 Sign Up
               </button>
 
-              <p className="fineprint">
-                By clicking Sign Up, you agree to our Terms and acknowledge our
-                Privacy Policy.
+              {/* Fine print + switch link (styled like Login’s text) */}
+              <p className="fineprint" style={{ textAlign: "center", marginTop: 12 }}>
+                By clicking Sign Up, you agree to our Terms and acknowledge our Privacy Policy.
               </p>
 
-              <p className="switch">
+              <div className="signup-prompt" style={{ textAlign: "center" }}>
                 Already have an account? <Link to="/login">Log in</Link>
-              </p>
+              </div>
             </form>
           </div>
         </div>

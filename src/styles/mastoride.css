@@ -9878,3 +9878,228 @@ a.forgot-link:hover,
 .signup-prompt a:hover {
   color: #000000 !important;
 }
+/* ========= Auth (Login & Signup) — shared look ========= */
+/* Page wrapper */
+.modern-login-page,
+.modern-signup-page {
+  background: #f9f9f9;
+  min-height: calc(100vh - 72px); /* header height guard */
+  padding: 56px 16px 96px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Max width container */
+.modern-login-container,
+.modern-signup-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Success / info banner */
+.success-banner,
+.signup-success-banner {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+/* Card */
+.modern-login-card,
+.modern-signup-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 18px 38px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.04);
+  padding: 28px;
+}
+
+/* Header */
+.login-header,
+.signup-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.login-header h1,
+.signup-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: .2px;
+}
+.login-header p,
+.signup-header p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Form */
+.modern-login-form,
+.modern-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+/* Field */
+.modern-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modern-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+}
+.modern-field input,
+.modern-field select {
+  height: 44px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 14px;
+  background: #fff;
+  font-size: 15px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.modern-field input:focus,
+.modern-field select:focus {
+  outline: none;
+  border-color: #f0b84e;
+  box-shadow: 0 0 0 4px rgba(240,184,78,.18);
+}
+
+/* Error state */
+.modern-field input.error,
+.modern-field select.error {
+  border-color: #e53935 !important;
+  box-shadow: 0 0 0 4px rgba(229,57,53,.12);
+}
+.error-text {
+  color: #e53935;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Options row (remember me / tos / links) */
+.login-options,
+.signup-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+.remember-checkbox,
+.tos-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  font-size: 14px;
+  color: #333;
+}
+.remember-checkbox input,
+.tos-checkbox input {
+  width: 16px;
+  height: 16px;
+}
+.forgot-link,
+.mini-link {
+  color: #111;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 1px;
+}
+.forgot-link:hover,
+.mini-link:hover {
+  border-color: #111;
+}
+
+/* Submit button (shared) */
+.modern-login-btn,
+.modern-signup-btn {
+  height: 46px;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  color: #171717;
+  background-image: linear-gradient(180deg, #f6cd72 0%, #e2b44f 100%);
+  box-shadow: 0 12px 30px rgba(226, 180, 79, .35);
+  transition: transform .06s ease, box-shadow .15s ease, filter .15s ease;
+}
+.modern-login-btn:hover,
+.modern-signup-btn:hover {
+  filter: brightness(1.02);
+  box-shadow: 0 16px 34px rgba(226, 180, 79, .40);
+}
+.modern-login-btn:active,
+.modern-signup-btn:active {
+  transform: translateY(1px);
+}
+
+/* Bottom prompt */
+.signup-prompt,
+.login-prompt {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+}
+.signup-prompt a,
+.login-prompt a {
+  font-weight: 700;
+  color: #111;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 1px;
+}
+.signup-prompt a:hover,
+.login-prompt a:hover {
+  border-color: #111;
+}
+
+/* Responsive tweaks */
+@media (max-width: 520px) {
+  .modern-login-card,
+  .modern-signup-card {
+    padding: 22px;
+    border-radius: 14px;
+  }
+  .login-header h1,
+  .signup-header h1 {
+    font-size: 24px;
+  }
+}
+/* --- Fix for invisible text inside signup inputs --- */
+.modern-login-card input,
+.modern-login-card input::placeholder {
+  color: #111 !important;              /* dark text for good contrast */
+}
+
+.modern-login-card input::placeholder {
+  opacity: 0.6 !important;             /* slightly lighter placeholders */
+}
+
+.modern-login-card input:focus {
+  color: #000 !important;              /* ensure focused input stays visible */
+}
+/* --- Signup fine print color fix --- */
+.fineprint {
+  color: #000 !important;   /* pure black text */
+  opacity: 0.9;             /* slight softening for visual balance */
+}
