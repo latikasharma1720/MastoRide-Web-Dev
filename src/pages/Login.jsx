@@ -8,6 +8,7 @@ export default function Login() {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState(location.state?.message || "");
 
@@ -57,96 +58,84 @@ export default function Login() {
   return (
     <>
       <Navbar />
-      <div className="page-container">
-        <div className="auth-stack">
+      <div className="modern-login-page">
+        <div className="modern-login-container">
+          {/* Success Message */}
           {successMsg && (
-            <div
-              style={{
-                padding: "16px 20px",
-                background: "#e8f5e9",
-                color: "#2e7d32",
-                borderRadius: "12px",
-                fontSize: "15px",
-                fontWeight: "600",
-                textAlign: "center",
-                width: "100%",
-                maxWidth: "400px",
-              }}
-            >
-              ✓ {successMsg}
+            <div className="success-banner">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              {successMsg}
             </div>
           )}
 
-          <div className="card" style={{ width: "100%", maxWidth: "400px" }}>
-            <div className="card-head">
-              <h2>Log in</h2>
-              <p className="sub">Welcome back — sign in to continue.</p>
+          {/* Login Card */}
+          <div className="modern-login-card">
+            {/* Header */}
+            <div className="login-header">
+              <h1>Member Login</h1>
+              <p>Welcome back! Please sign in to continue.</p>
             </div>
 
-            <form
-              className="form-grid"
-              onSubmit={handleSubmit}
-              style={{ marginTop: "20px" }}
-            >
-              <div className="field">
-                <label className="label">PFW email</label>
+            {/* Form */}
+            <form className="modern-login-form" onSubmit={handleSubmit}>
+              {/* Email Field */}
+              <div className="modern-field">
+                <label htmlFor="email">PFW Email</label>
                 <input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@pfw.edu"
-                  required
+                  className={errors.email ? "error" : ""}
                 />
                 {errors.email && (
-                  <div
-                    style={{
-                      color: "#b00020",
-                      fontSize: "13px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {errors.email}
-                  </div>
+                  <span className="error-text">{errors.email}</span>
                 )}
               </div>
 
-              <div className="field">
-                <label className="label">Password</label>
+              {/* Password Field */}
+              <div className="modern-field">
+                <label htmlFor="password">Password</label>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Your password"
-                  required
+                  placeholder="Enter your password"
+                  className={errors.password ? "error" : ""}
                 />
                 {errors.password && (
-                  <div
-                    style={{
-                      color: "#b00020",
-                      fontSize: "13px",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {errors.password}
-                  </div>
+                  <span className="error-text">{errors.password}</span>
                 )}
               </div>
 
-              <button className="btn-wide" type="submit">
-                Log in
+              {/* Remember Me & Forgot Password */}
+              <div className="login-options">
+                <label className="remember-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <span>Remember me</span>
+                </label>
+                <Link to="/forgot-password" className="forgot-link">
+                  Lost your password?
+                </Link>
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className="modern-login-btn">
+                Login
               </button>
 
-              <div
-                className="links-row"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "14px",
-                  marginTop: "12px",
-                }}
-              >
-                <Link to="/forgot-password">Forgot password?</Link>
-                <Link to="/signup">Create an account</Link>
+              {/* Sign Up Link */}
+              <div className="signup-prompt">
+                Not a member? <Link to="/signup">Register today</Link>
               </div>
             </form>
           </div>
