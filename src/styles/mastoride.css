@@ -7582,3 +7582,2299 @@ main.home-fullpage.allow-scroll {
   gap: 20px !important;
   padding: 20px 0 !important;
 }
+/* ========== MODERN LOGIN PAGE ========== */
+
+.modern-login-page {
+  min-height: calc(100vh - 72px);
+  background: linear-gradient(135deg, #e9d7a8 0%, #d1b985 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  margin-top: 72px;
+}
+
+.modern-login-container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Success Banner */
+.success-banner {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login Card */
+.modern-login-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;  /* Reduced shadow */
+  animation: fadeInUp 0.6s ease;
+  border: none;  /* Remove border if you want it cleaner */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1b1b1b;
+  margin: 0 0 8px;
+}
+
+.login-header p {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+/* Form */
+.modern-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Field */
+.modern-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modern-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modern-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.modern-field input:focus {
+  outline: none;
+  border-color: #c9a961;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.modern-field input.error {
+  border-color: #d32f2f;
+}
+
+.modern-field input::placeholder {
+  color: #aaa;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Login Options Row */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -4px;
+}
+
+/* Remember Me Checkbox */
+.remember-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.remember-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #c9a961;
+}
+
+/* Forgot Password Link */
+.forgot-link {
+  font-size: 14px;
+  color: #c9a961;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* Login Button */
+.modern-login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%);
+  color: #1b1b1b;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(201, 169, 97, 0.3);
+  margin-top: 8px;
+}
+
+.modern-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(201, 169, 97, 0.4);
+}
+
+.modern-login-btn:active {
+  transform: translateY(0);
+}
+
+/* Sign Up Prompt */
+.signup-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.signup-prompt a {
+  color: #c9a961;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.signup-prompt a:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .modern-login-page {
+    padding: 20px 16px;
+  }
+
+  .modern-login-card {
+    padding: 36px 28px;
+  }
+
+  .login-header h1 {
+    font-size: 24px;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-login-card {
+    padding: 32px 24px;
+  }
+
+  .login-header h1 {
+    font-size: 22px;
+  }
+
+  .modern-field input {
+    padding: 12px 14px;
+  }
+
+  .modern-login-btn {
+    padding: 14px;
+  }
+}
+/* ========== MODERN LOGIN PAGE (NO BACKGROUND CARD) ========== */
+
+.modern-login-page {
+  min-height: calc(100vh - 72px);
+  background: #d8bd77; /* Solid beige background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px 80px;
+  margin-top: 72px;
+}
+
+.modern-login-container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+/* Success Banner */
+.success-banner {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 18px 24px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login Card - Clean white card with no background */
+.modern-login-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;  /* Reduced shadow */
+  animation: fadeInUp 0.6s ease;
+  border: none;  /* Remove border if you want it cleaner */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-header h1 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1b1b1b;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.login-header p {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Form */
+.modern-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Field */
+.modern-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modern-field label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1b1b1b;
+  letter-spacing: 0.2px;
+}
+
+.modern-field input {
+  width: 100%;
+  padding: 15px 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+  font-family: inherit;
+}
+
+.modern-field input:focus {
+  outline: none;
+  border-color: #c9a961;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.modern-field input.error {
+  border-color: #d32f2f;
+  background: #fff5f5;
+}
+
+.modern-field input::placeholder {
+  color: #aaa;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: -2px;
+}
+
+/* Login Options Row */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
+/* Remember Me Checkbox */
+.remember-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.remember-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #c9a961;
+}
+
+.remember-checkbox span {
+  user-select: none;
+}
+
+/* Forgot Password Link */
+.forgot-link {
+  font-size: 14px;
+  color: #c9a961;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* Login Button */
+.modern-login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%);
+  color: #1b1b1b;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px rgba(201, 169, 97, 0.3);
+  margin-top: 8px;
+  letter-spacing: 0.3px;
+}
+
+.modern-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(201, 169, 97, 0.4);
+}
+
+.modern-login-btn:active {
+  transform: translateY(0);
+}
+
+/* Sign Up Prompt */
+.signup-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.signup-prompt a {
+  color: #c9a961;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.signup-prompt a:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .modern-login-page {
+    padding: 40px 16px 60px;
+  }
+
+  .modern-login-card {
+    padding: 40px 32px !important;
+    border-radius: 18px !important;
+  }
+
+  .login-header h1 {
+    font-size: 26px;
+  }
+
+  .modern-field input {
+    padding: 14px 16px;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-login-card {
+    padding: 36px 28px !important;
+  }
+
+  .login-header h1 {
+    font-size: 24px;
+  }
+
+  .modern-login-btn {
+    padding: 15px;
+    font-size: 15px;
+  }
+}
+/* ========== MODERN LOGIN PAGE (NO BACKGROUND CARD) ========== */
+
+.modern-login-page {
+  min-height: calc(100vh - 72px);
+  background: #d8bd77; /* Solid beige background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px 80px;
+  margin-top: 72px;
+}
+
+.modern-login-container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+/* Success Banner */
+.success-banner {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 18px 24px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login Card - Clean white card with no background */
+.modern-login-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15) !important;
+  animation: fadeInUp 0.6s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-header h1 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1b1b1b;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.login-header p {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Form */
+.modern-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Field */
+.modern-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modern-field label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1b1b1b;
+  letter-spacing: 0.2px;
+}
+
+.modern-field input {
+  width: 100%;
+  padding: 15px 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+  font-family: inherit;
+}
+
+.modern-field input:focus {
+  outline: none;
+  border-color: #c9a961;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+.modern-field input.error {
+  border-color: #d32f2f;
+  background: #fff5f5;
+}
+
+.modern-field input::placeholder {
+  color: #aaa;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: -2px;
+}
+
+/* Login Options Row */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
+/* Remember Me Checkbox */
+.remember-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.remember-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #c9a961;
+}
+
+.remember-checkbox span {
+  user-select: none;
+}
+
+/* Forgot Password Link */
+.forgot-link {
+  font-size: 14px;
+  color: #c9a961;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* Login Button */
+.modern-login-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%);
+  color: #1b1b1b;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px rgba(201, 169, 97, 0.3);
+  margin-top: 8px;
+  letter-spacing: 0.3px;
+}
+
+.modern-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(201, 169, 97, 0.4);
+}
+
+.modern-login-btn:active {
+  transform: translateY(0);
+}
+
+/* Sign Up Prompt */
+.signup-prompt {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.signup-prompt a {
+  color: #c9a961;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.signup-prompt a:hover {
+  color: #a98f4b;
+  text-decoration: underline;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .modern-login-page {
+    padding: 40px 16px 60px;
+  }
+
+  .modern-login-card {
+    padding: 40px 32px !important;
+    border-radius: 18px !important;
+  }
+
+  .login-header h1 {
+    font-size: 26px;
+  }
+
+  .modern-field input {
+    padding: 14px 16px;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-login-card {
+    padding: 36px 28px !important;
+  }
+
+  .login-header h1 {
+    font-size: 24px;
+  }
+
+  .modern-login-btn {
+    padding: 15px;
+    font-size: 15px;
+  }
+}
+/* ========== FINAL FIX - REMOVE YELLOW BACKGROUND CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Target the yellow container div */
+.modern-login-container > div {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Also try targeting any wrapper divs */
+.modern-login-card {
+  margin: 0 !important;
+}
+
+/* Remove background from any parent divs of the login card */
+.modern-login-page > * > * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Make sure only the actual login card has white background */
+.modern-login-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  border: none !important;
+}
+
+/* Nuclear option - remove background from ALL divs in login page except the card itself */
+.modern-login-page div:not(.modern-login-card):not(.modern-field):not(.login-header):not(.modern-login-form):not(.login-options):not(.signup-prompt):not(.remember-checkbox):not(.success-banner) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* ========== FINAL FIX - REMOVE YELLOW BACKGROUND CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Target the yellow container div */
+.modern-login-container > div {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Also try targeting any wrapper divs */
+.modern-login-card {
+  margin: 0 !important;
+}
+
+/* Remove background from any parent divs of the login card */
+.modern-login-page > * > * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Make sure only the actual login card has white background */
+.modern-login-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  border: none !important;
+}
+
+/* Nuclear option - remove background from ALL divs in login page except the card itself */
+.modern-login-page div:not(.modern-login-card):not(.modern-field):not(.login-header):not(.modern-login-form):not(.login-options):not(.signup-prompt):not(.remember-checkbox):not(.success-banner) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* === Clean Uber-style Login Page Override === */
+.modern-login-page {
+  background: #f9f9f9; /* clean light tone instead of yellow */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modern-login-container {
+  background: none;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modern-login-card {
+  background: #fff;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 380px;
+  width: 100%;
+}
+
+.modern-login-btn {
+  background: #111;
+  color: #fff;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.modern-login-btn:hover {
+  background: #000;
+}
+/* make it more specific */
+body .modern-login-page { background: #f9f9f9; }
+
+/* or force it (use sparingly) */
+.modern-login-page { background: #f9f9f9 !important; }
+/* === Modern Premium Login Page (MastoRide Themed) === */
+.modern-login-page {
+  background: linear-gradient(135deg, #111 0%, #2a1f06 50%, #d6b665 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Center container */
+.modern-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* Elegant dark glassy card */
+.modern-login-card {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 2.5rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(214, 182, 101, 0.2);
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  color: #f8f8f8;
+}
+
+/* Header */
+.login-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffd451; /* gold highlight */
+}
+
+.login-header p {
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  margin-bottom: 1.8rem;
+}
+
+/* Input Fields */
+.modern-field input {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid #ffd451;
+  border-radius: 30px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  margin-top: 0.5rem;
+  transition: 0.3s ease;
+}
+
+.modern-field input::placeholder {
+  color: #bdbdbd;
+}
+
+.modern-field input:focus {
+  border-color: #fff;
+  box-shadow: 0 0 10px rgba(255, 212, 81, 0.4);
+}
+
+/* Forgot Password + Remember */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.85rem;
+}
+
+.login-options a {
+  color: #ffd451;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-options a:hover {
+  color: #fff;
+}
+
+/* Button */
+.modern-login-btn {
+  width: 100%;
+  border: 2px solid #ffd451;
+  border-radius: 30px;
+  background: transparent;
+  color: #ffd451;
+  padding: 10px 0;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modern-login-btn:hover {
+  background: #ffd451;
+  color: #111;
+  box-shadow: 0 0 20px rgba(255, 212, 81, 0.5);
+}
+
+/* Signup text */
+.signup-prompt {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.signup-prompt a {
+  color: #ffd451;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-prompt a:hover {
+  color: #fff;
+}
+
+/* Subtle animation */
+@keyframes glowFade {
+  0% { box-shadow: 0 0 15px rgba(214,182,101,0.2); }
+  50% { box-shadow: 0 0 30px rgba(214,182,101,0.5); }
+  100% { box-shadow: 0 0 15px rgba(214,182,101,0.2); }
+}
+
+.modern-login-card {
+  animation: glowFade 3s infinite ease-in-out;
+}
+/* === Fix long login card and center it nicely === */
+.modern-login-page {
+  background: #d6b665; /* keep your golden theme */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modern-login-container {
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: auto; /* remove any full height stretching */
+  padding: 2rem 0;
+}
+
+/* Compact card design */
+.modern-login-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  height: auto; /* ensures compact height */
+}
+
+/* Reduce unnecessary space below */
+.modern-login-card form {
+  margin: 0;
+}
+
+/* Optional: Make the whole layout feel tighter and premium */
+.login-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.login-header p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+/* ===== Fix tall white column on Login ===== */
+
+/* Keep your page theme and center content */
+.modern-login-page {
+  background: #d6b665;                 /* your gold */
+  min-height: calc(100vh - 72px);       /* minus navbar height; adjust if needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* Make every wrapper transparent & auto height */
+.modern-login-container {
+  background: transparent !important;
+  height: auto !important;
+  padding: 0 !important;
+  display: block;                       /* no flex stretching */
+}
+
+/* If any pseudo-element paints a strip, kill it */
+.modern-login-container::before,
+.modern-login-container::after {
+  content: none !important;
+}
+
+/* The card is the ONLY thing with white background */
+.modern-login-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  width: min(420px, 92vw);
+  padding: 28px 24px;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 auto;                       /* keep it compact and centered */
+}
+
+/* Tighten spacing inside */
+.modern-login-card form { margin: 0; }
+
+/* Optional polish */
+.login-header h1 {
+  margin: 0 0 .25rem;
+  font-size: 1.8rem;
+}
+.login-header p {
+  margin: 0 0 1.25rem;
+  color: #666;
+  font-size: .95rem;
+}
+/* === Final Fix: No white column, compact dark login card === */
+.modern-login-page {
+  background: #d6b665; /* your main gold background */
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+/* Remove any white stretch */
+.modern-login-container {
+  background: transparent !important;
+  height: auto !important;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dark modern card with gold accent */
+.modern-login-card {
+  background: #111; /* dark matte background */
+  color: #f8f8f8;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 380px;
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Subtle hover lift */
+.modern-login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Headings */
+.login-header h1 {
+  color: #ffd451; /* gold title */
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.login-header p {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-bottom: 1.8rem;
+}
+
+/* Input Fields */
+.modern-field input {
+  width: 100%;
+  background: #1e1e1e;
+  border: 1.5px solid #ffd451;
+  border-radius: 30px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  transition: 0.3s ease;
+}
+
+.modern-field input:focus {
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255, 212, 81, 0.5);
+}
+
+/* Forgot password & remember */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.85rem;
+}
+
+.login-options a {
+  color: #ffd451;
+  text-decoration: none;
+}
+.login-options a:hover {
+  color: #fff;
+}
+
+/* Button */
+.modern-login-btn {
+  width: 100%;
+  border: 2px solid #ffd451;
+  border-radius: 30px;
+  background: transparent;
+  color: #ffd451;
+  padding: 10px 0;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.modern-login-btn:hover {
+  background: #ffd451;
+  color: #111;
+}
+
+/* Sign up link */
+.signup-prompt {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+}
+.signup-prompt a {
+  color: #ffd451;
+  text-decoration: none;
+  font-weight: 600;
+}
+.signup-prompt a:hover {
+  color: #fff;
+}
+/* Kill the centered white column wrapper only on the login page */
+.login-no-column .page-container,
+.login-no-column .page-container::before,
+.login-no-column .page-container::after {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* keep your login layout */
+.modern-login-page {
+  background: #d6b665; /* your brand gold */
+  min-height: calc(100vh - 80px); /* header height compensation if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 16px;
+}
+
+.modern-login-container {
+  background: transparent !important;
+  height: auto !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+}
+
+/* compact card */
+.modern-login-card {
+  background: #111;
+  color: #f8f8f8;
+  width: 100%;
+  max-width: 380px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  text-align: center;
+}
+
+.login-header h1 { color: #ffd451; margin: 0 0 .25rem; }
+.login-header p { color: #cfcfcf; margin: 0 0 1.25rem; }
+
+.modern-field { text-align: left; margin-bottom: 14px; }
+.modern-field label { font-size: .9rem; color: #ddd; }
+.modern-field input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border-radius: 28px;
+  background: #1e1e1e;
+  border: 1.5px solid #ffd451;
+  color: #fff;
+}
+.modern-field input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(255,212,81,.5);
+  border-color: #fff;
+}
+
+.login-options {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .9rem; margin: 8px 0 16px;
+}
+.login-options .forgot-link { color: #ffd451; text-decoration: none; }
+.login-options .forgot-link:hover { color: #fff; }
+
+.modern-login-btn {
+  width: 100%; padding: 10px 0;
+  border-radius: 28px; border: 2px solid #ffd451;
+  background: transparent; color: #ffd451; font-weight: 700;
+  transition: .25s ease;
+}
+.modern-login-btn:hover { background: #ffd451; color: #111; }
+
+.signup-prompt { margin-top: 16px; font-size: .9rem; }
+.signup-prompt a { color: #ffd451; text-decoration: none; font-weight: 600; }
+.signup-prompt a:hover { color: #fff; }
+/* ========== REMOVE WHITE CARD - TRANSPARENT LOGIN FORM ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Make the login card completely transparent */
+.modern-login-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Keep everything else styled but on transparent background */
+.modern-login-card .login-header h1 {
+  color: #1b1b1b !important;
+}
+
+.modern-login-card .login-header p {
+  color: #666 !important;
+}
+
+/* Keep input fields white with styling */
+.modern-login-card .modern-field input {
+  background: #ffffff !important;
+  border: 2px solid #e5e5e5 !important;
+}
+
+.modern-login-card .modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+}
+
+/* Keep button styled */
+.modern-login-card .modern-login-btn {
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%) !important;
+}
+
+/* Keep labels and text visible */
+.modern-login-card .modern-field label {
+  color: #1b1b1b !important;
+}
+
+.modern-login-card .remember-checkbox {
+  color: #444 !important;
+}
+
+.modern-login-card .forgot-link {
+  color: #c9a961 !important;
+}
+
+.modern-login-card .signup-prompt {
+  color: #666 !important;
+  border-top: none !important;
+}
+/* ========== FORCE REMOVE WHITE CARD COMPLETELY ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Nuclear option - force transparent background on everything */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container *,
+.modern-login-card,
+.modern-login-card *,
+.modern-login-form,
+.modern-login-form *,
+.login-header,
+.login-header * {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Only keep white background on input fields */
+.modern-field input,
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  background: #ffffff !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+}
+
+/* Keep button styled with gradient */
+.modern-login-btn,
+button[type="submit"] {
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+}
+
+/* Keep text visible */
+.login-header h1,
+.login-header p,
+.modern-field label,
+.remember-checkbox,
+.signup-prompt {
+  color: #1b1b1b !important;
+}
+
+.forgot-link {
+  color: #c9a961 !important;
+}
+
+/* Keep checkbox visible */
+input[type="checkbox"] {
+  background: #fff !important;
+  border: 2px solid #e5e5e5 !important;
+}
+/* ========== BEAUTIFUL FRAMED LOGIN FORM ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove white card background */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container *,
+.modern-login-form,
+.modern-login-form * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Add beautiful frame around the login card */
+.modern-login-card {
+  background: transparent !important;
+  border: 3px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Keep input fields white with styling */
+.modern-field input,
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  background: #ffffff !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+}
+
+/* Fix login button visibility */
+.modern-login-btn,
+button[type="submit"] {
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%) !important;
+  color: #1b1b1b !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.modern-login-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 16px rgba(201, 169, 97, 0.3) !important;
+}
+
+/* Keep text visible and styled */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+}
+
+.login-header p {
+  color: #666 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 700 !important;
+}
+
+.remember-checkbox,
+.remember-checkbox span {
+  color: #444 !important;
+}
+
+.forgot-link {
+  color: #c9a961 !important;
+  font-weight: 600 !important;
+}
+
+.signup-prompt {
+  color: #666 !important;
+  background: transparent !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.signup-prompt a {
+  color: #c9a961 !important;
+  font-weight: 700 !important;
+}
+
+/* Keep checkbox visible */
+input[type="checkbox"] {
+  background: #fff !important;
+  border: 2px solid #e5e5e5 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* Beautiful login button */
+.modern-login-btn {
+  background: linear-gradient(135deg, #e0c271 0%, #c9a961 100%) !important;
+  color: #1b1b1b !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.25) !important;
+  transition: all 0.3s ease !important;
+}
+
+.modern-login-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(201, 169, 97, 0.35) !important;
+}
+
+/* Text styling */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #666 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+}
+
+.remember-checkbox {
+  color: #444 !important;
+}
+
+.forgot-link {
+  color: #c9a961 !important;
+  font-weight: 600 !important;
+}
+
+.signup-prompt {
+  color: #666 !important;
+  background: transparent !important;
+  border-top: 1px solid #f0f0f0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+}
+
+.signup-prompt a {
+  color: #c9a961 !important;
+  font-weight: 700 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* MUCH BETTER LOGIN BUTTON - Dark & Bold */
+.modern-login-btn {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px !important;
+}
+
+.modern-login-btn:hover {
+  background: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Text styling - BOLD AND VISIBLE */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #666 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+/* REMEMBER ME - Bold Black */
+.remember-checkbox {
+  color: #1b1b1b !important;
+  font-weight: 700 !important;
+}
+
+.remember-checkbox span {
+  color: #1b1b1b !important;
+  font-weight: 700 !important;
+}
+
+/* FORGOT PASSWORD - Bold and Visible */
+.forgot-link {
+  color: #1b1b1b !important;
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+}
+
+.forgot-link:hover {
+  color: #000000 !important;
+}
+
+/* SIGNUP PROMPT - Bold Black Text */
+.signup-prompt {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+}
+
+.signup-prompt a {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+}
+
+.signup-prompt a:hover {
+  color: #000000 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* MUCH BETTER LOGIN BUTTON - Dark & Bold */
+.modern-login-btn {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px !important;
+}
+
+.modern-login-btn:hover {
+  background: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Text styling - BOLD AND VISIBLE */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #666 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+/* HIDE REMEMBER ME CHECKBOX */
+.remember-checkbox {
+  display: none !important;
+}
+
+/* FORGOT PASSWORD - Blue/Clickable Color */
+.forgot-link {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+.forgot-link:hover {
+  color: #1d4ed8 !important;
+  text-decoration: underline !important;
+}
+
+/* Adjust login-options to align forgot password to right */
+.login-options {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+/* SIGNUP PROMPT - Bold Black Text */
+.signup-prompt {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+}
+
+.signup-prompt a {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+}
+
+.signup-prompt a:hover {
+  color: #000000 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* MUCH BETTER LOGIN BUTTON - Dark & Bold */
+.modern-login-btn {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px !important;
+}
+
+.modern-login-btn:hover {
+  background: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Text styling - BOLD AND VISIBLE */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #666 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+/* HIDE REMEMBER ME CHECKBOX */
+.remember-checkbox {
+  display: none !important;
+}
+
+/* FORGOT PASSWORD - BLACK COLOR */
+.forgot-link {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+.forgot-link:hover {
+  color: #000000 !important;
+  text-decoration: underline !important;
+}
+
+/* Adjust login-options to align forgot password to right */
+.login-options {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+/* SIGNUP PROMPT - Bold Black Text */
+.signup-prompt {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+}
+
+.signup-prompt a {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+}
+
+.signup-prompt a:hover {
+  color: #000000 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* MUCH BETTER LOGIN BUTTON - Dark & Bold */
+.modern-login-btn {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px !important;
+}
+
+.modern-login-btn:hover {
+  background: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Text styling - BOLD AND VISIBLE */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #1b1b1b !important;
+  font-weight: 500 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+/* HIDE REMEMBER ME CHECKBOX */
+.remember-checkbox {
+  display: none !important;
+}
+
+/* FORGOT PASSWORD - FORCE BLACK COLOR WITH MULTIPLE SELECTORS */
+.forgot-link,
+.forgot-link:link,
+.forgot-link:visited,
+.forgot-link:active,
+a.forgot-link,
+.login-options a,
+.login-options .forgot-link {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+.forgot-link:hover,
+a.forgot-link:hover,
+.login-options a:hover {
+  color: #000000 !important;
+  text-decoration: underline !important;
+}
+
+/* Center the forgot password link */
+.login-options {
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* SIGNUP PROMPT - Bold Black Text */
+.signup-prompt {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+  text-align: center !important;
+}
+
+.signup-prompt a {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+}
+
+.signup-prompt a:hover {
+  color: #000000 !important;
+}
+/* ========== ELEGANT LOGIN FORM WITH CLEAN WHITE CARD ========== */
+/* Add this at the very end of your mastoride.css file */
+
+/* Remove all forced transparent backgrounds */
+.modern-login-page,
+.modern-login-page *,
+.modern-login-container,
+.modern-login-container * {
+  background: none;
+  box-shadow: none;
+}
+
+/* Beautiful white card with clean shadow */
+.modern-login-card {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 48px 44px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Keep input fields styled */
+.modern-field input {
+  background: #f9f9f9 !important;
+  border: 2px solid #e5e5e5 !important;
+  border-radius: 12px !important;
+  padding: 15px 16px !important;
+  width: 100%;
+}
+
+.modern-field input:focus {
+  background: #fff !important;
+  border-color: #c9a961 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1) !important;
+}
+
+/* LOGIN BUTTON - Matches Your Beige/Gold Theme */
+.modern-login-btn {
+  background: #c9a961 !important;
+  color: #1b1b1b !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3) !important;
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px !important;
+}
+
+.modern-login-btn:hover {
+  background: #b8935a !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(184, 147, 90, 0.4) !important;
+}
+
+.modern-login-btn:active {
+  background: #a88450 !important;
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(168, 132, 80, 0.3) !important;
+}
+
+/* Text styling - BOLD AND VISIBLE */
+.login-header h1 {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.login-header p {
+  color: #1b1b1b !important;
+  font-weight: 500 !important;
+}
+
+.modern-field label {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+}
+
+/* HIDE REMEMBER ME CHECKBOX */
+.remember-checkbox {
+  display: none !important;
+}
+
+/* FORGOT PASSWORD - FORCE BLACK COLOR WITH MULTIPLE SELECTORS */
+.forgot-link,
+.forgot-link:link,
+.forgot-link:visited,
+.forgot-link:active,
+a.forgot-link,
+.login-options a,
+.login-options .forgot-link {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+.forgot-link:hover,
+a.forgot-link:hover,
+.login-options a:hover {
+  color: #000000 !important;
+  text-decoration: underline !important;
+}
+
+/* Center the forgot password link */
+.login-options {
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* SIGNUP PROMPT - Bold Black Text */
+.signup-prompt {
+  color: #1b1b1b !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+  text-align: center !important;
+}
+
+.signup-prompt a {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+}
+
+.signup-prompt a:hover {
+  color: #000000 !important;
+}
