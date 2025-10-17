@@ -11559,3 +11559,145 @@ html, body{ overflow-x:hidden; }
 .scroll-indicator{ z-index:10; }
 html, body{ overflow-x:hidden; }
 
+/* ===== MAIN LAYOUT Contact ===== */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+/* ===== FORM & INFO CARDS ===== */
+.contact-form, .contact-info {
+  background: #f8f3ec;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 420px;
+}
+
+.intro {
+  color: #2f2f2f;
+  margin-bottom: 50px;
+  font-size: 1.15rem;
+}
+
+/* ===== SERVICES SECTION ===== */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+.service-card {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  
+  transform: translateY(30px);
+}
+
+.service-card h3 {
+  color: #000;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  color: #333;
+  line-height: 1.6;
+  font-size: 0.98rem;
+}
+
+.service-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== PRICING SECTION ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 35px;
+  margin-top: 50px;
+}
+
+.pricing-card {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 18px;
+  padding: 35px 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+
+  transform: translateY(30px);
+}
+
+.pricing-card h2 {
+  font-size: 1.5rem;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #000, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+
+.price span {
+  font-size: 1rem;
+  color: #444;
+}
+
+.pricing-card ul {
+  list-style: none;
+  text-align: left;
+  margin: 15px 0 20px;
+}
+
+.pricing-card ul li {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.pricing-card button {
+  background: linear-gradient(90deg, #000, #caa96a);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  letter-spacing: 0.5px;
+}
+
+.pricing-card button:hover {
+  background: linear-gradient(90deg, #d4af37, #000);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Highlight */
+.premium {
+  border: 2px solid #d4af37;
+  animation: float 3s ease-in-out infinite;
+  transform: scale(1.05);
+}
