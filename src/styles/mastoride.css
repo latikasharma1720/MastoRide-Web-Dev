@@ -11309,3 +11309,253 @@ input[type="password"] {
   color: #111 !important;
   -webkit-text-fill-color: #111 !important;
 }
+/* Make the page stack below the footer */
+.home-fullpage,
+.fullpage-section {
+  position: relative;
+  z-index: 1;
+  /* If any component set overflow:hidden on the wrapper, let the footer show */
+  overflow: visible;
+}
+
+/* If your Affordable section uses decorative pseudo elements/overlays,
+   they can unintentionally cover the footer. Turn off hit-testing. */
+.home-affordable::before,
+.home-affordable::after {
+  pointer-events: none !important;
+}
+
+/* Common: videos/illustrations that extend beyond their box.
+   Keep their hit-area to themselves. */
+.home-affordable .content-grid,
+.home-affordable .afford-video,
+.home-affordable .content-visual {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* Footer container: sit above EVERYTHING in the page content */
+.app-footer {
+  position: sticky;    /* shows only when rendered (Affordable in view) */
+  bottom: 0;
+  z-index: 1000;       /* higher than any section */
+}
+
+/* If you added a fade-in wrapper earlier, keep it simple & stable */
+.site-footer { opacity: 1; pointer-events: auto; }
+
+/* (Optional) If you have any full-width decorations that might hang over:
+   prevent them from covering the lower part of the viewport */
+.fullpage-section [data-decor],
+.fullpage-section .decor,
+.fullpage-section .road-overlay {
+  pointer-events: none !important;
+}
+.site-footer {
+  position: fixed;
+  left: 0; right: 0; bottom: -120px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(20px);
+  transition:
+    bottom 300ms ease,
+    opacity 300ms ease,
+    transform 300ms ease,
+    visibility 0s linear 300ms;
+  z-index: 50;
+}
+
+html.footer-on .site-footer {
+  bottom: 0;
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    bottom 300ms ease,
+    opacity 300ms ease,
+    transform 300ms ease,
+    visibility 0s;
+}
+
+/* Optional safety for decorative overlays */
+.home-fullpage [data-decor],
+.home-fullpage .road-overlay {
+  pointer-events: none;
+}
+.home-footer {
+  display: flex;
+  align-items: stretch; /* let the Footer take natural height */
+  padding: 0;          /* your choice */
+  background: var(--page-bg, #f8f8f8); /* match your site */
+}
+.home-footer .footer-wrap {
+  width: 100%;
+}
+/* =============== Back (X) button =============== */
+.back-to-top-btn{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  z-index: 9999;                 /* always above images/videos */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .25s ease, visibility .25s ease, transform .25s ease;
+}
+.back-to-top-btn.show{
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Make sure scroll indicators and other UI don’t cover the button */
+.scroll-indicator { z-index: 10; }
+
+/* =============== Footer section =============== */
+.home-footer{
+  display: flex;
+  align-items: stretch;
+  background: var(--page-bg, #f7f7f7);
+  padding: 0;     /* Footer component controls its own spacing */
+}
+.home-footer .footer-wrap{
+  width: 100%;
+}
+
+/* Optional: ensure sections have enough space to feel full screen */
+.fullpage-section{
+  min-height: 100svh; /* works nicely on mobile too */
+  display: flex;
+  align-items: center;
+}
+
+/* If any parent had overflow:hidden before, remove it for the page body */
+body { overflow-x: hidden; }
+.back-to-top-btn{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 42px; height: 42px;
+  border: 0; border-radius: 9999px;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  z-index: 9999;                /* always above video/images */
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .25s, visibility .25s, transform .25s;
+}
+.back-to-top-btn.show{
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+}
+/* ===== Back (X) button — fixed and above everything ===== */
+.back-to-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.82);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  z-index: 9999;               /* stay above video/images */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .25s ease, visibility .25s ease, transform .25s ease;
+}
+.back-to-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Ensure sections behave like screens and allow scrolling to the Footer */
+.fullpage-section {
+  min-height: 100svh; /* mobile safe */
+  display: flex;
+  align-items: center;
+}
+
+/* Footer section blends with the page; Footer component controls inside spacing */
+.home-footer {
+  display: flex;
+  align-items: stretch;
+  background: var(--page-bg, #f7f7f7);
+}
+.home-footer .footer-wrap {
+  width: 100%;
+}
+
+/* Make sure nothing globally traps the scroll */
+html, body { overflow-x: hidden; }
+/* Back (X) button */
+.back-to-top-btn{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 42px; height: 42px;
+  border: 0; border-radius: 9999px;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  z-index: 9999;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .25s, visibility .25s, transform .25s;
+}
+.back-to-top-btn.show{ opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); }
+
+/* Section & footer layout */
+.fullpage-section{ min-height:100svh; display:flex; align-items:center; }
+.home-footer{ display:flex; align-items:stretch; background:var(--page-bg,#f7f7f7); }
+.home-footer .footer-wrap{ width:100%; }
+
+/* Safety: ensure the button isn't hidden by local z-indexed elements */
+.scroll-indicator{ z-index:10; }
+html, body{ overflow-x:hidden; }
+/* ===== Back (X) button ===== */
+.back-to-top-btn{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 42px; height: 42px;
+  border: 0; border-radius: 9999px;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  z-index: 9999;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity .25s, visibility .25s, transform .25s;
+}
+.back-to-top-btn.show{ opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); }
+
+/* Sections & footer */
+.fullpage-section{ min-height:100svh; display:flex; align-items:center; }
+.home-footer{ display:flex; align-items:stretch; background:var(--page-bg,#f7f7f7); }
+.home-footer .footer-wrap{ width:100%; }
+
+/* Keep other UI from covering the button */
+.scroll-indicator{ z-index:10; }
+html, body{ overflow-x:hidden; }
+
