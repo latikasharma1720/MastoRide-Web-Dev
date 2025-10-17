@@ -10329,3 +10329,983 @@ a.forgot-link:hover,
   /* Removed shadow for cleaner blending */
   filter: brightness(.98) contrast(.98) saturate(.9) sepia(.08);
 }
+/* === Signup (and shared auth) layout + animation === */
+.auth-frame {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  align-items: center;
+  gap: 48px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  /* Glide-in together */
+  animation: authSlideTogether 700ms cubic-bezier(.2,.8,.2,1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes authSlideTogether {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Graphic sizing—no drop shadow for a clean blend with your bg */
+.auth-graphic-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-graphic {
+  width: min(400px, 40vw);
+  height: auto;
+  display: block;
+  filter: none;        /* make sure there is NO shadow */
+  box-shadow: none;
+  object-fit: contain;
+}
+
+/* Match login card spacing nicely within the grid */
+.modern-login-card {
+  margin: 0; /* use grid spacing instead of margins */
+}
+
+/* Smaller screens: stack vertically and animate from below */
+@media (max-width: 900px) {
+  .auth-frame {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px 20px 48px;
+    animation: authSlideUp 600ms cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes authSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .auth-graphic {
+    width: min(320px, 70vw);
+    margin: 0 auto;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .auth-frame {
+    animation: none !important;
+  }
+}
+/* === Remove white column look on Signup === */
+.auth-frame .modern-login-card {
+  background: transparent !important;  /* Remove white box */
+  box-shadow: none !important;          /* Remove drop shadow */
+  border-radius: 0 !important;          /* Match background */
+  padding: 0 !important;                /* Align naturally */
+}
+
+/* Style inner elements to still look good */
+.auth-frame .modern-login-form {
+  background: transparent;
+  padding: 24px 0;
+}
+
+.auth-frame .login-header h1,
+.auth-frame .login-header p {
+  color: #1a1a1a; /* Keep readable on gold background */
+}
+
+/* Buttons and inputs stay the same color */
+.auth-frame .modern-login-btn {
+  background: linear-gradient(to right, #e0b44c, #c89b35);
+  border: none;
+  color: #000;
+}
+
+/* Optional: fade-in animation so both appear naturally */
+.auth-frame {
+  animation: smoothFade 1.2s ease-out both;
+}
+@keyframes smoothFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ===========================
+   SIGNUP: image "drags" form in
+   =========================== */
+
+.signup-pull-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr; /* image | form */
+  align-items: center;
+  gap: 56px;
+}
+
+/* Illustration */
+.pull-illustration {
+  position: relative;
+  /* the rope (dashed line) that tightens as it pulls */
+}
+.pull-illustration::after {
+  content: "";
+  position: absolute;
+  right: -18px;        /* reach towards the form */
+  top: 52%;
+  width: clamp(90px, 12vw, 140px);
+  border-top: 2px dashed rgba(0,0,0,.28);
+  transform: translateY(-50%) rotate(10deg);
+  transform-origin: left center;
+  animation: ropeTension 1s ease-out .05s both;
+}
+
+.pull-illustration-img {
+  display: block;
+  width: clamp(260px, 34vw, 460px);
+  height: auto;
+  filter: drop-shadow(0 18px 28px rgba(0,0,0,.16));
+  animation: carEnter .9s cubic-bezier(.2,.7,.2,1.1) both;
+}
+
+/* Form panel (no white card) */
+.pull-form {
+  animation: formFollow 1s cubic-bezier(.2,.85,.2,1.05) .12s both;
+  background: transparent;  /* keep the gold page color */
+}
+.pull-form-head h1 {
+  font-size: clamp(26px, 2.1vw, 32px);
+  line-height: 1.15;
+  margin: 0 0 8px 0;
+  color: #1a1a1a;
+}
+.pull-form-sub {
+  margin: 0 0 24px 0;
+  color: rgba(0,0,0,.65);
+  font-size: 15px;
+}
+
+/* Form grid tweaks to match your existing look */
+.pull-form-grid {
+  display: grid;
+  gap: 18px;
+}
+.pull-form-grid .field .label { font-weight: 600; color: #1a1a1a; }
+.pull-form-grid .hint { color: rgba(0,0,0,.55); font-size: 13px; margin-top: 6px; }
+.pull-form-grid .error-text { color: #b00020; font-size: 13px; margin-top: 6px; }
+
+.pull-submit {
+  background: linear-gradient(90deg, #e2b959, #c89b35);
+  border: none;
+  color: #1a1a1a;
+}
+
+/* Animations */
+@keyframes carEnter {
+  0%   { opacity: 0; transform: translateX(-120%) rotate(-6deg) scale(0.98); }
+  68%  { opacity: 1; transform: translateX(8px) rotate(0deg) scale(1.0); }
+  100% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1.0); }
+}
+
+@keyframes formFollow {
+  0%   { opacity: 0; transform: translateX(70px); }
+  60%  { opacity: 1; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ropeTension {
+  0%   { transform: translateY(-50%) rotate(10deg) scaleX(0.7); opacity: 0; }
+  60%  { transform: translateY(-50%) rotate(6deg)  scaleX(1.06); opacity: 1; }
+  100% { transform: translateY(-50%) rotate(8deg)  scaleX(1);    opacity: 1; }
+}
+
+/* Mobile: stack and keep the feel */
+@media (max-width: 880px) {
+  .signup-pull-wrap {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 48px;
+  }
+  .pull-illustration {
+    order: 1;
+    justify-self: center;
+  }
+  .pull-form {
+    order: 2;
+  }
+  .pull-illustration::after {
+    display: none; /* rope is optional on small screens */
+  }
+}
+/* =======================================================
+   RIGHT-PULL VARIANT: image glides in from right, drags form
+   ======================================================= */
+
+.signup-pull-wrap.pull-right {
+  /* image right | form left */
+  grid-template-columns: 1.05fr 1fr;
+}
+
+/* Put the form in column 1, image in column 2 */
+.pull-right .pull-form {
+  grid-column: 1;
+  /* form follows from the right (smaller delay so it feels pulled) */
+  animation: formFollowFromRight 1s cubic-bezier(.2,.85,.2,1.05) .12s both;
+}
+
+.pull-right .pull-illustration {
+  grid-column: 2;
+}
+
+/* Car enters from the RIGHT now */
+.pull-right .pull-illustration-img {
+  animation: carEnterFromRight .9s cubic-bezier(.2,.7,.2,1.1) both;
+}
+
+/* “Rope” connects from car’s LEFT side toward the form */
+.pull-right .pull-illustration::after {
+  right: auto;
+  left: -18px;                  /* rope sits to the left of the car */
+  top: 52%;
+  width: clamp(90px, 12vw, 140px);
+  border-top: 2px dashed rgba(0,0,0,.28);
+  transform: translateY(-50%) rotate(-8deg);
+  transform-origin: right center;
+  animation: ropeTensionRight 1s ease-out .05s both;
+}
+
+/* === Animations (from the RIGHT) === */
+
+@keyframes carEnterFromRight {
+  0%   { opacity: 0; transform: translateX(120%) rotate(6deg)  scale(0.98); }
+  68%  { opacity: 1; transform: translateX(-8px)  rotate(0deg) scale(1.0); }
+  100% { opacity: 1; transform: translateX(0)     rotate(0deg) scale(1.0); }
+}
+
+@keyframes formFollowFromRight {
+  0%   { opacity: 0; transform: translateX(90px); }
+  60%  { opacity: 1; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ropeTensionRight {
+  0%   { transform: translateY(-50%) rotate(-12deg) scaleX(0.7); opacity: 0; }
+  60%  { transform: translateY(-50%) rotate(-6deg)  scaleX(1.06); opacity: 1; }
+  100% { transform: translateY(-50%) rotate(-8deg)  scaleX(1);    opacity: 1; }
+}
+
+/* Mobile: stack nicely (image above form) */
+@media (max-width: 880px) {
+  .signup-pull-wrap.pull-right {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 48px;
+  }
+  .pull-right .pull-illustration,
+  .pull-right .pull-form { grid-column: auto; }
+  .pull-right .pull-illustration { order: 1; justify-self: center; }
+  .pull-right .pull-form         { order: 2; }
+  .pull-right .pull-illustration::after { display: none; } /* optional on small screens */
+}
+/* === Lift the signup form slightly upward === */
+.signup-pull-wrap {
+  align-items: flex-start;   /* Move items upward */
+  padding-top: 40px;         /* Reduce top spacing */
+  min-height: calc(100vh - 150px); /* keep spacing balanced with navbar/footer */
+}
+
+.pull-form {
+  margin-top: 0; /* Ensure no extra top gap */
+}
+
+/* Adjust for small screens */
+@media (max-height: 800px) {
+  .signup-pull-wrap {
+    padding-top: 24px;
+  }
+}
+/* Base layout */
+.signup-glide-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: flex-start;
+  min-height: calc(100vh - 140px);
+  gap: 60px;
+  padding: 40px 80px;
+}
+
+/* Right animation */
+.signup-glide-illustration {
+  grid-column: 2;
+  animation: carEnterFromRight 1s ease-out both;
+}
+
+.signup-glide-img {
+  width: 80%;
+  max-width: 380px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Signup form column */
+.signup-glide-form {
+  grid-column: 1;
+  transform: translateY(-40px);
+  animation: formFollowFromRight 1.2s ease-out both;
+}
+
+/* Animations */
+@keyframes carEnterFromRight {
+  0% { opacity: 0; transform: translateX(120%) rotate(5deg); }
+  60% { opacity: 1; transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes formFollowFromRight {
+  0% { opacity: 0; transform: translateX(90px); }
+  60% { opacity: 1; transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+/* === SIGNUP HERO (BIG LAYOUT) =========================================== */
+.signup-hero {
+  /* two big columns; form on the left, art on the right */
+  display: grid;
+  grid-template-columns: minmax(520px, 640px) minmax(520px, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  min-height: calc(100vh - 120px); /* keeps everything in view */
+  padding: clamp(24px, 4vw, 48px) clamp(24px, 6vw, 80px);
+}
+
+/* Left column (form) — make everything larger and readable */
+.signup-hero__form {
+  transform: translateY(-12px); /* slight lift to reveal more form */
+  animation: formFollowFromRight 900ms ease-out both;
+}
+
+.signup-hero__form h1 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.15;
+  margin: 0 0 8px;
+  font-weight: 800;
+}
+
+.signup-hero__form .muted {
+  margin: 0 0 24px;
+  color: #3e392f;
+  opacity: .85;
+}
+
+/* Form sizing */
+.signup-hero__form form {
+  max-width: 560px; /* bigger! */
+}
+
+.signup-hero__form .field {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 18px;
+}
+
+.signup-hero__form .field > span {
+  font-weight: 600;
+}
+
+.signup-hero__form input {
+  height: 52px;                 /* taller inputs */
+  padding: 12px 16px;
+  font-size: 16.5px;            /* bigger text */
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.15);
+  background: #fff;
+  outline: none;
+  transition: box-shadow .2s ease, border-color .2s ease;
+  width: 100%;
+}
+
+.signup-hero__form input:focus {
+  border-color: #b9892f;
+  box-shadow: 0 0 0 4px rgba(185, 137, 47, 0.15);
+}
+
+.signup-hero__form input.error {
+  border-color: #b00020;
+  box-shadow: 0 0 0 4px rgba(176, 0, 32, 0.12);
+}
+
+.error-text {
+  color: #b00020;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* Big primary button */
+.btn-primary-xl {
+  display: inline-block;
+  width: 100%;
+  height: 54px;
+  border-radius: 14px;
+  border: 0;
+  font-weight: 700;
+  font-size: 16.5px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #e5bb5f, #c79b3c);
+  color: #1b150c;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.btn-primary-xl:hover { filter: brightness(1.05); }
+.btn-primary-xl:active { transform: translateY(1px); }
+
+.auth-switch {
+  margin-top: 14px;
+  font-size: 14.5px;
+}
+
+/* Right column (art) — much bigger image + clean glide-in */
+.signup-hero__art {
+  justify-self: center;
+  animation: carEnterFromRight 820ms ease-out both;
+}
+
+.signup-hero__img {
+  width: clamp(420px, 42vw, 620px); /* BIG image, scales with screen */
+  max-height: 70vh;                 /* prevents overflow on short screens */
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.10)); /* subtle only */
+  animation: float 3.2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes carEnterFromRight {
+  0%   { opacity: 0; transform: translateX(30vw) rotate(4deg); }
+  60%  { opacity: 1; transform: translateX(-8px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes formFollowFromRight {
+  0%   { opacity: 0; transform: translateX(80px) translateY(12px); }
+  60%  { opacity: 1; transform: translateX(-4px) translateY(0); }
+  100% { transform: translateX(0) translateY(-12px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Responsive (stack on small screens) */
+@media (max-width: 960px) {
+  .signup-hero {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 28px;
+    min-height: auto;
+  }
+  .signup-hero__art {
+    order: 2;
+    margin-top: -6px;
+  }
+  .signup-hero__img {
+    width: min(82vw, 520px);
+  }
+  .signup-hero__form {
+    order: 1;
+    transform: none;
+    animation: formFollowFromRight 680ms ease-out both;
+  }
+  .signup-hero__form form {
+    max-width: 640px;
+  }
+}
+/* === SIGNUP PAGE (TOP-RIGHT GLIDE EFFECT) === */
+.signup-scene {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  min-height: calc(100vh - 180px);
+  padding: 40px 80px;
+}
+
+/* LEFT FORM */
+.signup-left {
+  transform: translateY(-30px);
+  animation: formSlideIn 1.2s ease-out both;
+}
+.signup-left h1 {
+  font-size: clamp(28px, 3.2vw, 36px);
+  margin-bottom: 10px;
+}
+.signup-sub {
+  color: #3a2e24;
+  opacity: 0.9;
+  margin-bottom: 24px;
+}
+.signup-form {
+  max-width: 520px;
+}
+.sg-field {
+  margin-bottom: 18px;
+}
+.sg-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.sg-field input {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+}
+.signup-cta {
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #e6c067, #caa04c);
+  color: #111;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+.signup-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* RIGHT IMAGE (TOP-RIGHT ENTRY ANIMATION) */
+.signup-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+}
+.signup-flyin {
+  width: 480px;
+  max-width: 100%;
+  animation: flyInFromTopRight 1.4s ease-out forwards,
+             floatLoop 5s ease-in-out infinite;
+  transform-origin: top right;
+}
+
+/* ANIMATIONS */
+@keyframes flyInFromTopRight {
+  0% {
+    opacity: 0;
+    transform: translate(150px, -150px) rotate(10deg) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-10px, 10px) rotate(-2deg) scale(1.02);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+}
+@keyframes formSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes floatLoop {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* RESPONSIVE STACK */
+@media (max-width: 950px) {
+  .signup-scene {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 30px;
+  }
+  .signup-right {
+    justify-content: center;
+  }
+  .signup-flyin {
+    width: 340px;
+  }
+}
+/* ===== SIGNUP: Image pulls form from LEFT ===== */
+.signup-pull-scene {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(420px, 560px);
+  gap: 56px;
+  align-items: center;
+  min-height: calc(100vh - 180px);
+  padding: 48px 72px;
+  position: relative;
+}
+
+/* --- Vehicle (leads) --- */
+.pull-vehicle {
+  position: relative;
+  /* enters first */
+  animation: slideFromLeft 900ms cubic-bezier(.22,.8,.35,1) 0ms both;
+}
+.pull-vehicle-img {
+  width: 100%;
+  max-width: 440px;
+  display: block;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
+  transform-origin: left center;
+  animation: subtleBounce 4.5s ease-in-out 1200ms infinite;
+}
+
+/* Decorative “tow line” from car to form */
+.pull-vehicle::after {
+  content: "";
+  position: absolute;
+  top: 55%;
+  left: 90%;
+  width: 120px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(0,0,0,.45) 0 8px,
+    rgba(0,0,0,0) 8px 16px
+  );
+  opacity: .55;
+  transform: translateY(-50%);
+}
+
+/* --- Form (follows after car for pull illusion) --- */
+.pull-form {
+  position: relative;
+  /* comes in a bit later and a tad further to feel “pulled” */
+  animation: slideFromLeftSlightlyFurther 950ms cubic-bezier(.22,.8,.35,1) 180ms both;
+}
+.pull-form::before {
+  /* small hook at the form’s left edge where tow line “connects” */
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 52%;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.5);
+  box-shadow: 0 0 0 3px rgba(0,0,0,.15) inset;
+  transform: translateY(-50%);
+}
+
+.pull-form h1 {
+  font-size: clamp(28px, 3.2vw, 36px);
+  margin: 0 0 10px;
+}
+.pull-sub {
+  color: #3a2e24;
+  opacity: .9;
+  margin-bottom: 24px;
+}
+.pull-form-inner {
+  max-width: 560px;
+}
+.sg-field { margin-bottom: 18px; }
+.sg-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.sg-field input {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+}
+.sg-field input.error { border-color: #b00020; }
+.sg-error { color: #b00020; font-size: 13px; margin-top: 6px; display: inline-block; }
+
+.signup-cta {
+  width: 100%;
+  height: 54px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(90deg,#e6c067,#caa04c);
+  color: #111;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.signup-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.22);
+}
+.signup-login { margin-top: 12px; }
+
+/* --- Animations --- */
+@keyframes slideFromLeft {
+  0%   { opacity: 0; transform: translateX(-120px) scale(.98) }
+  60%  { opacity: 1; transform: translateX(6px)   scale(1.02) }
+  100% { opacity: 1; transform: translateX(0)     scale(1) }
+}
+@keyframes slideFromLeftSlightlyFurther {
+  0%   { opacity: 0; transform: translateX(-160px) }
+  60%  { opacity: 1; transform: translateX(10px) }
+  100% { opacity: 1; transform: translateX(0) }
+}
+@keyframes subtleBounce {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-8px) }
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .signup-pull-scene {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 36px 28px 64px;
+  }
+  .pull-vehicle {
+    justify-self: center;
+  }
+  .pull-vehicle-img {
+    max-width: 360px;
+  }
+  .pull-vehicle::after {
+    display: none; /* tow line off on small screens for simplicity */
+  }
+  .pull-form::before {
+    display: none;
+  }
+  .pull-form {
+    text-align: center;
+  }
+  .pull-form-inner {
+    margin: 0 auto;
+  }
+}
+/* ===== Signup "car drags the form" scene ===== */
+
+.signup-pull-scene {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: 56px;
+  min-height: calc(100vh - 180px); /* keeps the scene tall without hitting footer */
+  padding: 40px 72px;
+}
+
+/* Put the form on the left visually, car on the right */
+.pull-form { order: 1; max-width: 560px; }
+.pull-vehicle { order: 2; display: flex; justify-content: flex-end; }
+
+/* Image sizing */
+.pull-vehicle-img {
+  width: clamp(360px, 40vw, 540px);
+  max-width: 100%;
+  height: auto;
+  /* no shadows—keeps it clean on your background */
+  filter: none;
+}
+
+/* Typography helpers (keeps your current brand look) */
+.pull-form h1 {
+  font-size: clamp(28px, 3.2vw, 36px);
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+.pull-sub { opacity: .9; margin: 0 0 22px; }
+
+/* Inputs/buttons – use if your globals don’t already cover it */
+.pull-form-inner .sg-field { margin-bottom: 16px; }
+.pull-form-inner label { display: block; font-size: 14px; margin-bottom: 6px; }
+.pull-form-inner input {
+  width: 100%;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.12);
+  padding: 0 14px;
+  font-size: 16px;
+  background: #fff;
+}
+.pull-form-inner input.error { border-color: #b00020; }
+.sg-error { color: #b00020; font-size: 13px; margin-top: 4px; display: block; }
+
+.signup-cta {
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-radius: 12px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #e6c067, #caa04c);
+  color: #111;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+  transition: transform .2s, box-shadow .2s;
+}
+.signup-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.22); }
+
+.signup-login { margin-top: 10px; font-size: 14px; }
+
+/* === Animation: both glide in from the RIGHT; car leads, form follows === */
+
+/* Car (lead) */
+.pull-vehicle {
+  animation: pullLeadIn 900ms cubic-bezier(.2,.8,.25,1) 80ms both,
+             floatLoop 6s ease-in-out 1200ms infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* Form (follower) – starts later and travels a tad farther for the “tethered” feel */
+.pull-form {
+  animation: pullFollowIn 1050ms cubic-bezier(.2,.8,.25,1) 220ms both;
+  transform-origin: 8% 50%;
+  will-change: transform, opacity;
+}
+
+@keyframes pullLeadIn {
+  0%   { opacity: 0; transform: translateX(220px) translateY(-28px) rotate(6deg) scale(.97); }
+  65%  { opacity: 1; transform: translateX(-10px) translateY(4px) rotate(-2deg) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes pullFollowIn {
+  0%   { opacity: 0; transform: translateX(300px) rotate(2deg); }
+  58%  { opacity: .98; transform: translateX(14px) rotate(-1deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0); }
+}
+
+/* Gentle idle float for the image once it lands */
+@keyframes floatLoop {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .pull-vehicle, .pull-form { animation: none !important; transform: none !important; opacity: 1 !important; }
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 980px) {
+  .signup-pull-scene {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px 20px;
+  }
+  .pull-vehicle { justify-content: center; }
+  .pull-vehicle-img { width: clamp(280px, 60vw, 420px); }
+  .pull-form { margin-inline: auto; text-align: center; }
+  .pull-form-inner label { text-align: left; } /* keep label alignment readable */
+}
+.pull-vehicle-img {
+  width: clamp(360px, 40vw, 540px);
+  max-width: 100%;
+  height: auto;
+  filter: none;
+  background: none;
+  mask-image: none;
+  -webkit-mask-image: none;
+  /* Remove unwanted artifacts or outlines */
+  mix-blend-mode: multiply;
+  image-rendering: auto;
+}
+.signup-pull-scene {
+  overflow: hidden; /* hides any floating artifacts from image edges */
+}
+.pull-vehicle-img {
+  clip-path: inset(0 10px 0 0); /* trims 10px off the right */
+}
+/* ===== FIX unwanted dot and dotted line near the form ===== */
+
+/* Remove any bullet or pseudo-element artifacts */
+.signup-pull-scene,
+.pull-form,
+.pull-vehicle {
+  list-style: none !important;
+  position: relative;
+}
+
+.signup-pull-scene::before,
+.signup-pull-scene::after,
+.pull-form::before,
+.pull-form::after,
+.pull-vehicle::before,
+.pull-vehicle::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Hide any overflowing decorative elements */
+.signup-pull-scene {
+  overflow: hidden !important;
+}
+
+/* Remove stray borders or outlines */
+.pull-form input,
+.pull-form label,
+.pull-form h1,
+.pull-form p {
+  border: none;
+  outline: none;
+}
+/* --- Signup/Login input visibility fixes --- */
+.pull-form input,
+.modern-login-form input {
+  color: #111 !important;              /* actual text / dots color */
+  -webkit-text-fill-color: #111 !important; /* fixes Chrome autofill + password dots */
+  caret-color: #111 !important;        /* cursor color */
+  background: #fff !important;         /* keep a solid white field */
+}
+
+/* Make sure placeholders are not the same color as text */
+.pull-form input::placeholder,
+.modern-login-form input::placeholder {
+  color: rgba(0,0,0,.45);
+}
+
+/* Chrome/Safari autofill background and text */
+.pull-form input:-webkit-autofill,
+.modern-login-form input:-webkit-autofill {
+  -webkit-text-fill-color: #111 !important;
+  transition: background-color 99999s ease-in-out 0s; /* hides yellow bg */
+}
+
+/* If any global input rule set color: transparent or similar, neutralize it here */
+input[type="password"] {
+  font-family: inherit;                 /* prevent odd symbol fonts */
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+}
