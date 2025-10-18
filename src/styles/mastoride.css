@@ -11559,3 +11559,1202 @@ html, body{ overflow-x:hidden; }
 .scroll-indicator{ z-index:10; }
 html, body{ overflow-x:hidden; }
 
+.simple-user {
+  min-height: 100vh;
+  background: #d9c7a8; /* Beige background */
+  padding: 0;
+}
+
+.ud-hero,
+.ud-panel,
+.ud-toolbar,
+.ud-head,
+.ud-form,
+.ud-list-item,
+.setting-item,
+.rewards-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.ud-hero h1,
+.ud-hero p,
+.ud-head h2,
+.ud-head p,
+.ud-kpi-value,
+.ud-kpi-label {
+  color: #000;
+}
+
+.ud-kpi {
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.ud-kpi:hover {
+  transform: scale(1.02);
+}
+
+.btn,
+.estimate-btn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #000;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn:hover,
+.estimate-btn:hover {
+  transform: translateY(-2px);
+}
+
+.confirm-msg {
+  background: #d1fae5;
+  border: 2px solid #10b981;
+  border-radius: 0.75rem;
+  color: #065f46;
+  font-weight: 600;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.ud-tabs button {
+  background: transparent;
+  color: #000;
+}
+
+.ud-tab.is-active {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+}
+
+.ud-panel {
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .ud-hero h1 {
+    font-size: 1.75rem;
+  }
+  .ud-tabs {
+    flex-direction: column;
+  }
+}
+.ud-kpi,
+.ud-tab,
+.ud-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+/* ========= UserDashboard (global) ========= */
+
+/* 1) Single golden-beige page background */
+.simple-user {
+  min-height: 100vh;
+  background: #d1b985; /* your color */
+  padding: 0;
+  width: 100%;
+}
+
+/* 2) Remove white boxes / shadows so content sits on beige */
+.ud-hero,
+.ud-panel,
+.ud-toolbar,
+.ud-head,
+.ud-form,
+.ud-list-item,
+.setting-item,
+.rewards-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 3) Full width sections (avoid skinny centered strip) */
+.simple-user > section,
+.simple-user > div {
+  max-width: 100% !important;
+}
+
+/* 4) Typography contrast on beige */
+.ud-hero h1,
+.ud-hero p,
+.ud-head h2,
+.ud-head p,
+.ud-kpi-value,
+.ud-kpi-label,
+.ud-ride-info,
+.ud-destination {
+  color: #000;
+}
+
+/* 5) KPI tiles: subtle outline so they’re readable on beige */
+.ud-kpi {
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  transition: transform 0.2s ease;
+}
+.ud-kpi:hover { transform: translateY(-2px); }
+.ud-kpi-icon { font-size: 2rem; margin-bottom: .25rem; }
+.ud-kpi-value { font-weight: 800; font-size: 1.5rem; }
+.ud-kpi-label { font-size: .9rem; opacity: .8; }
+
+/* 6) Tabs: pills directly on beige */
+.ud-tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+.ud-tab {
+  padding: .6rem 1rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,.06);
+  color: #000;
+  border: none;
+  font-weight: 600;
+}
+.ud-tab.is-active {
+  background: #000;
+  color: #f6e58d; /* readable on black */
+}
+
+/* 7) Inputs readable on beige */
+.ud-field input,
+.ud-field select {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(0,0,0,0.25);
+  border-radius: .75rem;
+  padding: .8rem 1rem;
+  color: #000;
+}
+.ud-field input::placeholder { color: rgba(0,0,0,0.6); }
+.ud-field small { color: rgba(0,0,0,0.6); }
+
+/* 8) Buttons sit directly on beige (no container card) */
+.btn,
+.estimate-btn {
+  background: linear-gradient(135deg, #f8e47a 0%, #f2c94c 100%);
+  color: #000;
+  border: none;
+  border-radius: .75rem;
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn.wide { width: 100%; }
+.btn.ghost {
+  background: transparent;
+  border: 2px solid rgba(0,0,0,0.25);
+}
+.btn:hover,
+.estimate-btn:hover { transform: translateY(-2px); }
+
+/* 9) History list styling on beige */
+.ud-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.ud-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1rem;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  border-radius: .75rem;
+}
+.ud-ride-meta { display: flex; gap: .75rem; align-items: center; }
+.ud-price { font-weight: 800; color: #135d3b; }
+.ud-pill {
+  padding: .35rem .8rem;
+  border-radius: 999px;
+  background: #135d3b;
+  color: #fff;
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+/* 10) Toggle on beige */
+.toggle { position: relative; display: inline-block; width: 56px; height: 30px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle span {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.25);
+  border-radius: 34px; transition: .25s;
+}
+.toggle span:before {
+  content: ""; position: absolute; height: 22px; width: 22px; left: 4px; bottom: 4px;
+  background: #fff; border-radius: 50%; transition: .25s;
+}
+.toggle input:checked + span { background: #000; }
+.toggle input:checked + span:before { transform: translateX(26px); }
+
+/* 11) Messages */
+.confirm-msg {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: .75rem;
+  background: rgba(19,93,59,.12);
+  border: 2px solid rgba(19,93,59,.6);
+  color: #0f3d27;
+  font-weight: 700;
+}
+
+/* 12) Responsive tweaks */
+@media (max-width: 768px) {
+  .ud-hero h1 { font-size: 1.75rem; }
+  .ud-list-item { flex-direction: column; align-items: flex-start; gap: .75rem; }
+}
+/* =========================================
+   Modern Dashboard Layout with Black Sidebar
+   ========================================= */
+
+:root { --brand-beige: #d9bb85; }
+
+.simple-user { background: var(--brand-beige) !important; }
+
+/* Layout */
+.dashboard-layout {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 64px); /* leave space for navbar if fixed */
+}
+
+/* Sidebar */
+.sidebar-nav {
+  width: 240px;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 64px;          /* align under your navbar height */
+  align-self: flex-start;
+  height: calc(100vh - 64px);
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.sidebar-btn {
+  appearance: none;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: #f2f2f2;
+  padding: .8rem 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.sidebar-btn:hover {
+  background: #f8e47a;
+  color: #000;
+  transform: translateX(6px);
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+}
+
+.sidebar-btn.active {
+  background: #f2c94c;
+  color: #000;
+  box-shadow: 0 0 0 2px #000 inset, 0 8px 24px rgba(0,0,0,.35);
+}
+
+/* Main content */
+.dashboard-main {
+  flex: 1;
+  padding: 2rem 3rem;
+  background: #d9bb85; /* Your custom gold shade */
+  overflow: auto;
+  margin-left: var(--sidebar-w);
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* Remove any card backgrounds so they sit on beige */
+.ud-hero,
+.ud-panel,
+.ud-head,
+.ud-form,
+.ud-list-item,
+.rewards-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Modern primary buttons (dark w/ gold accent) */
+.btn,
+.estimate-btn {
+  background: linear-gradient(135deg, #111 0%, #000 100%);
+  color: #f6e58d;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn:hover,
+.estimate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.45);
+  filter: brightness(1.05);
+}
+.btn:active,
+.estimate-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+.btn.wide { width: 100%; }
+
+/* Ghost variant */
+.btn.ghost {
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: none;
+}
+.btn.ghost:hover {
+  background: #000;
+  color: #f6e58d;
+}
+
+/* Inputs on beige */
+.ud-field input,
+.ud-field select {
+  background: rgba(255,255,255,0.25);
+  border: 1.5px solid rgba(0,0,0,0.25);
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  color: #000;
+}
+.ud-field input::placeholder { color: rgba(0,0,0,.6); }
+.ud-field small { color: rgba(0,0,0,.7); }
+
+/* Toggles */
+.toggle { position: relative; display: inline-block; width: 56px; height: 30px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle span { position: absolute; inset: 0; background: rgba(0,0,0,.25); border-radius: 34px; transition: .25s; }
+.toggle span:before { content:""; position:absolute; left:4px; bottom:4px; width:22px; height:22px; background:#fff; border-radius:50%; transition:.25s; }
+.toggle input:checked + span { background:#000; }
+.toggle input:checked + span:before { transform: translateX(26px); }
+
+/* History list */
+.ud-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.ud-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1rem;
+  border: 1px solid rgba(0,0,0,.12) !important;
+  border-radius: 12px;
+}
+.ud-ride-meta { display: flex; gap: .75rem; align-items: center; }
+.ud-price { font-weight: 800; color: #135d3b; }
+.ud-pill { padding:.35rem .8rem; border-radius:999px; background:#135d3b; color:#fff; font-weight:700; font-size:.85rem; }
+
+/* Responsive: collapse sidebar */
+@media (max-width: 992px) {
+  .sidebar-nav { position: static; height: auto; width: 100%; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .dashboard-layout { flex-direction: column; }
+  .sidebar-tabs { flex-direction: row; flex-wrap: wrap; gap: .5rem; }
+  .sidebar-btn { flex: 1 0 130px; text-align: center; }
+  .dashboard-main { padding: 1.25rem; }
+}
+/* ===== Move sidebar to the far left of the page ===== */
+:root {
+  /* Adjust if your navbar is taller/shorter */
+  --nav-h: 64px;
+  --sidebar-w: 240px;
+}
+
+/* Make sure the layout can span edge-to-edge */
+.simple-user,
+.dashboard-layout {
+  width: 100vw !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Pin the sidebar to the left edge, below the navbar */
+.sidebar-nav {
+  position: fixed !important;
+  left: 0;
+  top: var(--nav-h);
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--nav-h));
+  border-right: 1px solid rgba(255,255,255,0.07);
+  z-index: 10; /* sit above page content but under navbar */
+}
+
+/* Shift main content to the right of the fixed sidebar */
+.dashboard-main {
+  margin-left: var(--sidebar-w);
+  padding: 2rem 3rem;
+  background: var(--brand-beige);
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* Optional: keep the hero/KPIs from hiding under the navbar */
+.ud-hero:first-child {
+  scroll-margin-top: var(--nav-h);
+}
+
+/* Mobile: collapse sidebar to top bar */
+@media (max-width: 992px) {
+  .sidebar-nav {
+    position: static !important;
+    width: 100%;
+    height: auto;
+    top: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .dashboard-main {
+    margin-left: 0;
+    padding: 1.25rem;
+  }
+  .sidebar-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .sidebar-btn {
+    flex: 1 0 130px;
+    text-align: center;
+  }
+}
+/* ===== Fullscreen beige background fix ===== */
+:root {
+  --brand-gold: #d9bb85;
+  --nav-h: 64px;
+  --sidebar-w: 240px;
+}
+
+/* Make sure entire user dashboard fills the screen */
+body,
+html,
+.simple-user,
+.dashboard-layout {
+  background-color: var(--brand-gold) !important;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sidebar pinned on far left */
+.sidebar-nav {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--nav-h));
+  background: #000;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  color: #fff;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+/* Dashboard main section */
+.dashboard-main {
+  margin-left: var(--sidebar-w);
+  background-color: var(--brand-gold); /* fills entire right side */
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* Hero/KPI/Panel transparency */
+.ud-hero,
+.ud-panel,
+.ud-kpis {
+  background: transparent !important;
+}
+
+/* Responsive: collapse sidebar on small screens */
+@media (max-width: 992px) {
+  .sidebar-nav {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .dashboard-main {
+    margin-left: 0;
+    padding: 1.25rem;
+  }
+}
+/* ====== Toggleable, sticky sidebar that won't overlap footer ====== */
+:root {
+  --nav-h: 64px;               /* adjust to your navbar height */
+  --sidebar-w-open: 240px;
+  --sidebar-w-closed: 64px;
+  --gold: #d9bb85;             /* your beige */
+}
+
+/* full-page background */
+.simple-user { background: var(--gold); }
+
+/* layout */
+.dashboard-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  min-height: calc(100vh - var(--nav-h));
+  padding-top: 0; /* content sits below navbar */
+}
+
+/* ---- Sidebar (sticky in normal flow, so it never overlaps footer) ---- */
+.sidebar-nav {
+  position: sticky;
+  top: var(--nav-h);
+  align-self: flex-start;
+  height: calc(100vh - var(--nav-h));
+  background: #000;
+  color: #fff;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: width .2s ease;
+  width: var(--sidebar-w-open);
+}
+
+.sidebar-closed .sidebar-nav { width: var(--sidebar-w-closed); }
+
+/* toggle button */
+.sidebar-toggle {
+  width: 100%;
+  height: 44px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: background .2s ease, transform .2s ease;
+}
+.sidebar-toggle:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
+.sidebar-toggle .bar {
+  display: block;
+  width: 18px; height: 2px;
+  background: #fff; border-radius: 2px;
+}
+.sidebar-toggle .bar + .bar { margin-left: 4px; }
+
+/* nav buttons */
+.sidebar-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+.sidebar-btn {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0.75rem;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  color: #f2f2f2;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease, color .2s ease;
+}
+.sidebar-btn .sb-icon { font-size: 1.1rem; line-height: 1; }
+.sidebar-btn .sb-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.sidebar-btn:hover { background: #f8e47a; color: #000; transform: translateX(4px); }
+.sidebar-btn.active { background: #f2c94c; color: #000; }
+
+/* collapsed: hide labels, keep icons centered */
+.sidebar-closed .sidebar-btn {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+.sidebar-closed .sidebar-btn .sb-label { display: none; }
+
+/* ---- Main content ---- */
+.dashboard-main {
+  flex: 1;
+  background: var(--gold);
+  padding: 2rem 3rem;
+  min-width: 0; /* prevents overflow on narrow screens */
+}
+
+/* panels/cards remain transparent on gold */
+.ud-hero, .ud-panel, .ud-kpis { background: transparent !important; }
+
+/* ====== Mobile (off-canvas that pushes content, still not covering footer) ====== */
+@media (max-width: 900px) {
+  .dashboard-layout { position: relative; }
+
+  .sidebar-nav {
+    position: sticky;   /* keep sticky so it scrolls with page */
+    width: var(--sidebar-w-closed);
+  }
+
+  /* when open on mobile, make it wider and push content via wrapper class */
+  .sidebar-open .sidebar-nav { width: var(--sidebar-w-open); }
+
+  .sidebar-open .dashboard-main {
+    /* "push" effect: leave room for expanded width */
+    margin-left: 0;
+  }
+
+  /* If you prefer a slide-over instead (not pushing): uncomment below
+  .sidebar-nav { position: fixed; left: 0; top: var(--nav-h); z-index: 20; }
+  .sidebar-closed .sidebar-nav { transform: translateX(-100%); }
+  .sidebar-open .sidebar-nav { transform: translateX(0); }
+  .dashboard-main { margin-left: 0 !important; }
+  */
+}
+
+/* optional: a subtle shadow divider between sidebar and content */
+.sidebar-nav { box-shadow: 2px 0 18px rgba(0,0,0,0.35); }
+/* ===== Premium hamburger → arrow toggle ===== */
+.sidebar-toggle.fancy {
+  --btn-bg: rgba(255,255,255,.08);
+  --btn-bg-hover: rgba(255,255,255,.16);
+
+  width: 100%;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--btn-bg);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+  outline: none;
+}
+.sidebar-toggle.fancy:hover { background: var(--btn-bg-hover); box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.sidebar-toggle.fancy:active { transform: translateY(1px); }
+.sidebar-toggle.fancy:focus-visible { box-shadow: 0 0 0 3px rgba(242,201,76,.6), 0 6px 18px rgba(0,0,0,.35); }
+
+/* icon container */
+.hamburger-arrow {
+  position: relative;
+  width: 46px;     /* wide so the arrow shaft can extend */
+  height: 20px;
+}
+
+/* the 3 lines */
+.hamburger-arrow .line {
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform .32s ease, width .32s ease, opacity .22s ease, left .22s ease, border-radius .22s ease;
+}
+.hamburger-arrow .line1 { top: 0; }
+.hamburger-arrow .line2 { top: 9px; }
+.hamburger-arrow .line3 { top: 18px; }
+
+/* —— Morph state: when the sidebar is OPEN, show a → arrow —— */
+.sidebar-open .hamburger-arrow .line1 {
+  /* arrow head (top) */
+  transform: translate(26px, 2px) rotate(35deg) scaleX(.55);
+  border-radius: 50px 50px 0 50px;
+}
+.sidebar-open .hamburger-arrow .line3 {
+  /* arrow head (bottom) */
+  transform: translate(26px, -2px) rotate(-35deg) scaleX(.55);
+  border-radius: 50px 0 50px 50px;
+}
+.sidebar-open .hamburger-arrow .line2 {
+  /* arrow shaft */
+  left: 2px;
+  width: 46px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+/* Optional: when collapsed, keep it tight & centered */
+.sidebar-closed .sidebar-toggle.fancy { justify-content: center; }
+/* ===== Premium toggle (hamburger → arrow) ===== */
+.sidebar-toggle.fancy{
+  --size: 40px;
+  --bg: rgba(255,255,255,.10);
+  --bg-hover: rgba(255,255,255,.18);
+
+  width: var(--size);
+  height: var(--size);
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  outline: none;
+  margin: 2px auto 10px;                /* centers inside sidebar */
+  transition: background .2s, box-shadow .2s, transform .2s;
+}
+.sidebar-toggle.fancy:hover{ background: var(--bg-hover); transform: translateY(-1px); }
+.sidebar-toggle.fancy:active{ transform: translateY(0); }
+.sidebar-toggle.fancy:focus-visible{
+  box-shadow: 0 0 0 3px rgba(242,201,76,.65), 0 6px 18px rgba(0,0,0,.35);
+}
+
+/* icon */
+.hamburger-arrow{ position: relative; width: 46px; height: 20px; }
+.hamburger-arrow .line{
+  position: absolute; left: 0; width: 28px; height: 2px; background:#fff; border-radius:2px;
+  transition: transform .32s ease, width .32s ease, opacity .22s ease, left .22s ease, border-radius .22s;
+}
+.hamburger-arrow .line1{ top: 0; }
+.hamburger-arrow .line2{ top: 9px; }
+.hamburger-arrow .line3{ top: 18px; }
+
+/* morph to → when sidebar is OPEN */
+.sidebar-open .hamburger-arrow .line1{
+  transform: translate(26px, 2px) rotate(35deg) scaleX(.55);
+  border-radius: 50px 50px 0 50px;
+}
+.sidebar-open .hamburger-arrow .line3{
+  transform: translate(26px, -2px) rotate(-35deg) scaleX(.55);
+  border-radius: 50px 0 50px 50px;
+}
+.sidebar-open .hamburger-arrow .line2{
+  left: 2px; width: 46px;
+  border-top-right-radius: 50px; border-bottom-right-radius: 50px;
+}
+
+/* ===== Collapsed tooltips (show when labels are hidden) ===== */
+.sidebar-btn{ position: relative; }
+.sidebar-closed .sidebar-btn:hover::after,
+.sidebar-closed .sidebar-btn:focus-visible::after{
+  content: attr(data-tip);
+  position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%);
+  background:#111; color:#fff; font-size:12px; font-weight:700; letter-spacing:.2px;
+  padding:6px 10px; border-radius:8px; white-space:nowrap; box-shadow:0 8px 20px rgba(0,0,0,.35); z-index:5;
+}
+.sidebar-closed .sidebar-btn:hover::before,
+.sidebar-closed .sidebar-btn:focus-visible::before{
+  content:""; position:absolute; left: calc(100% + 5px); top:50%; transform:translateY(-50%) rotate(45deg);
+  width:8px; height:8px; background:#111; z-index:4;
+}
+
+/* ensure collapsed layout hides labels */
+.sidebar-closed .sidebar-btn .sb-label{ display:none; }
+.sidebar-closed .sidebar-btn{ grid-template-columns:1fr; justify-items:center; }
+/* Center the round toggle inside the sidebar column */
+.sidebar-toggle.fancy {
+  align-self: center;          /* <-- this is the key */
+  margin-top: 6px;             /* sit just under the navbar */
+  margin-bottom: 10px;
+}
+
+/* Keep sidebar padding but don’t let it visually offset the circle */
+.sidebar-nav {
+  padding: 8px 10px;           /* symmetric left/right so center looks true */
+}
+
+/* Small spacing before the nav items */
+.sidebar-tabs {
+  margin-top: 6px;
+}
+/* Adjust vertical position of the toggle */
+.sidebar-toggle.fancy {
+  align-self: center;
+  margin-top: 25px;   /* ⬅️ increased from 6px to 25px */
+  margin-bottom: 12px;
+}
+
+/* Optional: if your sidebar logo is close to it, keep space consistent */
+.sidebar-nav {
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+/* Keep everything visually balanced under navbar */
+.sidebar-tabs {
+  margin-top: 8px;
+}
+/* --- Properly center the toggle button inside the sidebar --- */
+.sidebar-toggle.fancy {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 30px;    /* adjust this for vertical spacing */
+  margin-bottom: 16px;
+}
+
+/* Optional: ensure the sidebar itself doesn't stretch children unevenly */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center all content horizontally */
+  padding-top: 15px;
+}
+
+/* Keep spacing below the toggle consistent */
+.sidebar-tabs {
+  margin-top: 12px;
+  width: 100%;
+}
+/* Remove unwanted shadow/blur from the toggle lines */
+.hamburger-arrow .line {
+  background: #fff;           /* solid white lines */
+  box-shadow: none !important; /* removes any faint shadows */
+  filter: none !important;     /* in case a glow/filter was applied */
+}
+
+/* Ensure toggle circle background is clean and solid */
+.sidebar-toggle.fancy {
+  background: transparent;     /* clean backdrop */
+  box-shadow: none !important; /* no glow */
+  border: none;                /* no ring or outline */
+}
+/* Remove arrow transformation when sidebar toggle is active */
+.sidebar-toggle.fancy .hamburger-arrow .line {
+  transition: all 0.3s ease;
+}
+
+/* Reset transforms applied on checked/active state */
+.sidebar-toggle.fancy.active .line1,
+.sidebar-toggle.fancy.active .line2,
+.sidebar-toggle.fancy.active .line3 {
+  transform: none !important;
+  border-radius: 0 !important;
+  width: 25px !important; /* consistent line width */
+}
+
+/* Optional: make it stay as three clean parallel lines */
+.hamburger-arrow .line {
+  background-color: #fff;
+  box-shadow: none;
+  border-radius: 2px;
+  height: 3px;
+  width: 25px;
+  margin: 5px 0;
+}
+/* Remove arrow transformation when sidebar toggle is active */
+.sidebar-toggle.fancy .hamburger-arrow .line {
+  transition: all 0.3s ease;
+}
+
+/* Reset transforms applied on checked/active state */
+.sidebar-toggle.fancy.active .line1,
+.sidebar-toggle.fancy.active .line2,
+.sidebar-toggle.fancy.active .line3 {
+  transform: none !important;
+  border-radius: 0 !important;
+  width: 25px !important; /* consistent line width */
+}
+
+/* Optional: make it stay as three clean parallel lines */
+.hamburger-arrow .line {
+  background-color: #fff;
+  box-shadow: none;
+  border-radius: 2px;
+  height: 3px;
+  width: 25px;
+  margin: 5px 0;
+}
+#label-check:checked + .hamburger-label .line1,
+#label-check:checked + .hamburger-label .line2,
+#label-check:checked + .hamburger-label .line3 {
+  transform: none !important;
+  border-radius: 0 !important;
+}
+/* Center the toggle nicely */
+.sidebar-toggle.fancy {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 28px;
+  margin-bottom: 14px;
+  background: rgba(255,255,255,.10);
+  border: 0;
+  border-radius: 999px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  box-shadow: none;
+}
+
+/* Clean hamburger (no arrow) */
+.hamburger {
+  position: relative;
+  width: 22px;
+  height: 16px;
+}
+.hamburger .line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  width: 22px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: transform .26s ease, opacity .2s ease;
+}
+.hamburger .line.top    { top: 0; }
+.hamburger .line.middle { top: 7px; }
+.hamburger .line.bottom { top: 14px; }
+
+/* Remove any legacy arrow transforms that might still exist */
+.sidebar-open .hamburger-arrow .line1,
+.sidebar-open .hamburger-arrow .line2,
+.sidebar-open .hamburger-arrow .line3 {
+  transform: none !important;
+  left: 0 !important;
+  width: 22px !important;
+  border-radius: 2px !important;
+}
+
+/* Optional: hamburger → X when sidebar is open */
+.sidebar-open .hamburger .line.top {
+  transform: translateY(7px) rotate(45deg);
+}
+.sidebar-open .hamburger .line.middle {
+  opacity: 0;
+}
+.sidebar-open .hamburger .line.bottom {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Sidebar layout niceties */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+}
+.sidebar-tabs { margin-top: 10px; width: 100%; }
+/* ---------- SIDEBAR CONTAINMENT & BEHAVIOR ---------- */
+
+/* make the rail clip its children so nothing can spill out */
+.sidebar-nav{
+  position: sticky;
+  top: var(--nav-height, 72px);
+  height: calc(100vh - var(--nav-height, 72px));
+  overflow: hidden;            /* <- key: clip any slide-out label */
+  z-index: 1;
+  transition: width .25s ease;
+}
+
+/* scroll long nav lists but never horizontally */
+.sidebar-tabs{
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;          /* <- no sideways scroll/bleed */
+  padding-right: 6px;          /* keep shadows from touching edge */
+}
+
+/* rail widths */
+.sidebar-open  .sidebar-nav { width: 240px; }
+.sidebar-closed .sidebar-nav { width: 68px;  }
+
+/* nav buttons layout */
+.sidebar-btn{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  background: #0b0b0b;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+/* label never leaves the rail; it just collapses */
+.sidebar-btn .sb-label{
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity .2s ease, max-width .2s ease, transform .2s ease;
+}
+.sidebar-open  .sidebar-btn .sb-label{ opacity: 1; max-width: 160px; transform: none; }
+.sidebar-closed .sidebar-btn .sb-label{ opacity: 0; max-width: 0;     transform: translateX(-6px); pointer-events: none; }
+
+/* center icons nicely when collapsed */
+.sidebar-closed .sidebar-btn { justify-content: center; gap: 0; padding: 10px; }
+.sidebar-closed .sidebar-btn .sb-icon{ margin: 0; }
+
+/* If you previously added a CSS tooltip using ::after/::before, turn it off.
+   (You still keep aria-label for screen readers.) */
+.sidebar-btn::after,
+.sidebar-btn::before{ display: none !important; }
+
+/* optional: keep the hamburger clean (no extra shadow behind lines) */
+.sidebar-toggle.fancy .hamburger-arrow .line{
+  box-shadow: none !important;
+}
+
+/* keep the toggle vertically aligned a bit below the brand bar */
+.sidebar-toggle{
+  margin-top: 10px;            /* tweak if you want it lower/higher */
+}
+/* ==== HARD OVERRIDES: keep everything inside the sidebar ==== */
+
+/* Rail sizing + clip */
+.simple-user.sidebar-open  .sidebar-nav  { width: 240px !important; }
+.simple-user.sidebar-closed .sidebar-nav { width: 68px  !important; }
+.sidebar-nav { 
+  position: sticky; 
+  top: var(--nav-height, 72px); 
+  height: calc(100vh - var(--nav-height, 72px));
+  overflow: hidden !important;              /* <- nothing can spill out */
+  z-index: 1;
+}
+.sidebar-tabs{
+  height: 100%;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;            /* <- no horizontal bleed */
+}
+
+/* Buttons are contained; no absolute tricks */
+.sidebar-btn{ 
+  position: relative !important; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  width: 100%;
+}
+
+/* Label behavior: visible when open… */
+.simple-user.sidebar-open .sidebar-btn .sb-label{
+  display: inline-flex !important;
+  opacity: 1 !important;
+  max-width: 160px !important;
+  transform: none !important;
+  position: static !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* …completely gone when closed (no slide-out) */
+.simple-user.sidebar-closed .sidebar-btn .sb-label{
+  display: none !important;
+  opacity: 0 !important;
+  max-width: 0 !important;
+  transform: none !important;
+  position: static !important;
+  pointer-events: none !important;
+}
+
+/* Center icons nicely in collapsed mode */
+.simple-user.sidebar-closed .sidebar-btn{
+  justify-content: center !important;
+  gap: 0 !important;
+  padding: 10px !important;
+}
+
+/* Nuke any pseudo-element tooltips (common pattern with data-tip) */
+.sidebar-btn::before,
+.sidebar-btn::after,
+.sidebar-btn[data-tip]::before,
+.sidebar-btn[data-tip]::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* Keep the hamburger clean (no extra line shadow) */
+.sidebar-toggle.fancy .hamburger-arrow .line{
+  box-shadow: none !important;
+}
+
+/* Optional: position the toggle a touch lower */
+.sidebar-toggle{ margin-top: 10px !important; }
+/* ===== Stop sidebar items from shifting on hover ===== */
+
+/* Make sure the rail never reflows */
+.sidebar-nav { overflow: hidden !important; }
+
+/* Lock button box model + width */
+.sidebar-btn{
+  box-sizing: border-box !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;          /* keep same padding on hover */
+  transform: none !important;              /* kill any previous transforms */
+  transition: background-color .18s ease,  /* only animate color/blur */
+              color .18s ease,
+              box-shadow .18s ease !important;
+}
+
+/* No geometry change on hover (just a subtle bg/shadow if you want) */
+.sidebar-btn:hover{
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+  transform: none !important;
+  background: rgba(255,255,255,0.06) !important;  /* optional */
+  box-shadow: none !important;
+}
+
+/* In collapsed rail, also keep icons centered + no nudge */
+.simple-user.sidebar-closed .sidebar-btn{
+  justify-content: center !important;
+  gap: 0 !important;
+}
+.simple-user.sidebar-closed .sidebar-btn:hover{
+  justify-content: center !important;
+  gap: 0 !important;
+}
+
+/* Don’t let icon or label animate position */
+.sidebar-btn .sb-icon,
+.sidebar-btn .sb-label{
+  transform: none !important;
+  transition: color .18s ease, opacity .18s ease !important;
+}
+
+/* If any earlier rules add translate/scale on focus, neutralize it */
+.sidebar-btn:focus,
+.sidebar-btn:active{
+  transform: none !important;
+  padding: 10px 12px !important;
+}
+
+/* If you kept “slide-out” labels before, make sure they don't push layout */
+.simple-user.sidebar-closed .sidebar-btn .sb-label{
+  display: none !important;
+}
