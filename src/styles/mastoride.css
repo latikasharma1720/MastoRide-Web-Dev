@@ -4783,7 +4783,10 @@ body {
 
 /* Thumb */
 ::-webkit-scrollbar-thumb {
-  background: rgba(180, 150, 70, 0.6); /* subtle golden tint */
+  /* background: rgba(180, 150, 70, 0.6); subtle golden tint
+   */
+
+  background: #d9bb85;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
@@ -12757,4 +12760,99 @@ html,
 /* If you kept “slide-out” labels before, make sure they don't push layout */
 .simple-user.sidebar-closed .sidebar-btn .sb-label{
   display: none !important;
+}
+/* Make the hero text slide in slowly from the left */
+.ud-hero { overflow: hidden; }
+
+.ud-hero h1,
+.ud-hero p {
+  opacity: 0;
+  transform: translateX(-24px);
+  animation: heroSlideIn 1.2s ease-out forwards; /* slow + smooth */
+}
+
+/* Stagger the subtext a bit after the heading */
+.ud-hero p {
+  animation-delay: 0.18s;
+}
+
+@keyframes heroSlideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Respect reduced-motion user preference */
+@media (prefers-reduced-motion: reduce) {
+  .ud-hero h1,
+  .ud-hero p {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Ensure the hero headline actually slides from the left */
+.animate-on-scroll.slide-left {
+  opacity: 0;
+  transform: translateX(-64px);        /* start off-screen-left */
+  transition: opacity .8s ease, transform .8s ease;
+  will-change: transform, opacity;
+}
+
+.animate-in.slide-left {
+  opacity: 1;
+  transform: translateX(0);            /* end at natural position */
+}
+/* === Full-page beige background fix === */
+html,
+body {
+  background-color: #d9bb85 !important;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* React root container inherits the beige background */
+#root {
+  background-color: #d9bb85 !important;
+  min-height: 100vh;
+}
+
+/* Home page and all its sections */
+.home-fullpage,
+.fullpage-section {
+  background-color: #d9bb85 !important;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Prevent any content block from creating visual stripes */
+.hero-section,
+.home-safety,
+.home-affordable,
+.home-footer {
+  background-color: #d9bb85 !important;
+}
+/* ========== SIMPLE GALLERY CARD FIX ========== */
+
+/* Remove light card backgrounds - MAXIMUM SPECIFICITY */
+.home-fullpage .hero-gallery .gallery-card,
+.home-fullpage .hero-gallery figure.gallery-card,
+.home-fullpage .hero-content-center .hero-gallery .gallery-card,
+.home-fullpage .hero-content-center .hero-gallery figure {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Ensure page background is consistent */
+.home-fullpage,
+.fullpage-section,
+.hero-section {
+  background: #d9bb85 !important;
 }
