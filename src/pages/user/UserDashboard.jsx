@@ -1,16 +1,10 @@
+// src/pages/user/UserDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { getUser } from "../../utils/session";
 import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
-
-const KPI = [
-  { id: "points", label: "Reward Points", value: "250", icon: "🎯" },
-  { id: "rides", label: "Total Rides", value: "12", icon: "🚗" },
-  { id: "tier", label: "Membership Tier", value: "Silver", icon: "⭐" },
-  { id: "saved", label: "Total Saved", value: "$45.5", icon: "💰" },
-];
 
 const NAV_ITEMS = [
   { id: "profile", label: "Profile", icon: "👤" },
@@ -25,13 +19,16 @@ const NAV_ITEMS = [
 export default function UserDashboard() {
   const { pushToast } = useToast();
 
+  // auth / route guard
   const [authChecked, setAuthChecked] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const [activeTab, setActiveTab] = useState("history");
+  // ui state
+  const [activeTab, setActiveTab] = useState("book"); // <- default to Book Ride
   const [displayName, setDisplayName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // profile
   const [savingProfile, setSavingProfile] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
@@ -40,9 +37,11 @@ export default function UserDashboard() {
     phone: "",
   });
 
+  // settings
   const [settings, setSettings] = useState({ rideAlerts: true, marketing: false });
   const [savingSettings, setSavingSettings] = useState(false);
 
+  // book ride demo
   const [ride, setRide] = useState({
     pickup: "",
     dropoff: "",
@@ -61,12 +60,14 @@ export default function UserDashboard() {
     xl: { label: "🚐 XL", multiplier: 1.5, note: "6 seats • Multiplier ×1.5" },
   };
 
+  // auth check
   useEffect(() => {
     const u = getUser();
     setCurrentUser(u || null);
     setAuthChecked(true);
   }, []);
 
+  // load profile/settings
   useEffect(() => {
     if (!currentUser) return;
     const uid = currentUser.id || "demo-user";
@@ -86,6 +87,7 @@ export default function UserDashboard() {
 
   const uid = currentUser.id || "demo-user";
 
+  // handlers
   function onProfileChange(e) {
     const { name, value } = e.target;
     setProfile((p) => ({ ...p, [name]: value }));
@@ -155,8 +157,9 @@ export default function UserDashboard() {
 
       <div className={`simple-user ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
         <div className="dashboard-layout">
+          {/* Sidebar (sticky) */}
           <aside className="sidebar-nav" aria-label="Section navigation">
-            {/* Toggle (clean hamburger – no arrow) */}
+            {/* Toggle (clean hamburger) */}
             <button
               className="sidebar-toggle fancy"
               type="button"
@@ -181,31 +184,24 @@ export default function UserDashboard() {
                   data-tip={label}
                   aria-label={label}
                 >
-                  <span className="sb-icon" aria-hidden="true">
-                    {icon}
-                  </span>
+                  <span className="sb-icon" aria-hidden="true">{icon}</span>
                   <span className="sb-label">{label}</span>
                 </button>
               ))}
             </nav>
           </aside>
 
+          {/* Main */}
           <main className="dashboard-main">
-            <section className="ud-hero">
-              <h1>Welcome back, {displayName || "user"}! 👋</h1>
-              <p>Manage your account and view your ride history</p>
-            </section>
+            {/* HERO only on Book tab */}
+            {activeTab === "book" && (
+              <section className="ud-hero">
+                <h1>Welcome back, {displayName || "user"}! 👋</h1>
+                <p>Plan your next ride and estimate your fare in seconds.</p>
+              </section>
+            )}
 
-            <section className="ud-kpis">
-              {KPI.map((k) => (
-                <article key={k.id} className="ud-kpi">
-                  <div className="ud-kpi-icon">{k.icon}</div>
-                  <div className="ud-kpi-value">{k.value}</div>
-                  <div className="ud-kpi-label">{k.label}</div>
-                </article>
-              ))}
-            </section>
-
+            {/* Profile */}
             {activeTab === "profile" && (
               <section className="ud-panel">
                 <header className="ud-head">
@@ -216,7 +212,12 @@ export default function UserDashboard() {
                 <form className="ud-form" onSubmit={onSaveProfile}>
                   <label className="ud-field">
                     <span>Full Name</span>
-                    <input name="name" type="text" value={profile.name} onChange={onProfileChange} />
+                    <input
+                      name="name"
+                      type="text"
+                      value={profile.name}
+                      onChange={onProfileChange}
+                    />
                   </label>
 
                   <label className="ud-field">
@@ -248,6 +249,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* Book */}
             {activeTab === "book" && (
               <section className="ud-panel">
                 <header className="ud-head">
@@ -335,7 +337,11 @@ export default function UserDashboard() {
                       className="estimate-btn"
                       disabled={estimating}
                     >
-                      {estimating ? "Estimating…" : fare ? `💵 Estimated Fare: $${fare}` : "Estimate Fare"}
+                      {estimating
+                        ? "Estimating…"
+                        : fare
+                        ? `💵 Estimated Fare: $${fare}`
+                        : "Estimate Fare"}
                     </button>
                   </div>
 
@@ -348,6 +354,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* Payment */}
             {activeTab === "payment" && (
               <section className="ud-panel">
                 <header className="ud-head">
@@ -366,6 +373,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* Rewards */}
             {activeTab === "rewards" && (
               <section className="ud-panel rewards-panel">
                 <header>
@@ -381,6 +389,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* History */}
             {activeTab === "history" && (
               <section className="ud-panel">
                 <header className="ud-head">
@@ -423,6 +432,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* Support */}
             {activeTab === "support" && (
               <section className="ud-panel">
                 <header className="ud-head">
@@ -440,6 +450,7 @@ export default function UserDashboard() {
               </section>
             )}
 
+            {/* Settings */}
             {activeTab === "settings" && (
               <section className="ud-panel">
                 <header className="ud-head">
