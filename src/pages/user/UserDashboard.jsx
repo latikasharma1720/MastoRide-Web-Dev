@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import { getUser } from "../../utils/session";
 import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
+import MapBlock from "../../components/MapBlock"; // <— NEW
 
 const NAV_ITEMS = [
   { id: "profile", label: "Profile", icon: "👤" },
@@ -24,7 +25,7 @@ export default function UserDashboard() {
   const [currentUser, setCurrentUser] = useState(null);
 
   // ui state
-  const [activeTab, setActiveTab] = useState("book"); // <- default to Book Ride
+  const [activeTab, setActiveTab] = useState("book"); // default to Book Ride
   const [displayName, setDisplayName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -41,7 +42,7 @@ export default function UserDashboard() {
   const [settings, setSettings] = useState({ rideAlerts: true, marketing: false });
   const [savingSettings, setSavingSettings] = useState(false);
 
-  // book ride demo
+  // book ride
   const [ride, setRide] = useState({
     pickup: "",
     dropoff: "",
@@ -159,7 +160,6 @@ export default function UserDashboard() {
         <div className="dashboard-layout">
           {/* Sidebar (sticky) */}
           <aside className="sidebar-nav" aria-label="Section navigation">
-            {/* Toggle (clean hamburger) */}
             <button
               className="sidebar-toggle fancy"
               type="button"
@@ -351,6 +351,11 @@ export default function UserDashboard() {
                 </form>
 
                 {confirmMsg && <div className="confirm-msg">{confirmMsg}</div>}
+
+                {/* MAP — automatically reacts to pickup/dropoff text */}
+                <div style={{ marginTop: 16 }}>
+                  <MapBlock pickupAddress={ride.pickup} dropoffAddress={ride.dropoff} />
+                </div>
               </section>
             )}
 
