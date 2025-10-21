@@ -269,7 +269,7 @@ export default function UserDashboard() {
                     <section className="ud-panel">
                       <header className="ud-head">
                         <h2>Book a Ride 🚗</h2>
-                        <p>Plan your next ride and estimate the fare instantly.</p>
+                        {/* Removed subtitle */}
                       </header>
 
                       <form className="ud-form bookride" onSubmit={(e) => e.preventDefault()}>
@@ -341,7 +341,7 @@ export default function UserDashboard() {
                                 </option>
                               ))}
                             </select>
-                            <small>{VEHICLES[ride.vehicleType].note}</small>
+                            {/* Removed multiplier note */}
                           </label>
                         </div>
 
