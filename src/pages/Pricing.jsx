@@ -1,36 +1,59 @@
+import React from "react";
+
 export default function Pricing() {
+  const plans = [
+    {
+      name: "Basic Plan",
+      price: "$5",
+      period: "/ ride",
+      features: [
+        "Campus to nearby destinations",
+        "Available 8 AM – 10 PM",
+        "Verified student drivers",
+        "Chat support",
+      ],
+      button: "Choose Basic",
+      premium: false,
+    },
+    {
+      name: "Premium Plan",
+      price: "$20",
+      period: "/ month",
+      features: [
+        "Unlimited short rides",
+        "Priority booking",
+        "Exclusive weekend offers",
+        "24/7 support",
+      ],
+      button: "Go Premium",
+      premium: true,
+    },
+  ];
+
   return (
-    <div className="page-wrapper">
-      <section class="pricing fade-in">
-        <h1>Our Pricing Plans</h1>
-        <p class="intro">Simple, transparent pricing made just for students.</p>
+    <div className="pricing-section">
+      <h2>Our Pricing Plans</h2>
+      <p className="intro">Simple, transparent pricing made just for students.</p>
 
-        <div class="pricing-grid">
-          <div class="pricing-card fade-in-up">
-            <h2>Basic Plan</h2>
-            <p class="price">$5 <span>/ ride</span></p>
+      <div className="pricing-grid">
+        {plans.map((plan) => (
+          <div
+            key={plan.name}
+            className={`pricing-card ${plan.premium ? "premium" : ""}`}
+          >
+            <h2>{plan.name}</h2>
+            <p className="price">
+              {plan.price} <span>{plan.period}</span>
+            </p>
             <ul>
-              <li>Campus to nearby destinations</li>
-              <li>Available 8 AM – 10 PM</li>
-              <li>Verified student drivers</li>
-              <li>Chat support</li>
+              {plan.features.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
             </ul>
-            <button>Choose Basic</button>
+            <button>{plan.button}</button>
           </div>
-
-          <div class="pricing-card premium fade-in-up">
-            <h2>Premium Plan</h2>
-            <p class="price">$20 <span>/ month</span></p>
-            <ul>
-              <li>Unlimited short rides</li>
-              <li>Priority booking</li>
-              <li>Exclusive weekend offers</li>
-              <li>24/7 support</li>
-            </ul>
-            <button>Go Premium</button>
-          </div>
-        </div>
-      </section>
+        ))}
+      </div>
     </div>
   );
 }
