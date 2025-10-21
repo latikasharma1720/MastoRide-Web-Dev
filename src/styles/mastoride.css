@@ -13104,3 +13104,46 @@ body {
 .ud .book-form-col .ud-panel .ud-form.bookride {
   padding-top: 0.5rem;
 }
+/* ========== CLEAN PROFILE LAYOUT ========== */
+.clean-profile-layout { padding: 2rem; max-width: 800px; margin: 0 auto; }
+.profile-main-card { background: rgba(255,255,255,0.5); border-radius: 24px; padding: 2.5rem; box-shadow: 0 12px 36px rgba(0,0,0,0.12); }
+
+.profile-hero { display: flex; justify-content: space-between; align-items: center; padding-bottom: 2rem; border-bottom: 2px solid rgba(0,0,0,0.08); margin-bottom: 2rem; }
+.profile-hero-left { display: flex; align-items: center; gap: 1.5rem; }
+.profile-avatar-large { flex-shrink: 0; }
+.avatar-circle-large { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, #1b1b1b, #000); color: #f6e58d; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 800; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.profile-hero-info h2 { margin: 0 0 6px; font-size: 28px; font-weight: 800; color: #1b1b1b; }
+.profile-hero-info p { margin: 0; font-size: 15px; color: rgba(0,0,0,0.55); }
+.edit-btn-top { padding: 10px 24px; border-radius: 12px; background: linear-gradient(135deg, #c9a961, #b8935a); color: #fff; border: none; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(201,169,97,0.3); transition: all 0.2s; }
+.edit-btn-top:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(201,169,97,0.4); }
+
+.clean-profile-form { display: flex; flex-direction: column; gap: 1.5rem; }
+.form-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.clean-field { display: flex; flex-direction: column; gap: 8px; }
+.clean-field span { font-weight: 700; font-size: 14px; color: #1b1b1b; }
+.clean-field input, .clean-field select { height: 50px; padding: 0 16px; border: 2px solid rgba(0,0,0,0.12); border-radius: 12px; font-size: 15px; background: #fff; transition: all 0.2s; }
+.clean-field input::placeholder { color: rgba(0,0,0,0.4); }
+.clean-field input:focus, .clean-field select:focus { outline: none; border-color: #c9a961; box-shadow: 0 0 0 4px rgba(201,169,97,0.12); }
+
+.email-section { margin-top: 1rem; padding: 1.5rem; background: rgba(255,255,255,0.4); border-radius: 16px; }
+.email-section h3 { margin: 0 0 1rem; font-size: 16px; font-weight: 800; color: #1b1b1b; }
+.email-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #fff; border-radius: 12px; margin-bottom: 12px; }
+.email-icon { font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(201,169,97,0.1); border-radius: 10px; }
+.email-info { flex: 1; }
+.email-info strong { display: block; font-size: 15px; color: #1b1b1b; }
+.email-time { font-size: 13px; color: rgba(0,0,0,0.5); }
+.add-email-btn { width: 100%; padding: 12px; border: 2px dashed rgba(0,0,0,0.2); background: transparent; border-radius: 12px; color: rgba(0,0,0,0.5); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.add-email-btn:hover { border-color: #c9a961; color: #c9a961; background: rgba(201,169,97,0.05); }
+
+.save-btn-bottom { width: 100%; height: 54px; margin-top: 1rem; background: #1b1b1b; color: #f6e58d; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,0.2); transition: all 0.2s; }
+.save-btn-bottom:hover { background: #000; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+.save-btn-bottom:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+@media (max-width: 768px) {
+  .clean-profile-layout { padding: 1rem; }
+  .profile-main-card { padding: 1.5rem; border-radius: 20px; }
+  .profile-hero { flex-direction: column; text-align: center; gap: 1rem; }
+  .profile-hero-left { flex-direction: column; }
+  .avatar-circle-large { width: 75px; height: 75px; font-size: 36px; }
+  .form-grid-2col { grid-template-columns: 1fr; gap: 1rem; }
+}
