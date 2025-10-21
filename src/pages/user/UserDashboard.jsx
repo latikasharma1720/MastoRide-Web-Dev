@@ -17,7 +17,6 @@ const NAV_ITEMS = [
   { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
-// localStorage keys
 const LS_KEYS = {
   ride: "ud_ride_draft",
   tab: "ud_active_tab",
@@ -27,20 +26,15 @@ const LS_KEYS = {
 export default function UserDashboard() {
   const { pushToast } = useToast();
 
-  // auth / route guard
   const [authChecked, setAuthChecked] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-
-  // ui state (pull tab & sidebar from localStorage if present)
-  const [activeTab, setActiveTab] = useState(() => localStorage.getItem(LS_KEYS.tab) || "book");
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem(LS_KEYS.tab) || "profile");
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     const raw = localStorage.getItem(LS_KEYS.sidebar);
     return raw == null ? true : raw === "true";
   });
 
   const [displayName, setDisplayName] = useState("");
-
-  // profile
   const [savingProfile, setSavingProfile] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
@@ -49,33 +43,22 @@ export default function UserDashboard() {
     phone: "",
   });
 
-  // settings
-  const [settings, setSettings] = useState({ rideAlerts: true, marketing: false });
+  const [settings, setSettings] = useState({ 
+    rideAlerts: true, 
+    marketing: false,
+    wheelchairAccess: false,
+    darkMode: false 
+  });
   const [savingSettings, setSavingSettings] = useState(false);
 
-  // book ride (load draft from localStorage if present)
   const [ride, setRide] = useState(() => {
     try {
       const raw = localStorage.getItem(LS_KEYS.ride);
-      return (
-        JSON.parse(raw) || {
-          pickup: "",
-          dropoff: "",
-          date: "",
-          time: "",
-          passengers: 1,
-          vehicleType: "economy",
-        }
-      );
-    } catch {
-      return {
-        pickup: "",
-        dropoff: "",
-        date: "",
-        time: "",
-        passengers: 1,
-        vehicleType: "economy",
+      return JSON.parse(raw) || {
+        pickup: "", dropoff: "", date: "", time: "", passengers: 1, vehicleType: "economy",
       };
+    } catch {
+      return { pickup: "", dropoff: "", date: "", time: "", passengers: 1, vehicleType: "economy" };
     }
   });
 
@@ -84,33 +67,21 @@ export default function UserDashboard() {
   const [confirmMsg, setConfirmMsg] = useState("");
 
   const VEHICLES = {
-    economy: { label: "🚕 Economy", multiplier: 1, note: "Best value • Multiplier ×1" },
-    premium: { label: "🚘 Premium", multiplier: 2, note: "Luxury ride • Multiplier ×2" },
-    xl: { label: "🚐 XL", multiplier: 1.5, note: "6 seats • Multiplier ×1.5" },
+    economy: { label: "🚕 Economy", multiplier: 1 },
+    premium: { label: "🚘 Premium", multiplier: 2 },
+    xl: { label: "🚐 XL", multiplier: 1.5 },
   };
 
-  // persist UI state to localStorage
-  useEffect(() => {
-    localStorage.setItem(LS_KEYS.tab, activeTab);
-  }, [activeTab]);
+  useEffect(() => { localStorage.setItem(LS_KEYS.tab, activeTab); }, [activeTab]);
+  useEffect(() => { localStorage.setItem(LS_KEYS.sidebar, String(sidebarOpen)); }, [sidebarOpen]);
+  useEffect(() => { localStorage.setItem(LS_KEYS.ride, JSON.stringify(ride)); }, [ride]);
 
-  useEffect(() => {
-    localStorage.setItem(LS_KEYS.sidebar, String(sidebarOpen));
-  }, [sidebarOpen]);
-
-  // persist ride draft whenever it changes
-  useEffect(() => {
-    localStorage.setItem(LS_KEYS.ride, JSON.stringify(ride));
-  }, [ride]);
-
-  // auth check
   useEffect(() => {
     const u = getUser();
     setCurrentUser(u || null);
     setAuthChecked(true);
   }, []);
 
-  // load profile/settings
   useEffect(() => {
     if (!currentUser) return;
     const uid = currentUser.id || "demo-user";
@@ -121,7 +92,13 @@ export default function UserDashboard() {
       email: stored.email || currentUser.email || "user1@pfw.edu",
       phone: stored.phone || currentUser.phone || "",
     });
-    setSettings(getSettings(uid));
+    const loadedSettings = getSettings(uid);
+    setSettings({
+      rideAlerts: loadedSettings.rideAlerts ?? true,
+      marketing: loadedSettings.marketing ?? false,
+      wheelchairAccess: loadedSettings.wheelchairAccess ?? false,
+      darkMode: loadedSettings.darkMode ?? false,
+    });
     setDisplayName(stored.name || currentUser.name || "user1");
   }, [currentUser]);
 
@@ -130,7 +107,6 @@ export default function UserDashboard() {
 
   const uid = currentUser.id || "demo-user";
 
-  // handlers
   function onProfileChange(e) {
     const { name, value } = e.target;
     setProfile((p) => ({ ...p, [name]: value }));
@@ -187,65 +163,32 @@ export default function UserDashboard() {
 
   const handleBookRide = (e) => {
     e.preventDefault();
-
     const { pickup, dropoff, date, time, vehicleType } = ride;
-
     if (!pickup || !dropoff) {
       setConfirmMsg("⚠️ Please enter both pickup and drop-off locations before confirming your ride.");
       return;
     }
-
-    const formattedDate = date
-      ? new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })
-      : "(select date)";
+    const formattedDate = date ? new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) : "(select date)";
     const formattedTime = time || "(select time)";
-
-    setConfirmMsg(
-      `🎉 Ride Confirmed!
-
-📍 **From:** ${pickup}
-🏁 **To:** ${dropoff}
-📅 **Date:** ${formattedDate}
-⏰ **Time:** ${formattedTime}
-🚗 **Vehicle Type:** ${VEHICLES[vehicleType].label}
-
-💬 Your driver will be assigned shortly. You'll receive ride details and tracking updates soon.`
-    );
+    setConfirmMsg(`🎉 Ride Confirmed!\n\n📍 **From:** ${pickup}\n🏁 **To:** ${dropoff}\n📅 **Date:** ${formattedDate}\n⏰ **Time:** ${formattedTime}\n🚗 **Vehicle Type:** ${VEHICLES[vehicleType].label}\n\n💬 Your driver will be assigned shortly.`);
   };
 
   return (
     <>
       <Navbar />
-
-      {/* === Namespaced wrapper to isolate all dashboard styles === */}
       <div className={`ud ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
         <div className="dashboard-layout">
-          {/* Sidebar (sticky) */}
           <aside className="sidebar-nav" aria-label="Section navigation">
-            <button
-              className="sidebar-toggle fancy"
-              type="button"
-              onClick={() => setSidebarOpen((v) => !v)}
-              aria-expanded={sidebarOpen}
-              aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-              title={sidebarOpen ? "Collapse" : "Expand"}
-            >
+            <button className="sidebar-toggle fancy" type="button" onClick={() => setSidebarOpen((v) => !v)} aria-expanded={sidebarOpen}>
               <span className="hamburger">
                 <span className="line top" />
                 <span className="line middle" />
                 <span className="line bottom" />
               </span>
             </button>
-
             <nav className="sidebar-tabs">
               {NAV_ITEMS.map(({ id, label, icon }) => (
-                <button
-                  key={id}
-                  className={`sidebar-btn ${activeTab === id ? "active" : ""}`}
-                  onClick={() => setActiveTab(id)}
-                  data-tip={label}
-                  aria-label={label}
-                >
+                <button key={id} className={`sidebar-btn ${activeTab === id ? "active" : ""}`} onClick={() => setActiveTab(id)} data-tip={label} aria-label={label}>
                   <span className="sb-icon" aria-hidden="true">{icon}</span>
                   <span className="sb-label">{label}</span>
                 </button>
@@ -253,189 +196,152 @@ export default function UserDashboard() {
             </nav>
           </aside>
 
-          {/* Main */}
           <main className="dashboard-main">
             <div className="dashboard-content-wrapper">
-              {/* Book Tab - TWO COLUMN LAYOUT */}
+              {activeTab === "profile" && (
+                <div className="clean-profile-layout">
+                  <div className="profile-main-card">
+                    <div className="profile-hero">
+                      <div className="profile-hero-left">
+                        <div className="profile-avatar-large">
+                          <span className="avatar-circle-large">{profile.name.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <div className="profile-hero-info">
+                          <h2>{profile.name}</h2>
+                          <p>{profile.email}</p>
+                        </div>
+                      </div>
+                      <button className="edit-btn-top" onClick={() => setActiveTab('settings')}>
+                        Edit
+                      </button>
+                    </div>
+
+                    <form className="clean-profile-form" onSubmit={onSaveProfile}>
+                      <div className="form-grid-2col">
+                        <label className="clean-field">
+                          <span>Full Name</span>
+                          <input name="name" type="text" placeholder="Your First Name" value={profile.name} onChange={onProfileChange} />
+                        </label>
+                        <label className="clean-field">
+                          <span>Nick Name</span>
+                          <input type="text" placeholder="Your First Name" value={profile.name.split(' ')[0]} readOnly />
+                        </label>
+                      </div>
+
+                      <div className="form-grid-2col">
+                        <label className="clean-field">
+                          <span>Gender</span>
+                          <select>
+                            <option>Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                          </select>
+                        </label>
+                        <label className="clean-field">
+                          <span>Country</span>
+                          <select>
+                            <option>United States</option>
+                          </select>
+                        </label>
+                      </div>
+
+                      <div className="form-grid-2col">
+                        <label className="clean-field">
+                          <span>Language</span>
+                          <select>
+                            <option>English</option>
+                          </select>
+                        </label>
+                        <label className="clean-field">
+                          <span>Time Zone</span>
+                          <select>
+                            <option>EST (UTC-5)</option>
+                          </select>
+                        </label>
+                      </div>
+
+                      <div className="email-section">
+                        <h3>My email Address</h3>
+                        <div className="email-item">
+                          <div className="email-icon">📧</div>
+                          <div className="email-info">
+                            <strong>{profile.email}</strong>
+                            <span className="email-time">1 month ago</span>
+                          </div>
+                        </div>
+                        <button type="button" className="add-email-btn">+ Add Email Address</button>
+                      </div>
+
+                      <button className="save-btn-bottom" type="submit" disabled={savingProfile}>
+                        {savingProfile ? "Saving..." : "Save Changes"}
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              )}
+
               {activeTab === "book" && (
                 <div className="book-layout">
-                  {/* LEFT COLUMN - Form */}
                   <div className="book-form-col">
                     <section className="ud-hero">
                       <h1>Welcome back, {displayName || "user"}! 👋</h1>
                       <p>Plan your next ride and estimate your fare in seconds.</p>
                     </section>
-
                     <section className="ud-panel">
-                      <header className="ud-head">
-                        <h2>Book a Ride 🚗</h2>
-                        {/* Removed subtitle */}
-                      </header>
-
+                      <header className="ud-head"><h2>Book a Ride 🚗</h2></header>
                       <form className="ud-form bookride" onSubmit={(e) => e.preventDefault()}>
                         <label className="ud-field">
                           <span>Pickup Location</span>
-                          <input
-                            type="text"
-                            placeholder="e.g., Walb Student Union, Fort Wayne, IN"
-                            value={ride.pickup}
-                            onChange={(e) => setRide({ ...ride, pickup: e.target.value })}
-                          />
+                          <input type="text" placeholder="e.g., Walb Student Union" value={ride.pickup} onChange={(e) => setRide({ ...ride, pickup: e.target.value })} />
                         </label>
-
                         <label className="ud-field">
                           <span>Drop-off Location</span>
-                          <input
-                            type="text"
-                            placeholder="e.g., Coliseum Blvd, Fort Wayne, IN"
-                            value={ride.dropoff}
-                            onChange={(e) => setRide({ ...ride, dropoff: e.target.value })}
-                          />
+                          <input type="text" placeholder="e.g., Coliseum Blvd" value={ride.dropoff} onChange={(e) => setRide({ ...ride, dropoff: e.target.value })} />
                         </label>
-
                         <div className="ud-row">
                           <label className="ud-field">
                             <span>Date</span>
-                            <input
-                              type="date"
-                              value={ride.date}
-                              onChange={(e) => setRide({ ...ride, date: e.target.value })}
-                            />
+                            <input type="date" value={ride.date} onChange={(e) => setRide({ ...ride, date: e.target.value })} />
                           </label>
                           <label className="ud-field">
                             <span>Time</span>
-                            <input
-                              type="time"
-                              value={ride.time}
-                              onChange={(e) => setRide({ ...ride, time: e.target.value })}
-                            />
+                            <input type="time" value={ride.time} onChange={(e) => setRide({ ...ride, time: e.target.value })} />
                           </label>
                         </div>
-
                         <div className="ud-row">
                           <label className="ud-field">
                             <span>Passengers</span>
-                            <input
-                              type="number"
-                              min="1"
-                              max="6"
-                              value={ride.passengers}
-                              onChange={(e) =>
-                                setRide({
-                                  ...ride,
-                                  passengers: parseInt(e.target.value || "1", 10),
-                                })
-                              }
-                            />
+                            <input type="number" min="1" max="6" value={ride.passengers} onChange={(e) => setRide({ ...ride, passengers: parseInt(e.target.value || "1", 10) })} />
                           </label>
-
                           <label className="ud-field">
                             <span>Vehicle Type</span>
-                            <select
-                              value={ride.vehicleType}
-                              onChange={(e) => setRide({ ...ride, vehicleType: e.target.value })}
-                            >
+                            <select value={ride.vehicleType} onChange={(e) => setRide({ ...ride, vehicleType: e.target.value })}>
                               {Object.entries(VEHICLES).map(([key, v]) => (
-                                <option key={key} value={key}>
-                                  {v.label}
-                                </option>
+                                <option key={key} value={key}>{v.label}</option>
                               ))}
                             </select>
-                            {/* Removed multiplier note */}
                           </label>
                         </div>
-
                         <div className="br-actions">
-                          <button
-                            type="button"
-                            onClick={handleEstimateFare}
-                            className="estimate-btn"
-                            disabled={estimating}
-                          >
-                            {estimating
-                              ? "Estimating…"
-                              : fare
-                              ? `💵 Estimated Fare: $${fare}`
-                              : "Estimate Fare"}
+                          <button type="button" onClick={handleEstimateFare} className="estimate-btn" disabled={estimating}>
+                            {estimating ? "Estimating…" : fare ? `💵 Estimated Fare: $${fare}` : "Estimate Fare"}
                           </button>
                         </div>
-
-                        <button className="btn wide confirm-btn" onClick={handleBookRide} type="button">
-                          Confirm Booking
-                        </button>
+                        <button className="btn wide confirm-btn" onClick={handleBookRide} type="button">Confirm Booking</button>
                       </form>
-
                       {confirmMsg && <div className="confirm-msg">{confirmMsg}</div>}
                     </section>
                   </div>
-
-                  {/* RIGHT COLUMN - Map */}
                   <div className="book-map-col">
-                    <MapBlock 
-                      pickupText={ride.pickup} 
-                      dropoffText={ride.dropoff}
-                      height={600}
-                    />
+                    <MapBlock pickupText={ride.pickup} dropoffText={ride.dropoff} height={600} />
                   </div>
                 </div>
               )}
 
-              {/* Profile */}
-              {activeTab === "profile" && (
-                <section className="ud-panel">
-                  <header className="ud-head">
-                    <h2>Account Details</h2>
-                    <p>Update your personal information</p>
-                  </header>
-
-                  <form className="ud-form" onSubmit={onSaveProfile}>
-                    <label className="ud-field">
-                      <span>Full Name</span>
-                      <input
-                        name="name"
-                        type="text"
-                        value={profile.name}
-                        onChange={onProfileChange}
-                      />
-                    </label>
-
-                    <label className="ud-field">
-                      <span>Student ID</span>
-                      <input name="studentId" type="text" value={profile.studentId} readOnly />
-                      <small>Assigned by PFW</small>
-                    </label>
-
-                    <label className="ud-field">
-                      <span>Email Address</span>
-                      <input name="email" type="email" value={profile.email} readOnly />
-                    </label>
-
-                    <label className="ud-field">
-                      <span>Phone Number</span>
-                      <input
-                        name="phone"
-                        type="tel"
-                        placeholder="(260) 555-0123"
-                        value={profile.phone}
-                        onChange={onProfileChange}
-                      />
-                    </label>
-
-                    <button className="btn wide" type="submit" disabled={savingProfile}>
-                      {savingProfile ? "Saving..." : "Save Profile"}
-                    </button>
-                  </form>
-                </section>
-              )}
-
-              {/* Payment */}
               {activeTab === "payment" && (
                 <section className="ud-panel">
-                  <header className="ud-head">
-                    <h2>Payment</h2>
-                    <p>Manage your saved methods and receipts</p>
-                  </header>
-
+                  <header className="ud-head"><h2>Payment</h2><p>Manage your saved methods and receipts</p></header>
                   <div className="ud-empty">
                     <div className="ud-chip">💳</div>
                     <p>No payment methods saved yet.</p>
@@ -447,14 +353,9 @@ export default function UserDashboard() {
                 </section>
               )}
 
-              {/* Rewards */}
               {activeTab === "rewards" && (
                 <section className="ud-panel rewards-panel">
-                  <header>
-                    <h2>Rewards</h2>
-                    <p>Track points and redeem perks</p>
-                  </header>
-
+                  <header><h2>Rewards</h2><p>Track points and redeem perks</p></header>
                   <div className="rewards-content">
                     <div className="reward-points">🏅 250 Points</div>
                     <div className="reward-message">Keep riding to reach Gold tier!</div>
@@ -463,18 +364,13 @@ export default function UserDashboard() {
                 </section>
               )}
 
-              {/* History */}
               {activeTab === "history" && (
                 <section className="ud-panel">
-                  <header className="ud-head">
-                    <h2>Ride History</h2>
-                    <p>Your recent campus and off-campus rides</p>
-                  </header>
-
+                  <header className="ud-head"><h2>Ride History</h2><p>Your recent campus and off-campus rides</p></header>
                   <ul className="ud-list">
                     <li className="ud-list-item">
                       <div className="ud-ride-info">
-                        <strong>09/22</strong> • Campus Center → <b>Jefferson Pointe Mall</b> <br />
+                        <strong>09/22</strong> • Campus Center → <b>Jefferson Pointe Mall</b><br />
                         <span className="ud-destination">📍 Off-Campus Destination — Fort Wayne</span>
                       </div>
                       <div className="ud-ride-meta">
@@ -484,7 +380,7 @@ export default function UserDashboard() {
                     </li>
                     <li className="ud-list-item">
                       <div className="ud-ride-info">
-                        <strong>09/19</strong> • Dorms → <b>Fort Wayne International Airport</b> <br />
+                        <strong>09/19</strong> • Dorms → <b>Fort Wayne International Airport</b><br />
                         <span className="ud-destination">📍 Off-Campus Destination — Fort Wayne</span>
                       </div>
                       <div className="ud-ride-meta">
@@ -492,27 +388,13 @@ export default function UserDashboard() {
                         <span className="ud-pill">Completed</span>
                       </div>
                     </li>
-                    <li className="ud-list-item">
-                      <div className="ud-ride-info">
-                        <strong>09/16</strong> • Engineering Building → <b>Electric Works</b> <br />
-                        <span className="ud-destination">📍 Off-Campus Destination — Fort Wayne</span>
-                      </div>
-                      <div className="ud-ride-meta">
-                        <span className="ud-price">💵 $9.80</span>
-                        <span className="ud-pill">Completed</span>
-                      </div>
-                    </li>
                   </ul>
                 </section>
               )}
 
-              {/* Support */}
               {activeTab === "support" && (
                 <section className="ud-panel">
-                  <header className="ud-head">
-                    <h2>Support</h2>
-                    <p>We're here to help</p>
-                  </header>
+                  <header className="ud-head"><h2>Support</h2><p>We're here to help</p></header>
                   <div className="ud-empty">
                     <div className="ud-chip">🛟</div>
                     <p>Need assistance? Start a ticket or visit the Help Center.</p>
@@ -524,48 +406,27 @@ export default function UserDashboard() {
                 </section>
               )}
 
-              {/* Settings */}
               {activeTab === "settings" && (
                 <section className="ud-panel">
-                  <header className="ud-head">
-                    <h2>Settings</h2>
-                    <p>Customize notifications & preferences</p>
-                  </header>
-
+                  <header className="ud-head"><h2>Settings</h2><p>Customize notifications & preferences</p></header>
                   <form className="ud-form" onSubmit={onSaveSettings}>
                     <div className="setting-item">
-                      <div>
-                        <strong>Ride Alerts</strong>
-                        <p>Receive notifications for ride updates</p>
-                      </div>
-                      <label className="toggle">
-                        <input
-                          type="checkbox"
-                          checked={settings.rideAlerts}
-                          onChange={() => onToggleSetting("rideAlerts")}
-                        />
-                        <span />
-                      </label>
+                      <div><strong>Wheelchair Access</strong><p>Request wheelchair-accessible vehicles</p></div>
+                      <label className="toggle"><input type="checkbox" checked={settings.wheelchairAccess} onChange={() => onToggleSetting("wheelchairAccess")} /><span /></label>
                     </div>
-
                     <div className="setting-item">
-                      <div>
-                        <strong>Marketing Emails</strong>
-                        <p>Get news and promotions</p>
-                      </div>
-                      <label className="toggle">
-                        <input
-                          type="checkbox"
-                          checked={settings.marketing}
-                          onChange={() => onToggleSetting("marketing")}
-                        />
-                        <span />
-                      </label>
+                      <div><strong>Dark Mode</strong><p>Use dark theme across the app</p></div>
+                      <label className="toggle"><input type="checkbox" checked={settings.darkMode} onChange={() => onToggleSetting("darkMode")} /><span /></label>
                     </div>
-
-                    <button className="btn wide" type="submit" disabled={savingSettings}>
-                      {savingSettings ? "Saving..." : "Save Settings"}
-                    </button>
+                    <div className="setting-item">
+                      <div><strong>Ride Alerts</strong><p>Receive notifications for ride updates</p></div>
+                      <label className="toggle"><input type="checkbox" checked={settings.rideAlerts} onChange={() => onToggleSetting("rideAlerts")} /><span /></label>
+                    </div>
+                    <div className="setting-item">
+                      <div><strong>Marketing Emails</strong><p>Get news and promotions</p></div>
+                      <label className="toggle"><input type="checkbox" checked={settings.marketing} onChange={() => onToggleSetting("marketing")} /><span /></label>
+                    </div>
+                    <button className="btn wide" type="submit" disabled={savingSettings}>{savingSettings ? "Saving..." : "Save Settings"}</button>
                   </form>
                 </section>
               )}
