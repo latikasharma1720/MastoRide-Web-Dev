@@ -128,7 +128,7 @@ export default function UserDashboard() {
       saveProfile(uid, profile);
       setDisplayName(profile.name);
       pushToast("Profile saved!", "success");
-      setIsEditing(false); // Exit edit mode after saving
+      setIsEditing(false);
     } catch {
       pushToast("Could not save profile.", "error");
     } finally {
@@ -373,17 +373,62 @@ export default function UserDashboard() {
               )}
 
               {activeTab === "payment" && (
-                <section className="ud-panel">
-                  <header className="ud-head"><h2>Payment</h2><p>Manage your saved methods and receipts</p></header>
-                  <div className="ud-empty">
-                    <div className="ud-chip">💳</div>
-                    <p>No payment methods saved yet.</p>
-                    <div className="ud-actions">
-                      <button className="btn">Add Card</button>
-                      <button className="btn ghost">View Receipts</button>
+                <div className="payment-page-wrapper">
+                  {/* MastoRide Cash Section */}
+                  <div className="mastoride-cash-card">
+                    <h3 className="cash-title">MastoRide Cash</h3>
+                    <div className="cash-amount">${(0).toFixed(2)}</div>
+                    <p className="cash-subtitle">Plan ahead, budget easier</p>
+                    <div className="cash-actions">
+                      <button className="btn-add-cash">Add cash</button>
+                      <button className="btn-manage">Manage</button>
                     </div>
                   </div>
-                </section>
+
+                  {/* Payment Defaults Section */}
+                  <div className="payment-section">
+                    <h3 className="section-title">Payment defaults</h3>
+                    
+                    <button className="payment-option">
+                      <div className="option-icon">
+                        <span>👤</span>
+                      </div>
+                      <div className="option-content">
+                        <div className="option-title">Personal</div>
+                        <div className="option-subtitle">Visa Card</div>
+                      </div>
+                      <span className="option-arrow">›</span>
+                    </button>
+                  </div>
+
+                  {/* Payment Methods Section */}
+                  <div className="payment-section">
+                    <h3 className="section-title">Payment methods</h3>
+                    
+                    <div className="payment-method-item">
+                      <div className="method-icon">
+                        <span className="visa-icon">VISA</span>
+                      </div>
+                      <div className="method-content">
+                        <div className="method-title">Visa Card</div>
+                      </div>
+                    </div>
+
+                    <div className="payment-method-item">
+                      <div className="method-icon">
+                        <span className="apple-icon"></span>
+                      </div>
+                      <div className="method-content">
+                        <div className="method-title">Apple Pay</div>
+                      </div>
+                    </div>
+
+                    <button className="add-payment-btn">
+                      <span className="add-icon">+</span>
+                      <span>Add payment method</span>
+                    </button>
+                  </div>
+                </div>
               )}
 
               {activeTab === "rewards" && (
