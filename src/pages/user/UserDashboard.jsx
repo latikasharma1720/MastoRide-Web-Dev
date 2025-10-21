@@ -67,6 +67,10 @@ export default function UserDashboard() {
   const [estimating, setEstimating] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState("");
 
+  // Badges state
+  const [availableBadges, setAvailableBadges] = useState([]);
+  const [usedBadges, setUsedBadges] = useState([]);
+
   const VEHICLES = {
     economy: { label: "🚕 Economy", multiplier: 1 },
     premium: { label: "🚘 Premium", multiplier: 2 },
@@ -101,7 +105,50 @@ export default function UserDashboard() {
       darkMode: loadedSettings.darkMode ?? false,
     });
     setDisplayName(stored.name || currentUser.name || "user1");
+
+    // Load badges
+    try {
+      const storedAvailable = localStorage.getItem(`badges_available_${uid}`);
+      const storedUsed = localStorage.getItem(`badges_used_${uid}`);
+      
+      if (storedAvailable) {
+        setAvailableBadges(JSON.parse(storedAvailable));
+      } else {
+        // Default available badges
+        const defaultAvailable = [
+          { id: 1, icon: "🚗", title: "10 Rides Completed", date: "Earned on Oct 20, 2025", type: "achievement" },
+          { id: 2, icon: "🏅", title: "Gold Rider", description: "Exclusive 10% off next ride", type: "reward" },
+          { id: 3, icon: "🎯", title: "Early Bird", description: "Book 5 rides before 8 AM", type: "achievement" },
+          { id: 4, icon: "🌟", title: "Weekend Warrior", description: "Complete 10 weekend rides", type: "achievement" }
+        ];
+        setAvailableBadges(defaultAvailable);
+        localStorage.setItem(`badges_available_${uid}`, JSON.stringify(defaultAvailable));
+      }
+
+      if (storedUsed) {
+        setUsedBadges(JSON.parse(storedUsed));
+      } else {
+        // Default used badges
+        const defaultUsed = [
+          { id: 101, icon: "🎫", title: "10% Off Ride", date: "Expired on Oct 18, 2025" },
+          { id: 102, icon: "🎁", title: "Referral Bonus", date: "Redeemed last month" }
+        ];
+        setUsedBadges(defaultUsed);
+        localStorage.setItem(`badges_used_${uid}`, JSON.stringify(defaultUsed));
+      }
+    } catch (error) {
+      console.error("Error loading badges:", error);
+    }
   }, [currentUser]);
+
+  // Persist badges when they change
+  useEffect(() => {
+    if (currentUser) {
+      const uid = currentUser.id || "demo-user";
+      localStorage.setItem(`badges_available_${uid}`, JSON.stringify(availableBadges));
+      localStorage.setItem(`badges_used_${uid}`, JSON.stringify(usedBadges));
+    }
+  }, [availableBadges, usedBadges, currentUser]);
 
   if (!authChecked) return null;
   if (!currentUser || currentUser.role !== "user") return <Navigate to="/login" replace />;
@@ -177,6 +224,30 @@ export default function UserDashboard() {
     const formattedDate = date ? new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) : "(select date)";
     const formattedTime = time || "(select time)";
     setConfirmMsg(`🎉 Ride Confirmed!\n\n📍 **From:** ${pickup}\n🏁 **To:** ${dropoff}\n📅 **Date:** ${formattedDate}\n⏰ **Time:** ${formattedTime}\n🚗 **Vehicle Type:** ${VEHICLES[vehicleType].label}\n\n💬 Your driver will be assigned shortly.`);
+  };
+
+  const handleUseBadge = (badgeId) => {
+    const badgeToUse = availableBadges.find(b => b.id === badgeId);
+    if (!badgeToUse) return;
+
+    // Add current date as used date
+    const currentDate = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+
+    const usedBadge = {
+      ...badgeToUse,
+      date: `Used on ${currentDate}`,
+      usedDate: new Date().toISOString()
+    };
+
+    // Remove from available and add to used
+    setAvailableBadges(prev => prev.filter(b => b.id !== badgeId));
+    setUsedBadges(prev => [usedBadge, ...prev]);
+
+    pushToast(`Badge "${badgeToUse.title}" has been used!`, "success");
   };
 
   return (
@@ -432,14 +503,71 @@ export default function UserDashboard() {
               )}
 
               {activeTab === "rewards" && (
-                <section className="ud-panel rewards-panel">
-                  <header><h2>Rewards</h2><p>Track points and redeem perks</p></header>
-                  <div className="rewards-content">
-                    <div className="reward-points">🏅 250 Points</div>
-                    <div className="reward-message">Keep riding to reach Gold tier!</div>
-                    <button className="btn">Redeem</button>
+                <div className="rewards-page-wrapper">
+                  <section className="rewards-hero">
+                    <h1>Rewards & Badges</h1>
+                    <p>Track your progress, earn rewards, and unlock exclusive perks 🚀</p>
+                  </section>
+
+                  <div className="rewards-points-card">
+                    <div className="points-display">
+                      <span className="trophy-icon">🏆</span>
+                      <span className="points-number">250 Points</span>
+                    </div>
+                    <p className="points-subtitle">Keep riding to reach <strong>Gold Tier</strong></p>
+                    <button className="redeem-points-btn">Redeem Points</button>
                   </div>
-                </section>
+
+                  <section className="badges-section">
+                    <h2 className="badges-heading">
+                      <span className="badge-emoji">🎯</span> Available Badges
+                    </h2>
+                    {availableBadges.length > 0 ? (
+                      <div className="badges-grid">
+                        {availableBadges.map((badge) => (
+                          <div key={badge.id} className="badge-card available">
+                            <div className="badge-icon">{badge.icon}</div>
+                            <h3 className="badge-title">{badge.title}</h3>
+                            {badge.date && <p className="badge-date">{badge.date}</p>}
+                            {badge.description && <p className="badge-description">{badge.description}</p>}
+                            <button 
+                              className="use-badge-btn"
+                              onClick={() => handleUseBadge(badge.id)}
+                            >
+                              Use Badge
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="empty-badges">
+                        <p>🎉 No available badges right now. Keep riding to earn more!</p>
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="badges-section">
+                    <h2 className="badges-heading">
+                      <span className="badge-emoji">📜</span> Used Badges
+                    </h2>
+                    {usedBadges.length > 0 ? (
+                      <div className="badges-grid">
+                        {usedBadges.map((badge) => (
+                          <div key={badge.id} className="badge-card used">
+                            <div className="badge-icon">{badge.icon}</div>
+                            <h3 className="badge-title">{badge.title}</h3>
+                            <p className="badge-date">{badge.date}</p>
+                            {badge.description && <p className="badge-description">{badge.description}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="empty-badges">
+                        <p>No used badges yet</p>
+                      </div>
+                    )}
+                  </section>
+                </div>
               )}
 
               {activeTab === "history" && (

@@ -13217,3 +13217,253 @@ body {
 .add-payment-btn:hover { border-color: #c9a961; color: #c9a961; background: rgba(201,169,97,0.08); border-style: solid; }
 .add-icon { font-size: 1.5rem; font-weight: 400; }
 @media (max-width: 768px) { .payment-page-wrapper { padding: 1.5rem 1rem; } .mastoride-cash-card { padding: 2rem 1.5rem; } .cash-amount { font-size: 3rem; } .cash-actions { grid-template-columns: 1fr; max-width: 100%; } .payment-option, .payment-method-item { padding: 1rem 1.25rem; } .option-icon { width: 48px; height: 48px; font-size: 1.4rem; } }
+/* ========================================
+   REWARDS PAGE STYLES
+   ======================================== */
+
+.rewards-page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.rewards-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.rewards-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.rewards-hero p {
+  font-size: 1.125rem;
+  color: #666;
+}
+
+/* Points Card */
+.rewards-points-card {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 30px rgba(253, 203, 110, 0.3);
+}
+
+.points-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.trophy-icon {
+  font-size: 3rem;
+}
+
+.points-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #2d3436;
+}
+
+.points-subtitle {
+  font-size: 1.125rem;
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+}
+
+.points-subtitle strong {
+  color: #d63031;
+  font-weight: 700;
+}
+
+.redeem-points-btn {
+  background: #2d3436;
+  color: white;
+  border: none;
+  padding: 0.875rem 2.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.redeem-points-btn:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Badges Section */
+.badges-section {
+  margin-bottom: 3rem;
+}
+
+.badges-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge-emoji {
+  font-size: 1.5rem;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.badge-card {
+  background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid #ffeaa7;
+  position: relative;
+}
+
+.badge-card.available {
+  cursor: pointer;
+}
+
+.badge-card.available:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(253, 203, 110, 0.4);
+  border-color: #fdcb6e;
+}
+
+.badge-card.used {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  border-color: #ddd;
+  opacity: 0.8;
+}
+
+.badge-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.badge-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 0.5rem;
+}
+
+.badge-date,
+.badge-description {
+  font-size: 0.9rem;
+  color: #636e72;
+  margin-bottom: 0.75rem;
+}
+
+.use-badge-btn {
+  background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+  color: white;
+  border: none;
+  padding: 0.625rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+}
+
+.use-badge-btn:hover {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+}
+
+.use-badge-btn:active {
+  transform: translateY(0);
+}
+
+.empty-badges {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #636e72;
+  font-size: 1.125rem;
+}
+
+.empty-badges p {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rewards-page-wrapper {
+    padding: 1rem;
+  }
+
+  .rewards-hero h1 {
+    font-size: 2rem;
+  }
+
+  .rewards-hero p {
+    font-size: 1rem;
+  }
+
+  .rewards-points-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .points-number {
+    font-size: 2.5rem;
+  }
+
+  .trophy-icon {
+    font-size: 2.5rem;
+  }
+
+  .badges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .badges-heading {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rewards-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .points-display {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .points-number {
+    font-size: 2rem;
+  }
+
+  .redeem-points-btn {
+    padding: 0.75rem 2rem;
+    font-size: 0.9rem;
+  }
+
+  .use-badge-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
