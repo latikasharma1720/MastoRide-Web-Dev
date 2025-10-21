@@ -13188,3 +13188,32 @@ body {
   border-color: #c9a961;
   box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.1);
 }
+/* ========== PAYMENT PAGE STYLES ========== */
+.payment-page-wrapper { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; }
+.mastoride-cash-card { background: rgba(201, 169, 97, 0.15); border-radius: 20px; padding: 2.5rem 2rem; margin-bottom: 3rem; border: 2px solid rgba(201, 169, 97, 0.3); text-align: center; }
+.cash-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 1.5rem; color: #1b1b1b; }
+.cash-amount { font-size: 3.5rem; font-weight: 800; margin: 0.5rem 0 1rem; color: #1b1b1b; letter-spacing: -1px; }
+.cash-subtitle { font-size: 1rem; color: rgba(0,0,0,0.6); margin: 0 0 2rem; }
+.cash-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 400px; margin: 0 auto; }
+.btn-add-cash { padding: 1rem 1.5rem; background: linear-gradient(135deg, #e0c271, #c9a961); color: #1b1b1b; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.btn-add-cash:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(201,169,97,0.3); }
+.btn-manage { padding: 1rem 1.5rem; background: rgba(0,0,0,0.05); color: #1b1b1b; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+.btn-manage:hover { background: rgba(0,0,0,0.1); transform: translateY(-2px); }
+.payment-section { margin-bottom: 3rem; }
+.section-title { font-size: 1.2rem; font-weight: 800; margin: 0 0 1.5rem; color: #1b1b1b; }
+.payment-option { width: 100%; display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.12); border-radius: 16px; margin-bottom: 1rem; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.payment-option:hover { background: rgba(255,255,255,0.7); transform: translateX(6px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.option-icon { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; background: rgba(201,169,97,0.2); border-radius: 14px; font-size: 1.6rem; flex-shrink: 0; }
+.option-content { flex: 1; text-align: left; }
+.option-title { font-weight: 700; font-size: 1rem; color: #1b1b1b; margin-bottom: 4px; }
+.option-subtitle { font-size: 0.9rem; color: rgba(0,0,0,0.55); margin-top: 0; }
+.option-arrow { font-size: 2rem; color: rgba(0,0,0,0.3); font-weight: 300; margin-left: 0.5rem; }
+.payment-method-item { display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; background: rgba(255,255,255,0.4); border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.method-icon { width: 56px; height: 36px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.visa-icon { font-size: 0.75rem; font-weight: 800; color: #1434CB; letter-spacing: 1.5px; }
+.apple-icon { width: 28px; height: 28px; background: #000; border-radius: 6px; }
+.method-title { font-weight: 600; font-size: 1rem; color: #1b1b1b; }
+.add-payment-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1.25rem; background: transparent; border: 2px dashed rgba(0,0,0,0.25); border-radius: 14px; color: rgba(0,0,0,0.6); font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+.add-payment-btn:hover { border-color: #c9a961; color: #c9a961; background: rgba(201,169,97,0.08); border-style: solid; }
+.add-icon { font-size: 1.5rem; font-weight: 400; }
+@media (max-width: 768px) { .payment-page-wrapper { padding: 1.5rem 1rem; } .mastoride-cash-card { padding: 2rem 1.5rem; } .cash-amount { font-size: 3rem; } .cash-actions { grid-template-columns: 1fr; max-width: 100%; } .payment-option, .payment-method-item { padding: 1rem 1.25rem; } .option-icon { width: 48px; height: 48px; font-size: 1.4rem; } }
