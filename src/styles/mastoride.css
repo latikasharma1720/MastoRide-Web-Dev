@@ -13147,3 +13147,44 @@ body {
   .avatar-circle-large { width: 75px; height: 75px; font-size: 36px; }
   .form-grid-2col { grid-template-columns: 1fr; gap: 1rem; }
 }
+/* ========== PROFILE EDIT MODE STYLES ========== */
+
+/* Disabled field styling */
+.clean-field input:disabled, 
+.clean-field select:disabled,
+.add-email-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.save-btn-bottom:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background: #888 !important;
+}
+
+/* Edit button active state */
+.edit-btn-top.active {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+/* Smooth transitions for edit mode */
+.clean-field input,
+.clean-field select {
+  transition: all 0.3s ease;
+}
+
+/* Highlight editable fields when in edit mode */
+.clean-field input:not(:disabled),
+.clean-field select:not(:disabled) {
+  border-color: rgba(201, 169, 97, 0.5);
+  background: #fff;
+}
+
+.clean-field input:not(:disabled):hover,
+.clean-field select:not(:disabled):hover {
+  border-color: #c9a961;
+  box-shadow: 0 0 0 2px rgba(201, 169, 97, 0.1);
+}
