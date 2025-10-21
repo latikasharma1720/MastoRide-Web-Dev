@@ -35,6 +35,7 @@ export default function UserDashboard() {
   });
 
   const [displayName, setDisplayName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
@@ -107,6 +108,10 @@ export default function UserDashboard() {
 
   const uid = currentUser.id || "demo-user";
 
+  function toggleEditMode() {
+    setIsEditing(!isEditing);
+  }
+
   function onProfileChange(e) {
     const { name, value } = e.target;
     setProfile((p) => ({ ...p, [name]: value }));
@@ -123,6 +128,7 @@ export default function UserDashboard() {
       saveProfile(uid, profile);
       setDisplayName(profile.name);
       pushToast("Profile saved!", "success");
+      setIsEditing(false); // Exit edit mode after saving
     } catch {
       pushToast("Could not save profile.", "error");
     } finally {
@@ -211,8 +217,12 @@ export default function UserDashboard() {
                           <p>{profile.email}</p>
                         </div>
                       </div>
-                      <button className="edit-btn-top" onClick={() => setActiveTab('settings')}>
-                        Edit
+                      <button 
+                        className="edit-btn-top" 
+                        type="button"
+                        onClick={toggleEditMode}
+                      >
+                        {isEditing ? 'Cancel' : 'Edit'}
                       </button>
                     </div>
 
@@ -220,18 +230,31 @@ export default function UserDashboard() {
                       <div className="form-grid-2col">
                         <label className="clean-field">
                           <span>Full Name</span>
-                          <input name="name" type="text" placeholder="Your First Name" value={profile.name} onChange={onProfileChange} />
+                          <input 
+                            name="name" 
+                            type="text" 
+                            placeholder="Your Full Name" 
+                            value={profile.name} 
+                            onChange={onProfileChange}
+                            disabled={!isEditing}
+                          />
                         </label>
                         <label className="clean-field">
                           <span>Nick Name</span>
-                          <input type="text" placeholder="Your First Name" value={profile.name.split(' ')[0]} readOnly />
+                          <input 
+                            type="text" 
+                            placeholder="Your First Name" 
+                            value={profile.name.split(' ')[0]} 
+                            readOnly
+                            disabled={!isEditing}
+                          />
                         </label>
                       </div>
 
                       <div className="form-grid-2col">
                         <label className="clean-field">
                           <span>Gender</span>
-                          <select>
+                          <select disabled={!isEditing}>
                             <option>Select</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -240,7 +263,7 @@ export default function UserDashboard() {
                         </label>
                         <label className="clean-field">
                           <span>Country</span>
-                          <select>
+                          <select disabled={!isEditing}>
                             <option>United States</option>
                           </select>
                         </label>
@@ -249,13 +272,13 @@ export default function UserDashboard() {
                       <div className="form-grid-2col">
                         <label className="clean-field">
                           <span>Language</span>
-                          <select>
+                          <select disabled={!isEditing}>
                             <option>English</option>
                           </select>
                         </label>
                         <label className="clean-field">
                           <span>Time Zone</span>
-                          <select>
+                          <select disabled={!isEditing}>
                             <option>EST (UTC-5)</option>
                           </select>
                         </label>
@@ -270,10 +293,20 @@ export default function UserDashboard() {
                             <span className="email-time">1 month ago</span>
                           </div>
                         </div>
-                        <button type="button" className="add-email-btn">+ Add Email Address</button>
+                        <button 
+                          type="button" 
+                          className="add-email-btn"
+                          disabled={!isEditing}
+                        >
+                          + Add Email Address
+                        </button>
                       </div>
 
-                      <button className="save-btn-bottom" type="submit" disabled={savingProfile}>
+                      <button 
+                        className="save-btn-bottom" 
+                        type="submit" 
+                        disabled={savingProfile || !isEditing}
+                      >
                         {savingProfile ? "Saving..." : "Save Changes"}
                       </button>
                     </form>
