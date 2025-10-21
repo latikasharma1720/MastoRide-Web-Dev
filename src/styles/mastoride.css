@@ -12856,3 +12856,119 @@ body {
 .hero-section {
   background: #d9bb85 !important;
 }
+/* ========== BOOK RIDE - TWO COLUMN LAYOUT WITH MAP (FINAL FIX) ========== */
+
+/* Reset any constraints on dashboard content wrapper */
+.ud .dashboard-content-wrapper {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+/* Two column grid for Book Ride */
+.ud .book-layout {
+  display: grid;
+  grid-template-columns: 500px 1fr;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 100%;
+  align-items: start;
+}
+
+/* Form column (left) */
+.ud .book-form-col {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Map column (right) - sticky so it stays visible while scrolling */
+.ud .book-map-col {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  align-self: start;
+  min-width: 0;
+}
+
+/* Ensure map container is visible and properly sized */
+.ud .book-map-col > div {
+  display: block !important;
+  width: 100% !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Leaflet map styling */
+.ud .book-map-col .leaflet-container {
+  width: 100% !important;
+  height: 600px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  z-index: 1 !important;
+}
+
+/* Adjust layout when sidebar is closed (more space) */
+.ud.sidebar-closed .book-layout {
+  grid-template-columns: 550px 1fr;
+  gap: 3rem;
+}
+
+/* Adjust layout when sidebar is open (less space) */
+.ud.sidebar-open .book-layout {
+  grid-template-columns: 450px 1fr;
+  gap: 2rem;
+}
+
+/* Responsive - stack vertically on smaller screens */
+@media (max-width: 1400px) {
+  .ud .book-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
+  }
+  
+  .ud .book-map-col {
+    position: static;
+    order: 2;
+  }
+  
+  .ud .book-form-col {
+    order: 1;
+  }
+  
+  .ud .book-map-col .leaflet-container {
+    height: 450px !important;
+  }
+}
+
+/* Mobile - smaller map */
+@media (max-width: 768px) {
+  .ud .book-map-col .leaflet-container {
+    height: 350px !important;
+  }
+  
+  .ud .book-layout {
+    gap: 1.5rem;
+  }
+}
+
+/* Fix Leaflet marker icons if they don't show */
+.leaflet-default-icon-path {
+  background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png');
+}
+
+/* Ensure map is above other content but below modals */
+.ud .book-map-col {
+  z-index: 1;
+}
+
+/* Make sure the form doesn't overflow */
+.ud .book-form-col .ud-form {
+  max-width: 100%;
+}
+
+/* Ensure buttons stay visible */
+.ud .br-actions,
+.ud .confirm-btn {
+  z-index: 2;
+  position: relative;
+}

@@ -1,212 +1,172 @@
-// src/components/MapBlock.jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// —— Fort Wayne, IN ——
-const FTW = { lat: 41.0793, lng: -85.1394 };
-const DEFAULT_ZOOM = 12;
+/** Simple pin icon so markers render */
+const pin = new L.Icon({
+  iconUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [0, -32],
+  shadowSize: [41, 41],
+});
 
-// A generous bounding box around Fort Wayne (lon,lat)
-const FTW_BBOX = {
-  left: -85.30,
-  top: 41.20,
-  right: -84.95,
-  bottom: 40.95,
+/** Fit map to two points */
+function FitBounds({ points }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!points || points.length === 0) return;
+    if (points.length === 1) {
+      map.setView(points[0], 13, { animate: true });
+      return;
+    }
+    const bounds = L.latLngBounds(points);
+    map.fitBounds(bounds.pad(0.25), { animate: true });
+  }, [points, map]);
+  return null;
+}
+
+/** Debounce helper */
+const useDebounced = (value, delay = 400) => {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+  return v;
 };
 
-// Simple SVG pin marker icons (no external images)
-const createPin = (color = "#2E7D32") =>
-  L.divIcon({
-    className: "",
-    iconSize: [28, 28],
-    html: `
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" fill="${color}" />
-        <circle cx="12" cy="10" r="3.2" fill="#fff"/>
-      </svg>
-    `,
-  });
+export default function MapBlock({
+  pickupText = "",
+  dropoffText = "",
+  /** center Fort Wayne, IN */
+  initialCenter = { lat: 41.0793, lng: -85.1394 },
+  height = 360,
+}) {
+  const debouncedPickup = useDebounced(pickupText.trim());
+  const debouncedDrop = useDebounced(dropoffText.trim());
 
-const pickupIcon = createPin("#1E88E5"); // blue
-const dropoffIcon = createPin("#E53935"); // red
+  const [pickupPt, setPickupPt] = useState(null);
+  const [dropPt, setDropPt] = useState(null);
+  const [error, setError] = useState("");
 
-// Free endpoints (no key): Nominatim + OSRM
-const NOMINATIM = "https://nominatim.openstreetmap.org/search";
-const OSRM = "https://router.project-osrm.org/route/v1/driving";
+  // Abort inflight lookups if user types again
+  const abortRef = useRef(null);
 
-// Ensure queries are biased to Fort Wayne, IN
-function normalizeQuery(q) {
-  if (!q) return "";
-  const s = q.trim();
-  if (!s) return "";
-  const lower = s.toLowerCase();
-  const hasCity =
-    lower.includes("fort wayne") ||
-    lower.includes("in ") ||
-    lower.endsWith(" in") ||
-    lower.includes("indiana");
+  // Restrict search to an area around Fort Wayne to improve accuracy and avoid weird results
+  // (rough box around the city)
+  const viewbox = "-85.35,41.20,-84.95,40.95"; // lonW,latN,lonE,latS
 
-  // If user did not specify city/state, append it
-  if (!hasCity) {
-    return `${s}, Fort Wayne, Indiana`;
-  }
-  return s;
-}
+  async function geocode(q) {
+    // Clean up any previous request
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-async function geocode(address) {
-  const q = normalizeQuery(address);
-  if (!q || q.length < 3) return null;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=0&q=${encodeURIComponent(
+      q
+    )}&viewbox=${viewbox}&bounded=1`;
 
-  // Nominatim bbox constraint (left,top,right,bottom) + bounded=1
-  const { left, top, right, bottom } = FTW_BBOX;
-  const url =
-    `${NOMINATIM}?format=json` +
-    `&q=${encodeURIComponent(q)}` +
-    `&limit=1` +
-    `&viewbox=${left},${top},${right},${bottom}` +
-    `&bounded=1` +
-    `&addressdetails=1`;
-
-  const res = await fetch(url, {
-    headers: {
-      // identify your app politely
-      "Accept-Language": "en",
-    },
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data[0]) return null;
-
-  // Extra sanity check: if result is wildly outside bbox, ignore
-  const lat = parseFloat(data[0].lat);
-  const lng = parseFloat(data[0].lon);
-  if (lng < left || lng > right || lat < bottom || lat > top) {
-    return null;
+    try {
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          // You cannot set User-Agent from the browser; Accept-Language is fine.
+          "Accept-Language": "en",
+        },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) return null;
+      const { lat, lon } = data[0];
+      return { lat: parseFloat(lat), lng: parseFloat(lon) };
+    } catch (err) {
+      // Swallow network/abort/rate errors and surface a friendly note
+      console.warn("Geocode failed:", err);
+      return null;
+    }
   }
 
-  return { lat, lng };
-}
-
-async function routeCoords(a, b) {
-  const url = `${OSRM}/${a.lng},${a.lat};${b.lng},${b.lat}?overview=full&geometries=geojson`;
-  const res = await fetch(url);
-  if (!res.ok) return null;
-  const data = await res.json();
-  const coords = data?.routes?.[0]?.geometry?.coordinates;
-  if (!coords) return null;
-  // convert [lng,lat] -> [lat,lng]
-  return coords.map(([lng, lat]) => [lat, lng]);
-}
-
-export default function MapBlock({ pickupAddress, dropoffAddress }) {
-  const mapRef = useRef(null);
-  const mapElRef = useRef(null);
-  const markersRef = useRef({ pickup: null, dropoff: null });
-  const routeRef = useRef(null);
-
-  const [pickupPoint, setPickupPoint] = useState(null);
-  const [dropoffPoint, setDropoffPoint] = useState(null);
-
-  // Mount Leaflet map once
+  // Lookup both points when user stops typing
   useEffect(() => {
-    if (mapRef.current || !mapElRef.current) return;
-    const map = L.map(mapElRef.current, {
-      center: [FTW.lat, FTW.lng],
-      zoom: DEFAULT_ZOOM,
-      zoomControl: true,
-    });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-    }).addTo(map);
-    mapRef.current = map;
-  }, []);
+    let mounted = true;
 
-  // Geocode when addresses change
-  useEffect(() => {
-    let cancelled = false;
     (async () => {
-      const [p, d] = await Promise.all([
-        geocode(pickupAddress),
-        geocode(dropoffAddress),
-      ]);
-      if (cancelled) return;
-      setPickupPoint(p || null);
-      setDropoffPoint(d || null);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [pickupAddress, dropoffAddress]);
+      setError("");
 
-  // Update markers + route whenever points change
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
+      // Only geocode if BOTH have values
+      if (!debouncedPickup || !debouncedDrop) {
+        setPickupPt(null);
+        setDropPt(null);
+        return;
+      }
 
-    // Clear old markers/route
-    if (markersRef.current.pickup) {
-      map.removeLayer(markersRef.current.pickup);
-      markersRef.current.pickup = null;
-    }
-    if (markersRef.current.dropoff) {
-      map.removeLayer(markersRef.current.dropoff);
-      markersRef.current.dropoff = null;
-    }
-    if (routeRef.current) {
-      map.removeLayer(routeRef.current);
-      routeRef.current = null;
-    }
+      const [p1, p2] = await Promise.all([geocode(debouncedPickup), geocode(debouncedDrop)]);
 
-    // Add markers if available
-    if (pickupPoint) {
-      markersRef.current.pickup = L.marker(
-        [pickupPoint.lat, pickupPoint.lng],
-        { icon: pickupIcon }
-      ).addTo(map);
-    }
-    if (dropoffPoint) {
-      markersRef.current.dropoff = L.marker(
-        [dropoffPoint.lat, dropoffPoint.lng],
-        { icon: dropoffIcon }
-      ).addTo(map);
-    }
+      if (!mounted) return;
 
-    // Fit/route logic
-    (async () => {
-      if (pickupPoint && dropoffPoint) {
-        const bounds = L.latLngBounds(
-          [pickupPoint.lat, pickupPoint.lng],
-          [dropoffPoint.lat, dropoffPoint.lng]
-        );
-        map.fitBounds(bounds, { padding: [40, 40] });
+      setPickupPt(p1);
+      setDropPt(p2);
 
-        const coords = await routeCoords(pickupPoint, dropoffPoint);
-        if (coords && coords.length) {
-          routeRef.current = L.polyline(coords, { weight: 5 }).addTo(map);
-        }
-      } else if (pickupPoint) {
-        map.setView([pickupPoint.lat, pickupPoint.lng], 15);
-      } else if (dropoffPoint) {
-        map.setView([dropoffPoint.lat, dropoffPoint.lng], 15);
-      } else {
-        // Fallback — Fort Wayne center
-        map.setView([FTW.lat, FTW.lng], DEFAULT_ZOOM);
+      if (!p1 || !p2) {
+        setError("We couldn’t locate one or both places. Please refine the addresses (include 'Fort Wayne, IN').");
       }
     })();
-  }, [pickupPoint, dropoffPoint]);
+
+    return () => {
+      mounted = false;
+      abortRef.current?.abort();
+    };
+  }, [debouncedPickup, debouncedDrop]);
+
+  const points = useMemo(() => {
+    const arr = [];
+    if (pickupPt) arr.push(pickupPt);
+    if (dropPt) arr.push(dropPt);
+    return arr;
+  }, [pickupPt, dropPt]);
 
   return (
-    <div
-      ref={mapElRef}
-      style={{
-        height: 360,
-        width: "100%",
-        borderRadius: 12,
-        overflow: "hidden",
-        boxShadow: "0 10px 24px rgba(0,0,0,.15)",
-      }}
-      aria-label="Pickup and drop-off map"
-    />
+    <div style={{ borderRadius: 12, overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,.12)", marginTop: 16 }}>
+      {error && (
+        <div
+          style={{
+            background: "#fff6e5",
+            color: "#8a5a00",
+            padding: "10px 12px",
+            fontSize: 14,
+            borderBottom: "1px solid #f1dfbf",
+          }}
+        >
+          ⚠️ {error}
+        </div>
+      )}
+      <MapContainer
+        center={[initialCenter.lat, initialCenter.lng]}
+        zoom={12}
+        style={{ height }}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {pickupPt && <Marker position={pickupPt} icon={pin} />}
+        {dropPt && <Marker position={dropPt} icon={pin} />}
+
+        {pickupPt && dropPt && (
+          <Polyline positions={[pickupPt, dropPt]} pathOptions={{ weight: 4, opacity: 0.9 }} />
+        )}
+
+        <FitBounds points={points} />
+      </MapContainer>
+    </div>
   );
 }
