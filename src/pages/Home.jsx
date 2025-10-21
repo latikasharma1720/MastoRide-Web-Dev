@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer"; // adjust path if needed
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [showBackButton, setShowBackButton] = useState(false);
@@ -23,7 +23,7 @@ export default function Home() {
     return () => animator.disconnect();
   }, []);
 
-  // Show ✕ ONLY on Safety or Affordable (use a visibility map so it never flickers)
+  // Show ✕ ONLY on Safety or Affordable
   useEffect(() => {
     const safety = document.querySelector(".home-safety");
     const affordable = document.querySelector(".home-affordable");
@@ -72,8 +72,8 @@ export default function Home() {
     document.querySelector(".home-affordable")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
-    <>
-      {/* Back (X) button — only shows on Safety/Affordable */}
+    <div className="modern-home-page">
+      {/* Back (X) button */}
       <button
         ref={backButtonRef}
         className={`back-to-top-btn ${showBackButton ? "show" : ""}`}
@@ -175,7 +175,6 @@ export default function Home() {
           <div className="section-content-center">
             <div className="content-grid">
               <div className="content-visual animate-on-scroll" style={{ "--delay": "0s" }}>
-                {/* NOTE: direct /public paths — no process.env */}
                 <video
                   className="afford-video"
                   src="/assets/home/affordable3.mp4"
@@ -212,6 +211,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }
