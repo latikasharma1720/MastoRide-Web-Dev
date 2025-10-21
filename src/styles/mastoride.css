@@ -12972,3 +12972,135 @@ body {
   z-index: 2;
   position: relative;
 }
+/* ========== BOOK RIDE PAGE - UI REFINEMENTS ========== */
+
+/* Move hero (welcome message) to the left and increase spacing */
+.ud .book-form-col .ud-hero {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Increase Book a Ride heading size and align with welcome message */
+.ud .book-form-col .ud-panel .ud-head h2 {
+  font-size: 2rem !important;
+  font-weight: 800;
+  margin: 0 0 0.75rem 0;
+  text-align: left;
+  line-height: 1.2;
+}
+
+/* Hide the subtitle under Book a Ride heading */
+.ud .book-form-col .ud-panel .ud-head p {
+  display: none;
+}
+
+/* Hide the vehicle type multiplier note */
+.ud .book-form-col .ud-field small {
+  display: none;
+}
+
+/* Adjust panel padding for better alignment */
+.ud .book-form-col .ud-panel {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Ensure header is aligned properly */
+.ud .book-form-col .ud-panel .ud-head {
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+/* ========== BOOK RIDE FORM - CONSISTENT SPACING FIX ========== */
+
+/* Standardize all field spacing in the book ride form */
+.ud .book-form-col .ud-form.bookride .ud-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Consistent gap between label and input */
+  margin-bottom: 1rem; /* Consistent spacing between fields */
+}
+
+/* Ensure labels have consistent styling */
+.ud .book-form-col .ud-form.bookride .ud-field > span {
+  font-weight: 700;
+  font-size: 14px;
+  color: #1b1b1b;
+  margin-bottom: 0; /* Remove any extra margin */
+}
+
+/* Ensure inputs have consistent height and padding */
+.ud .book-form-col .ud-form.bookride .ud-field input,
+.ud .book-form-col .ud-form.bookride .ud-field select {
+  height: 48px;
+  padding: 0 14px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+/* Focus state for inputs */
+.ud .book-form-col .ud-form.bookride .ud-field input:focus,
+.ud .book-form-col .ud-form.bookride .ud-field select:focus {
+  outline: none;
+  border-color: #c9a961;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+}
+
+/* Fix the row spacing (Date/Time and Passengers/Vehicle Type) */
+.ud .book-form-col .ud-form.bookride .ud-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Ensure fields inside rows also have consistent spacing */
+.ud .book-form-col .ud-form.bookride .ud-row .ud-field {
+  margin-bottom: 0; /* Remove bottom margin since row handles spacing */
+}
+
+/* Date and Time inputs specific styling */
+.ud .book-form-col .ud-form.bookride input[type="date"],
+.ud .book-form-col .ud-form.bookride input[type="time"] {
+  height: 48px;
+  padding: 0 14px;
+}
+
+/* Number input (Passengers) */
+.ud .book-form-col .ud-form.bookride input[type="number"] {
+  height: 48px;
+  padding: 0 14px;
+}
+
+/* Select dropdown (Vehicle Type) */
+.ud .book-form-col .ud-form.bookride select {
+  height: 48px;
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+/* Remove the small text that was under vehicle type (already hidden but ensure it's gone) */
+.ud .book-form-col .ud-form.bookride .ud-field small {
+  display: none !important;
+}
+
+/* Button spacing - consistent gap before buttons */
+.ud .book-form-col .ud-form.bookride .br-actions {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ud .book-form-col .ud-form.bookride .btn.confirm-btn {
+  margin-top: 1rem;
+}
+
+/* Ensure consistent form padding */
+.ud .book-form-col .ud-panel .ud-form.bookride {
+  padding-top: 0.5rem;
+}
