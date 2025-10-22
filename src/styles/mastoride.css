@@ -13884,4 +13884,222 @@ body {
   }
   .history-sideimg-img { max-height: 220px; }
 }
+/* Profile inner tabs (Account / Settings / Support) */
+.profile-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 18px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  padding-bottom: 8px;
+}
+.profile-tab-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  opacity: .7;
+  transition: .2s ease;
+}
+.profile-tab-btn:hover { opacity: 1; }
+.profile-tab-btn.active {
+  background: linear-gradient(180deg,#ffe08a,#ffd36b);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  opacity: 1;
+}
+.profile-section { margin-top: 6px; }
+
+/* Keep your previous HISTORY animation centering fix */
+.history-grid.img-gone {
+  grid-template-columns: 1fr !important;
+  justify-items: center;
+}
+.history-grid.img-gone .ride-history-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.history-grid.img-gone .ride-history-card { width: 100%; }
+/* ---- Ride History: centered, desktop-wide stack ---- */
+.history-panel {
+  padding-top: 8px;
+}
+
+.history-stack {
+  /* Center the whole stack */
+  max-width: 1100px;      /* tweak to 1000–1200px if you prefer */
+  margin: 0 auto;
+  display: grid;
+  gap: 28px;
+}
+
+/* Card */
+.ride-history-card {
+  background: linear-gradient(135deg, #d9bb85 0%, #d9bb85 100%);
+  border-radius: 18px;
+  border: 2px solid #1a140a;           /* crisp dark border */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  overflow: hidden;
+  animation: cardIn 420ms cubic-bezier(.2,.7,.2,1) var(--stagger, 0ms) both;
+}
+
+@keyframes cardIn {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+/* Header */
+.ride-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.06);
+}
+
+.ride-date-badge,
+.ride-status-badge {
+  background: #0e0d0b;
+  color: #f5d872;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .3px;
+}
+
+/* Body */
+.ride-card-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;   /* route | info */
+  gap: 18px;
+  padding: 18px;
+}
+
+.ride-route .route-point {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.route-line {
+  height: 1px;
+  background: rgba(0,0,0,0.12);
+  margin: 10px 0 12px;
+}
+
+.route-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #0e0d0b;
+  color: #ff4d4f;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.25) inset;
+}
+
+.route-label {
+  font-size: 11px;
+  color: #6a5c3c;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+.route-location {
+  font-weight: 800;
+}
+
+.ride-card-info {
+  border: 1px dashed rgba(0,0,0,0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.03));
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.info-icon { opacity: .85; }
+
+/* Footer */
+.ride-card-footer {
+  padding: 12px 18px;
+  background: rgba(0,0,0,0.07);
+  border-top: 1px solid rgba(0,0,0,0.15);
+}
+
+.ride-price {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.price-label {
+  font-size: 12px;
+  color: #6a5c3c;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.price-amount {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+/* Responsive: stack columns on narrow widths */
+@media (max-width: 920px) {
+  .ride-card-body {
+    grid-template-columns: 1fr;
+  }
+}
+/* ==== FIX: Sidebar Button Hover Visibility ==== */
+.sidebar-btn {
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* Active tab (the one currently selected) */
+.sidebar-btn.active {
+  background: #f5d872;
+  color: #000;
+  font-weight: 600;
+}
+
+/* HOVER FIX — visible gold highlight */
+.sidebar-btn:hover {
+  background: linear-gradient(145deg, #f5d872, #ffe694);
+  color: #FFFF;
+  font-weight: 600;
+  transform: translateX(4px);
+  box-shadow: 0 0 10px rgba(245, 216, 114, 0.6);
+}
+
+/* Smooth icon + label transitions */
+.sidebar-btn:hover .sb-icon {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.sb-label {
+  color: inherit;
+  font-weight: 500;
+}
+
+/* For sidebar-closed mode too */
+.sidebar-closed .sidebar-btn:hover {
+  background: #f5d872;
+  color: #000;
+}
 
