@@ -131,8 +131,12 @@ export default function UserDashboard() {
 
   const [rideHistory, setRideHistory] = useState([]);
 
-  // profile inner tabs
+  // inner tabs for Profile (Account / Settings / Support)
   const [profileSubTab, setProfileSubTab] = useState("account");
+
+  // Support form state
+  const [supportForm, setSupportForm] = useState({ subject: "", message: "" });
+  const [sendingSupport, setSendingSupport] = useState(false);
 
   useEffect(() => { localStorage.setItem(LS_KEYS.tab, activeTab); }, [activeTab]);
   useEffect(() => { localStorage.setItem(LS_KEYS.sidebar, String(sidebarOpen)); }, [sidebarOpen]);
@@ -167,9 +171,9 @@ export default function UserDashboard() {
 
     setDisplayName(stored.name || currentUser.name || "user1");
 
+    // badges
     const availableKey = `badges_available_${uid}`;
     const usedKey = `badges_used_${uid}`;
-
     try {
       const a = localStorage.getItem(availableKey);
       const u = localStorage.getItem(usedKey);
@@ -181,6 +185,7 @@ export default function UserDashboard() {
     }
     setBadgesInitialized(true);
 
+    // ride history
     setRideHistory(getRideHistory());
   }, [currentUser]);
 
@@ -282,6 +287,48 @@ export default function UserDashboard() {
     setUsedBadges((prev) => [usedBadge, ...prev]);
     pushToast(`Badge "${badgeToUse.title}" has been used!`, "success");
   };
+
+  // ---------------------------
+  // Support form: mailto submit
+  // ---------------------------
+  function onSupportFieldChange(e) {
+    const { name, value } = e.target;
+    setSupportForm((f) => ({ ...f, [name]: value }));
+  }
+
+  async function onSupportSubmit(e) {
+    e.preventDefault();
+    if (!supportForm.subject.trim() || !supportForm.message.trim()) {
+      pushToast("Please enter both subject and message.", "error");
+      return;
+    }
+
+    try {
+      setSendingSupport(true);
+
+      const to = "support@example.com";
+      const subject = encodeURIComponent(supportForm.subject.trim());
+      const bodyLines = [
+        `From: ${profile.email || "unknown@pfw.edu"}`,
+        "",
+        supportForm.message.trim(),
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
+
+      // open default mail client
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+      // quick feedback
+      pushToast("Opening your email app with the message…", "success");
+
+      // reset
+      setSupportForm({ subject: "", message: "" });
+    } catch (err) {
+      pushToast("Could not open your email client.", "error");
+    } finally {
+      setSendingSupport(false);
+    }
+  }
 
   return (
     <>
@@ -473,10 +520,47 @@ export default function UserDashboard() {
                     {/* Support (inside Profile) */}
                     {profileSubTab === "support" && (
                       <section className="profile-section">
-                        <header className="ud-head"><h2>Support</h2><p>We're here to help</p></header>
-                        <div className="ud-empty">
-                          <div className="ud-chip">🛟</div>
-                          <p>Need assistance? Start a ticket or visit the Help Center.</p>
+                        <header className="ud-head">
+                          <h2>Support</h2>
+                          <p>We're here to help</p>
+                        </header>
+
+                        <div className="support-contact-card">
+                          <p className="support-note">
+                            You can reach our support team anytime via email at{" "}
+                            <a href="mailto:support@example.com" className="support-mail">support@example.com</a>.
+                          </p>
+
+                          <form className="support-form" onSubmit={onSupportSubmit}>
+                            <label className="clean-field">
+                              <span>Subject</span>
+                              <input
+                                name="subject"
+                                type="text"
+                                placeholder="Brief subject"
+                                value={supportForm.subject}
+                                onChange={onSupportFieldChange}
+                              />
+                            </label>
+
+                            <label className="clean-field">
+                              <span>Message</span>
+                              <textarea
+                                name="message"
+                                rows={5}
+                                placeholder="Tell us how we can help…"
+                                value={supportForm.message}
+                                onChange={onSupportFieldChange}
+                              />
+                            </label>
+
+                            <div className="profile-actions">
+                              <button className="btn" type="submit" disabled={sendingSupport}>
+                                {sendingSupport ? "Opening Mail…" : "Contact Support"}
+                              </button>
+                            </div>
+                          </form>
+
                           <div className="ud-actions">
                             <button className="btn">Open Ticket</button>
                             <button className="btn ghost">Help Center</button>
