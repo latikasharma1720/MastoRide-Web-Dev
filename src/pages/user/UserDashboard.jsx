@@ -23,6 +23,13 @@ const LS_KEYS = {
   sidebar: "ud_sidebar_open",
 };
 
+const getDefaultAvailableBadges = () => [
+  { id: Date.now() + 1, icon: "🚗", title: "10 Rides Completed", date: "Earned on Oct 20, 2025", type: "achievement" },
+  { id: Date.now() + 2, icon: "🏅", title: "Gold Rider", description: "Exclusive 10% off next ride", type: "reward" },
+  { id: Date.now() + 3, icon: "🎯", title: "Early Bird", description: "Book 5 rides before 8 AM", type: "achievement" },
+  { id: Date.now() + 4, icon: "🌟", title: "Weekend Warrior", description: "Complete 10 weekend rides", type: "achievement" }
+];
+
 export default function UserDashboard() {
   const { pushToast } = useToast();
 
@@ -67,9 +74,9 @@ export default function UserDashboard() {
   const [estimating, setEstimating] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState("");
 
-  // Badges state
   const [availableBadges, setAvailableBadges] = useState([]);
   const [usedBadges, setUsedBadges] = useState([]);
+  const [badgesInitialized, setBadgesInitialized] = useState(false);
 
   const VEHICLES = {
     economy: { label: "🚕 Economy", multiplier: 1 },
@@ -89,7 +96,9 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!currentUser) return;
-    const uid = currentUser.id || "demo-user";
+    
+    const uid = currentUser.email || currentUser.id || "demo-user";
+    
     const stored = getProfile(uid);
     setProfile({
       name: stored.name || currentUser.name || "user1",
@@ -97,6 +106,7 @@ export default function UserDashboard() {
       email: stored.email || currentUser.email || "user1@pfw.edu",
       phone: stored.phone || currentUser.phone || "",
     });
+    
     const loadedSettings = getSettings(uid);
     setSettings({
       rideAlerts: loadedSettings.rideAlerts ?? true,
@@ -104,56 +114,73 @@ export default function UserDashboard() {
       wheelchairAccess: loadedSettings.wheelchairAccess ?? false,
       darkMode: loadedSettings.darkMode ?? false,
     });
+    
     setDisplayName(stored.name || currentUser.name || "user1");
 
-    // Load badges
-    try {
-      const storedAvailable = localStorage.getItem(`badges_available_${uid}`);
-      const storedUsed = localStorage.getItem(`badges_used_${uid}`);
-      
+    const availableKey = `badges_available_${uid}`;
+    const usedKey = `badges_used_${uid}`;
+    
+    const storedAvailable = localStorage.getItem(availableKey);
+    const storedUsed = localStorage.getItem(usedKey);
+    
+    let loadedAvailableBadges = [];
+    let loadedUsedBadges = [];
+    
+    const hasStoredData = storedAvailable !== null || storedUsed !== null;
+    
+    if (!hasStoredData) {
+      loadedAvailableBadges = getDefaultAvailableBadges();
+      loadedUsedBadges = [];
+    } else {
       if (storedAvailable) {
-        setAvailableBadges(JSON.parse(storedAvailable));
+        try {
+          const parsed = JSON.parse(storedAvailable);
+          loadedAvailableBadges = Array.isArray(parsed) ? parsed : getDefaultAvailableBadges();
+        } catch (error) {
+          loadedAvailableBadges = getDefaultAvailableBadges();
+        }
       } else {
-        // Default available badges
-        const defaultAvailable = [
-          { id: 1, icon: "🚗", title: "10 Rides Completed", date: "Earned on Oct 20, 2025", type: "achievement" },
-          { id: 2, icon: "🏅", title: "Gold Rider", description: "Exclusive 10% off next ride", type: "reward" },
-          { id: 3, icon: "🎯", title: "Early Bird", description: "Book 5 rides before 8 AM", type: "achievement" },
-          { id: 4, icon: "🌟", title: "Weekend Warrior", description: "Complete 10 weekend rides", type: "achievement" }
-        ];
-        setAvailableBadges(defaultAvailable);
-        localStorage.setItem(`badges_available_${uid}`, JSON.stringify(defaultAvailable));
+        loadedAvailableBadges = [];
       }
 
       if (storedUsed) {
-        setUsedBadges(JSON.parse(storedUsed));
+        try {
+          const parsed = JSON.parse(storedUsed);
+          loadedUsedBadges = Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+          loadedUsedBadges = [];
+        }
       } else {
-        // Default used badges
-        const defaultUsed = [
-          { id: 101, icon: "🎫", title: "10% Off Ride", date: "Expired on Oct 18, 2025" },
-          { id: 102, icon: "🎁", title: "Referral Bonus", date: "Redeemed last month" }
-        ];
-        setUsedBadges(defaultUsed);
-        localStorage.setItem(`badges_used_${uid}`, JSON.stringify(defaultUsed));
+        loadedUsedBadges = [];
       }
-    } catch (error) {
-      console.error("Error loading badges:", error);
     }
+    
+    setAvailableBadges(loadedAvailableBadges);
+    setUsedBadges(loadedUsedBadges);
+    setBadgesInitialized(true);
+    
+    localStorage.setItem(availableKey, JSON.stringify(loadedAvailableBadges));
+    localStorage.setItem(usedKey, JSON.stringify(loadedUsedBadges));
   }, [currentUser]);
 
-  // Persist badges when they change
   useEffect(() => {
-    if (currentUser) {
-      const uid = currentUser.id || "demo-user";
+    if (currentUser && badgesInitialized) {
+      const uid = currentUser.email || currentUser.id || "demo-user";
       localStorage.setItem(`badges_available_${uid}`, JSON.stringify(availableBadges));
+    }
+  }, [availableBadges, currentUser, badgesInitialized]);
+
+  useEffect(() => {
+    if (currentUser && badgesInitialized) {
+      const uid = currentUser.email || currentUser.id || "demo-user";
       localStorage.setItem(`badges_used_${uid}`, JSON.stringify(usedBadges));
     }
-  }, [availableBadges, usedBadges, currentUser]);
+  }, [usedBadges, currentUser, badgesInitialized]);
 
   if (!authChecked) return null;
   if (!currentUser || currentUser.role !== "user") return <Navigate to="/login" replace />;
 
-  const uid = currentUser.id || "demo-user";
+  const uid = currentUser.email || currentUser.id || "demo-user";
 
   function toggleEditMode() {
     setIsEditing(!isEditing);
@@ -230,7 +257,6 @@ export default function UserDashboard() {
     const badgeToUse = availableBadges.find(b => b.id === badgeId);
     if (!badgeToUse) return;
 
-    // Add current date as used date
     const currentDate = new Date().toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'short', 
@@ -243,7 +269,6 @@ export default function UserDashboard() {
       usedDate: new Date().toISOString()
     };
 
-    // Remove from available and add to used
     setAvailableBadges(prev => prev.filter(b => b.id !== badgeId));
     setUsedBadges(prev => [usedBadge, ...prev]);
 
@@ -445,7 +470,6 @@ export default function UserDashboard() {
 
               {activeTab === "payment" && (
                 <div className="payment-page-wrapper">
-                  {/* MastoRide Cash Section */}
                   <div className="mastoride-cash-card">
                     <h3 className="cash-title">MastoRide Cash</h3>
                     <div className="cash-amount">${(0).toFixed(2)}</div>
@@ -456,7 +480,6 @@ export default function UserDashboard() {
                     </div>
                   </div>
 
-                  {/* Payment Defaults Section */}
                   <div className="payment-section">
                     <h3 className="section-title">Payment defaults</h3>
                     
@@ -472,7 +495,6 @@ export default function UserDashboard() {
                     </button>
                   </div>
 
-                  {/* Payment Methods Section */}
                   <div className="payment-section">
                     <h3 className="section-title">Payment methods</h3>
                     
