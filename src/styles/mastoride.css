@@ -14236,3 +14236,172 @@ body {
 .support-form .clean-field + .clean-field {
   margin-top: 12px;
 }
+/* ===== Profile: make the card wider on desktop ===== */
+.profile-main-card.profile-wide {
+  max-width: 1180px;         /* wider desktop layout */
+  margin: 0 auto;
+}
+
+/* Section groups for a longer, richer form */
+.profile-group {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid #d6c393;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 0 rgba(60, 45, 20, 0.06) inset;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #3b2f1b;
+  margin-bottom: 12px;
+}
+
+/* Grids to stretch the form vertically and visually */
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.grid-one {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Inputs to match existing brand style */
+.clean-field input,
+.clean-field select,
+.clean-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbb682;
+  background: #f8e9c9;
+  font-size: 15px;
+}
+
+.clean-field textarea {
+  resize: vertical;
+}
+
+.clean-field span {
+  display: block;
+  font-weight: 600;
+  color: #3b2f1b;
+  margin-bottom: 6px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Responsive: keep it nice on smaller widths */
+@media (max-width: 900px) {
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+  .profile-main-card.profile-wide {
+    max-width: 96%;
+  }
+}
+/* ===== Profile: make the card wider on desktop ===== */
+.profile-main-card.profile-wide {
+  max-width: 1180px;         /* wider desktop layout */
+  margin: 0 auto;
+}
+
+/* Section groups for a longer, richer form */
+.profile-group {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid #d6c393;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 0 rgba(60, 45, 20, 0.06) inset;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #3b2f1b;
+  margin-bottom: 12px;
+}
+
+/* Grids to stretch the form vertically and visually */
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.grid-one {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Inputs to match existing brand style */
+.clean-field input,
+.clean-field select,
+.clean-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbb682;
+  background: #f8e9c9;
+  font-size: 15px;
+}
+
+.clean-field textarea {
+  resize: vertical;
+}
+
+.clean-field span {
+  display: block;
+  font-weight: 600;
+  color: #3b2f1b;
+  margin-bottom: 6px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Responsive: keep it nice on smaller widths */
+@media (max-width: 900px) {
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+  .profile-main-card.profile-wide {
+    max-width: 96%;
+  }
+}
+/* === Support form (Profile > Support) === */
+.support-intro {
+  margin: 8px 0 18px;
+  color: #3a2e1a;
+  opacity: 0.9;
+}
+
+.support-form .clean-field textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 140px;
+}
+
+.support-form .profile-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+/* optional little margin utility used above */
+.mt-16 { margin-top: 16px; }
