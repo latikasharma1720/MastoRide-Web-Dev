@@ -15313,3 +15313,19 @@ input:focus-visible {
 }
 
 /* ===== END OF CHART HEADING ALIGNMENT FIXES ===== */
+/* ===== ADD THIS CSS RIGHT AFTER THE .grid-two DEFINITION ===== */
+
+/* Three-column grid for City/State/ZIP */
+.grid-three {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;  /* City wider, State and ZIP narrower */
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+/* Responsive: Stack on mobile/tablet */
+@media (max-width: 768px) {
+  .grid-three {
+    grid-template-columns: 1fr;
+  }
+}

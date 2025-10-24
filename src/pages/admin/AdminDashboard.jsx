@@ -213,9 +213,6 @@ export default function AdminDashboard() {
     emergencyContact: "",
     emergencyPhone: "",
     address: "",
-    city: "",
-    state: "",
-    zipCode: "",
     bio: "",
   });
 
@@ -258,9 +255,6 @@ export default function AdminDashboard() {
       emergencyContact: stored.emergencyContact || "",
       emergencyPhone: stored.emergencyPhone || "",
       address: stored.address || "",
-      city: stored.city || "",
-      state: stored.state || "",
-      zipCode: stored.zipCode || "",
       bio: stored.bio || "",
     };
     setProfile(nextProfile);
@@ -641,6 +635,18 @@ export default function AdminDashboard() {
                                 />
                               </label>
                             </div>
+
+                            <label className="clean-field">
+                              <span>Address</span>
+                              <input
+                                name="address"
+                                type="text"
+                                placeholder="123 Main Street, Fort Wayne, IN 46805"
+                                value={profile.address}
+                                onChange={onProfileChange}
+                                disabled={!isEditing}
+                              />
+                            </label>
                           </div>
 
                           <div className="profile-group">
@@ -720,55 +726,30 @@ export default function AdminDashboard() {
                             </div>
                           </div>
 
+                          
                           <div className="profile-group">
-                            <div className="group-title">Contact Information</div>
+                            <div className="group-title">About</div>
                             <label className="clean-field">
-                              <span>Street Address</span>
-                              <input
-                                name="address"
-                                type="text"
-                                placeholder="123 Main Street"
-                                value={profile.address}
+                              <span>Bio / Notes</span>
+                              <textarea
+                                name="bio"
+                                rows="4"
+                                placeholder="Brief description or notes..."
+                                value={profile.bio}
                                 onChange={onProfileChange}
                                 disabled={!isEditing}
+                                style={{
+                                  width: '100%',
+                                  padding: '12px 14px',
+                                  border: '1px solid #dedede',
+                                  borderRadius: '12px',
+                                  fontSize: '14px',
+                                  fontFamily: 'inherit',
+                                  resize: 'vertical',
+                                  outline: 'none'
+                                }}
                               />
                             </label>
-
-                            <div className="grid-three">
-                              <label className="clean-field">
-                                <span>City</span>
-                                <input
-                                  name="city"
-                                  type="text"
-                                  placeholder="Fort Wayne"
-                                  value={profile.city}
-                                  onChange={onProfileChange}
-                                  disabled={!isEditing}
-                                />
-                              </label>
-                              <label className="clean-field">
-                                <span>State</span>
-                                <input
-                                  name="state"
-                                  type="text"
-                                  placeholder="IN"
-                                  value={profile.state}
-                                  onChange={onProfileChange}
-                                  disabled={!isEditing}
-                                />
-                              </label>
-                              <label className="clean-field">
-                                <span>ZIP Code</span>
-                                <input
-                                  name="zipCode"
-                                  type="text"
-                                  placeholder="46805"
-                                  value={profile.zipCode}
-                                  onChange={onProfileChange}
-                                  disabled={!isEditing}
-                                />
-                              </label>
-                            </div>
                           </div>
 
                           <div className="profile-actions">
@@ -867,6 +848,7 @@ export default function AdminDashboard() {
                       <section className="profile-section">
                         <header className="ud-head">
                           <h2>Security</h2>
+                          <p>Manage security and access control</p>
                         </header>
                         <div className="security-section">
                           <div className="security-item">
