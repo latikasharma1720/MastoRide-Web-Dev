@@ -7,7 +7,7 @@ import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
 
 const NAV_ITEMS = [
-  { id: "overview", label: "Overview", icon: "📊" },
+  { id: "feedback", label: "Feedback", icon: "💬" },
   { id: "users", label: "Users", icon: "👥" },
   { id: "rides", label: "Rides", icon: "🚗" },
   { id: "analytics", label: "Analytics", icon: "📈" },
@@ -188,13 +188,12 @@ export default function AdminDashboard() {
 
   const [authChecked, setAuthChecked] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeTab, setActiveTab] = useState(() => localStorage.getItem(LS_KEYS.tab) || "overview");
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem(LS_KEYS.tab) || "feedback");
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     const raw = localStorage.getItem(LS_KEYS.sidebar);
     return raw == null ? true : raw === "true";
   });
 
-  const [displayName, setDisplayName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileSubTab, setProfileSubTab] = useState("account");
@@ -258,7 +257,6 @@ export default function AdminDashboard() {
       bio: stored.bio || "",
     };
     setProfile(nextProfile);
-    setDisplayName(nextProfile.name);
 
     const s = getSettings(adminId) || {};
     setSettings({
@@ -291,7 +289,6 @@ export default function AdminDashboard() {
       }
       const adminId = currentUser.id || "admin-demo";
       saveProfile(adminId, profile);
-      setDisplayName(profile.name);
       pushToast("Admin profile saved!", "success");
       setIsEditing(false);
     } catch {
@@ -359,55 +356,77 @@ export default function AdminDashboard() {
           <main className="dashboard-main">
             <div className="dashboard-content-wrapper">
               {/* OVERVIEW */}
-              {activeTab === "overview" && (
-                <div className="overview-layout">
+              {activeTab === "feedback" && (
+                <div className="feedback-layout">
                   <section className="ud-hero">
-                    <h1>Welcome, {displayName}! 👋</h1>
-                    <p>Monitor performance and manage operations efficiently</p>
+                    <h1>User Feedback 💬</h1>
+                    <p>View and manage customer reviews and feedback</p>
                   </section>
 
                   <div className="stats-grid">
-                    {STATS.map((stat) => (
-                      <div key={stat.id} className="stat-card">
-                        <div className="stat-icon">{stat.icon}</div>
-                        <div className="stat-details">
-                          <div className="stat-value">{stat.value}</div>
-                          <div className="stat-label">{stat.label}</div>
-                          <div className="stat-trend">{stat.trend}</div>
-                        </div>
+                    <div className="stat-card">
+                      <div className="stat-icon">⭐</div>
+                      <div className="stat-details">
+                        <div className="stat-value">4.8</div>
+                        <div className="stat-label">Average Rating</div>
+                        <div className="stat-trend">+0.3</div>
                       </div>
-                    ))}
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-icon">💬</div>
+                      <div className="stat-details">
+                        <div className="stat-value">342</div>
+                        <div className="stat-label">Total Feedback</div>
+                        <div className="stat-trend">+28</div>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-icon">✅</div>
+                      <div className="stat-details">
+                        <div className="stat-value">89%</div>
+                        <div className="stat-label">Positive Reviews</div>
+                        <div className="stat-trend">+5%</div>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-icon">⏱️</div>
+                      <div className="stat-details">
+                        <div className="stat-value">24</div>
+                        <div className="stat-label">Pending Reviews</div>
+                        <div className="stat-trend">-6</div>
+                      </div>
+                    </div>
                   </div>
 
                   <section className="ud-panel">
                     <header className="ud-head">
-                      <h2>Recent Activities</h2>
-                      <p>Latest platform updates</p>
+                      <h2>Recent Feedback</h2>
+                      <p>Latest customer reviews</p>
                     </header>
                     <div className="activity-list">
                       <div className="activity-item">
-                        <span className="activity-icon">✅</span>
+                        <span className="activity-icon">⭐⭐⭐⭐⭐</span>
                         <div className="activity-content">
-                          <strong>New User Registration</strong>
-                          <p>John Doe joined the platform</p>
+                          <strong>Excellent Service</strong>
+                          <p>Great driver, smooth ride! - Sarah Johnson</p>
                         </div>
-                        <span className="activity-time">5 mins ago</span>
+                        <span className="activity-time">2 hours ago</span>
                       </div>
                       <div className="activity-item">
-                        <span className="activity-icon">🚗</span>
+                        <span className="activity-icon">⭐⭐⭐⭐</span>
                         <div className="activity-content">
-                          <strong>Ride Completed</strong>
-                          <p>Sarah Smith completed a ride</p>
+                          <strong>Good Experience</strong>
+                          <p>Easy to use app, would like more payment options - Mike Chen</p>
                         </div>
-                        <span className="activity-time">12 mins ago</span>
+                        <span className="activity-time">5 hours ago</span>
                       </div>
                       <div className="activity-item">
-                        <span className="activity-icon">💳</span>
+                        <span className="activity-icon">⭐⭐</span>
                         <div className="activity-content">
-                          <strong>Payment Received</strong>
-                          <p>$22.75 from Mike Johnson</p>
+                          <strong>Needs Improvement</strong>
+                          <p>Wait time was longer than expected - Emily Rodriguez</p>
                         </div>
-                        <span className="activity-time">25 mins ago</span>
+                        <span className="activity-time">1 day ago</span>
                       </div>
                     </div>
                   </section>
@@ -513,8 +532,6 @@ export default function AdminDashboard() {
               {activeTab === "analytics" && (
                 <div className="analytics-layout">
                   <section className="ud-hero">
-                    <h1>Analytics Dashboard 📈</h1>
-                    <p>Insights and performance metrics</p>
                   </section>
 
                   <div className="analytics-grid">

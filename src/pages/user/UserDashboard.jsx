@@ -603,8 +603,6 @@ export default function UserDashboard() {
                     {profileSubTab === "settings" && (
                       <section className="profile-section">
                         <header className="ud-head">
-                          <h2>Settings</h2>
-                          <p>Customize notifications & preferences</p>
                         </header>
                         <form className="ud-form" onSubmit={onSaveSettings}>
                           <div className="setting-item">
@@ -646,8 +644,6 @@ export default function UserDashboard() {
                     {profileSubTab === "support" && (
                       <section className="profile-section">
                         <header className="ud-head">
-                          <h2>Support</h2>
-                          <p>We're here to help</p>
                         </header>
 
                         <div className="support-intro">
