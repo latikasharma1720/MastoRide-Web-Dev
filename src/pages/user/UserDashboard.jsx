@@ -95,7 +95,21 @@ export default function UserDashboard() {
   const [displayName, setDisplayName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
-  const [profile, setProfile] = useState({ name: "", studentId: "", email: "", phone: "" });
+
+  // Expanded profile object (longer desktop form)
+  const [profile, setProfile] = useState({
+    name: "",
+    studentId: "",
+    email: "",
+    phone: "",
+    department: "",
+    year: "",
+    address: "",
+    emergencyContact: "",
+    dob: "",
+    preferredVehicle: "",
+    bio: "",
+  });
 
   const [settings, setSettings] = useState({
     rideAlerts: true,
@@ -131,10 +145,10 @@ export default function UserDashboard() {
 
   const [rideHistory, setRideHistory] = useState([]);
 
-  // inner tabs for Profile (Account / Settings / Support)
+  // profile inner tabs
   const [profileSubTab, setProfileSubTab] = useState("account");
 
-  // Support form state
+  // --- Support form state ---
   const [supportForm, setSupportForm] = useState({ subject: "", message: "" });
   const [sendingSupport, setSendingSupport] = useState(false);
 
@@ -159,6 +173,13 @@ export default function UserDashboard() {
       studentId: stored.studentId || currentUser.studentId || "PFW123456",
       email: stored.email || currentUser.email || "user1@pfw.edu",
       phone: stored.phone || currentUser.phone || "",
+      department: stored.department || "",
+      year: stored.year || "",
+      address: stored.address || "",
+      emergencyContact: stored.emergencyContact || "",
+      dob: stored.dob || "",
+      preferredVehicle: stored.preferredVehicle || "",
+      bio: stored.bio || "",
     });
 
     const loadedSettings = getSettings(uid);
@@ -171,12 +192,9 @@ export default function UserDashboard() {
 
     setDisplayName(stored.name || currentUser.name || "user1");
 
-    // badges
-    const availableKey = `badges_available_${uid}`;
-    const usedKey = `badges_used_${uid}`;
     try {
-      const a = localStorage.getItem(availableKey);
-      const u = localStorage.getItem(usedKey);
+      const a = localStorage.getItem(`badges_available_${uid}`);
+      const u = localStorage.getItem(`badges_used_${uid}`);
       setAvailableBadges(a ? JSON.parse(a) : getDefaultAvailableBadges());
       setUsedBadges(u ? JSON.parse(u) : []);
     } catch {
@@ -185,7 +203,6 @@ export default function UserDashboard() {
     }
     setBadgesInitialized(true);
 
-    // ride history
     setRideHistory(getRideHistory());
   }, [currentUser]);
 
@@ -288,47 +305,30 @@ export default function UserDashboard() {
     pushToast(`Badge "${badgeToUse.title}" has been used!`, "success");
   };
 
-  // ---------------------------
-  // Support form: mailto submit
-  // ---------------------------
-  function onSupportFieldChange(e) {
-    const { name, value } = e.target;
-    setSupportForm((f) => ({ ...f, [name]: value }));
-  }
-
-  async function onSupportSubmit(e) {
+  // --- Support submit handler (mailto: support@mastoride.com) ---
+  const onSupportSubmit = (e) => {
     e.preventDefault();
-    if (!supportForm.subject.trim() || !supportForm.message.trim()) {
-      pushToast("Please enter both subject and message.", "error");
-      return;
-    }
+    const subject = supportForm.subject.trim();
+    const message = supportForm.message.trim();
+    if (!subject || !message) return;
 
-    try {
-      setSendingSupport(true);
+    setSendingSupport(true);
 
-      const to = "support@example.com";
-      const subject = encodeURIComponent(supportForm.subject.trim());
-      const bodyLines = [
-        `From: ${profile.email || "unknown@pfw.edu"}`,
-        "",
-        supportForm.message.trim(),
-      ];
-      const body = encodeURIComponent(bodyLines.join("\n"));
+    const to = "support@mastoride.com";
+    const body = `From: ${profile.email || "unknown@pfw.edu"}\n\n${message}`;
+    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-      // open default mail client
-      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    // open default mail client with the filled message
+    window.location.href = mailto;
 
-      // quick feedback
-      pushToast("Opening your email app with the message…", "success");
-
-      // reset
-      setSupportForm({ subject: "", message: "" });
-    } catch (err) {
-      pushToast("Could not open your email client.", "error");
-    } finally {
+    // small UX delay, then clear
+    setTimeout(() => {
       setSendingSupport(false);
-    }
-  }
+      setSupportForm({ subject: "", message: "" });
+      // toast so user gets immediate feedback
+      pushToast("Opening your email app with the message.", "success");
+    }, 300);
+  };
 
   return (
     <>
@@ -372,7 +372,7 @@ export default function UserDashboard() {
               {/* PROFILE (includes Account + Settings + Support) */}
               {activeTab === "profile" && (
                 <div className="clean-profile-layout">
-                  <div className="profile-main-card">
+                  <div className="profile-main-card profile-wide">{/* wider desktop card */}
                     <div className="profile-hero">
                       <div className="profile-hero-left">
                         <div className="profile-avatar-large">
@@ -400,58 +400,183 @@ export default function UserDashboard() {
                       ))}
                     </div>
 
-                    {/* Account */}
+                    {/* Account – LONG desktop layout */}
                     {profileSubTab === "account" && (
                       <section className="profile-section">
                         <form className="clean-profile-form" onSubmit={onSaveProfile}>
-                          <div className="form-grid-2col">
-                            <label className="clean-field">
-                              <span>Full Name</span>
-                              <input
-                                name="name"
-                                type="text"
-                                placeholder="Your Full Name"
-                                value={profile.name}
-                                onChange={onProfileChange}
-                                disabled={!isEditing}
-                              />
-                            </label>
-                            <label className="clean-field">
-                              <span>Student ID</span>
-                              <input
-                                name="studentId"
-                                type="text"
-                                placeholder="Your ID"
-                                value={profile.studentId}
-                                onChange={onProfileChange}
-                                disabled={!isEditing}
-                              />
-                            </label>
+
+                          {/* Group 1: Personal Info */}
+                          <div className="profile-group">
+                            <div className="group-title">Personal Info</div>
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Full Name</span>
+                                <input
+                                  name="name"
+                                  type="text"
+                                  placeholder="Your Full Name"
+                                  value={profile.name}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Student ID</span>
+                                <input
+                                  name="studentId"
+                                  type="text"
+                                  placeholder="Your ID"
+                                  value={profile.studentId}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Email</span>
+                                <input
+                                  name="email"
+                                  type="email"
+                                  placeholder="you@pfw.edu"
+                                  value={profile.email}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Phone</span>
+                                <input
+                                  name="phone"
+                                  type="tel"
+                                  placeholder="(optional)"
+                                  value={profile.phone}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Department</span>
+                                <input
+                                  name="department"
+                                  type="text"
+                                  placeholder="e.g., Computer Science"
+                                  value={profile.department}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Year of Study</span>
+                                <input
+                                  name="year"
+                                  type="text"
+                                  placeholder="e.g., 2nd Year"
+                                  value={profile.year}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Address</span>
+                                <input
+                                  name="address"
+                                  type="text"
+                                  placeholder="1234 Campus Drive, Fort Wayne"
+                                  value={profile.address}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Emergency Contact</span>
+                                <input
+                                  name="emergencyContact"
+                                  type="tel"
+                                  placeholder="Parent/Guardian number"
+                                  value={profile.emergencyContact}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Date of Birth</span>
+                                <input
+                                  name="dob"
+                                  type="date"
+                                  value={profile.dob}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Preferred Vehicle Type</span>
+                                <select
+                                  name="preferredVehicle"
+                                  value={profile.preferredVehicle}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                >
+                                  <option value="">Select Vehicle</option>
+                                  <option value="economy">Economy</option>
+                                  <option value="premium">Premium</option>
+                                  <option value="xl">XL</option>
+                                </select>
+                              </label>
+                            </div>
+
+                            <div className="grid-one">
+                              <label className="clean-field">
+                                <span>Bio / About You</span>
+                                <textarea
+                                  name="bio"
+                                  rows={4}
+                                  placeholder="Write a short description about yourself..."
+                                  value={profile.bio}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
                           </div>
 
-                          <div className="form-grid-2col">
-                            <label className="clean-field">
-                              <span>Email</span>
-                              <input
-                                name="email"
-                                type="email"
-                                placeholder="you@pfw.edu"
-                                value={profile.email}
-                                onChange={onProfileChange}
-                                disabled={!isEditing}
-                              />
-                            </label>
-                            <label className="clean-field">
-                              <span>Phone</span>
-                              <input
-                                name="phone"
-                                type="tel"
-                                placeholder="(optional)"
-                                value={profile.phone}
-                                onChange={onProfileChange}
-                                disabled={!isEditing}
-                              />
-                            </label>
+                          {/* Group 2: Ride Preferences */}
+                          <div className="profile-group">
+                            <div className="group-title">Ride Preferences</div>
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Default Pickup Notes</span>
+                                <input
+                                  name="pickupNotes"
+                                  type="text"
+                                  placeholder="e.g., Meet near the south entrance"
+                                  value={profile.pickupNotes || ""}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Accessibility Needs</span>
+                                <input
+                                  name="accessNeeds"
+                                  type="text"
+                                  placeholder="e.g., Wheelchair access"
+                                  value={profile.accessNeeds || ""}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
                           </div>
 
                           <div className="profile-actions">
@@ -525,47 +650,48 @@ export default function UserDashboard() {
                           <p>We're here to help</p>
                         </header>
 
-                        <div className="support-contact-card">
-                          <p className="support-note">
-                            You can reach our support team anytime via email at{" "}
-                            <a href="mailto:support@example.com" className="support-mail">support@example.com</a>.
+                        <div className="support-intro">
+                          <p>
+                            You can reach our support team anytime via email at <strong>support@mastoride.com</strong>.
                           </p>
-
-                          <form className="support-form" onSubmit={onSupportSubmit}>
-                            <label className="clean-field">
-                              <span>Subject</span>
-                              <input
-                                name="subject"
-                                type="text"
-                                placeholder="Brief subject"
-                                value={supportForm.subject}
-                                onChange={onSupportFieldChange}
-                              />
-                            </label>
-
-                            <label className="clean-field">
-                              <span>Message</span>
-                              <textarea
-                                name="message"
-                                rows={5}
-                                placeholder="Tell us how we can help…"
-                                value={supportForm.message}
-                                onChange={onSupportFieldChange}
-                              />
-                            </label>
-
-                            <div className="profile-actions">
-                              <button className="btn" type="submit" disabled={sendingSupport}>
-                                {sendingSupport ? "Opening Mail…" : "Contact Support"}
-                              </button>
-                            </div>
-                          </form>
-
-                          <div className="ud-actions">
-                            <button className="btn">Open Ticket</button>
-                            <button className="btn ghost">Help Center</button>
-                          </div>
                         </div>
+
+                        <form className="support-form" onSubmit={onSupportSubmit}>
+                          <label className="clean-field">
+                            <span>Subject</span>
+                            <input
+                              type="text"
+                              placeholder="Brief summary of the issue"
+                              value={supportForm.subject}
+                              onChange={(e) => setSupportForm((s) => ({ ...s, subject: e.target.value }))}
+                              required
+                            />
+                          </label>
+
+                          <label className="clean-field">
+                            <span>Message</span>
+                            <textarea
+                              rows={6}
+                              placeholder="Describe what happened, steps to reproduce, or add ride details…"
+                              value={supportForm.message}
+                              onChange={(e) => setSupportForm((s) => ({ ...s, message: e.target.value }))}
+                              required
+                            />
+                          </label>
+
+                          <div className="profile-actions">
+                            <button className="btn" type="submit" disabled={sendingSupport}>
+                              {sendingSupport ? "Opening Mail…" : "Contact Support"}
+                            </button>
+                            <button
+                              className="btn ghost"
+                              type="button"
+                              onClick={() => setSupportForm({ subject: "", message: "" })}
+                            >
+                              Clear
+                            </button>
+                          </div>
+                        </form>
                       </section>
                     )}
                   </div>
