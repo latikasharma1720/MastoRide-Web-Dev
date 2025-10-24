@@ -864,8 +864,6 @@ export default function AdminDashboard() {
                     {profileSubTab === "security" && (
                       <section className="profile-section">
                         <header className="ud-head">
-                          <h2>Security</h2>
-                          <p>Manage security and access control</p>
                         </header>
                         <div className="security-section">
                           <div className="security-item">
