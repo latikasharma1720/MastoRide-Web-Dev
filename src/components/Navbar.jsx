@@ -48,7 +48,6 @@ export default function Navbar() {
               <Link to="/user/dashboard" className="mr-btn mr-btn-primary">
                 My Profile
               </Link>
-              <span className="mr-email">{user.email}</span>
               <button onClick={signOut} className="mr-btn mr-btn-danger">
                 Sign out
               </button>
@@ -60,8 +59,6 @@ export default function Navbar() {
               <Link to="/admin/profile" className="mr-btn mr-btn-primary">
                 My Profile
               </Link>
-              <span className="mr-badge">Admin</span>
-              <span className="mr-email">{user.email}</span>
               <button onClick={signOut} className="mr-btn mr-btn-danger">
                 Sign out
               </button>
