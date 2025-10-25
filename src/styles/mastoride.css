@@ -16949,3 +16949,287 @@ input:focus-visible {
 }
 
 /* ===== END OF ADMIN ANALYTICS STYLES ===== */
+/* ===== TRULY CENTERED NAVBAR (SPOTIFY STYLE) ===== */
+/* Add this to the end of your mastoride.css file */
+/* This will override the previous navbar styles */
+
+/* Navbar container - using flexbox for better control */
+.mr-nav-inner {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  position: relative;
+}
+
+/* Brand stays on the left */
+.MastoRide.logo {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+/* Navigation links - absolutely centered in viewport */
+.mr-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 1;
+}
+
+/* Actions pushed to the far right */
+.mr-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+/* Make sure links are properly styled */
+.mr-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mr-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mr-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .mr-nav-inner {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .mr-links {
+    position: relative;
+    left: auto;
+    transform: none;
+    width: 100%;
+    order: 3;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  
+  .mr-actions {
+    margin-left: auto;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .mr-nav-inner {
+    padding: 12px 16px;
+  }
+  
+  .mr-links {
+    display: none;
+  }
+  
+  .mr-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .mr-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Override any conflicting styles */
+header.mr-navbar .mr-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+@media (max-width: 1024px) {
+  header.mr-navbar .mr-links {
+    position: relative;
+    left: auto;
+    transform: none;
+  }
+}
+
+/* ===== END OF TRULY CENTERED NAVBAR STYLES ===== */
+/* ===== TRULY CENTERED NAVBAR (SPOTIFY STYLE) - UPDATED ===== */
+/* Add this to the end of your mastoride.css file */
+/* This will override the previous navbar styles */
+
+/* Navbar container - using flexbox for better control */
+.mr-nav-inner {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  position: relative;
+}
+
+/* Brand stays on the left - with added left margin */
+.MastoRide.logo {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  margin-left: 100px; /* Move logo to the right */
+}
+
+/* Navigation links - absolutely centered in viewport */
+.mr-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 1;
+}
+
+/* Actions pushed to the far right */
+.mr-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+/* Make sure links are properly styled - INCREASED FONT SIZE */
+.mr-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 17px; /* Increased from 15px to 17px */
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mr-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mr-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .mr-nav-inner {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .MastoRide.logo {
+    margin-left: 90; /* Reset margin on smaller screens */
+  }
+  
+  .mr-links {
+    position: relative;
+    left: auto;
+    transform: none;
+    width: 100%;
+    order: 3;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  
+  .mr-actions {
+    margin-left: auto;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .mr-nav-inner {
+    padding: 12px 16px;
+  }
+  
+  .mr-links {
+    display: none;
+  }
+  
+  .mr-link {
+    font-size: 15px; /* Slightly smaller on mobile */
+  }
+  
+  .mr-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .mr-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Override any conflicting styles */
+header.mr-navbar .mr-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+header.mr-navbar .mr-links .mr-link,
+header.mr-navbar .mr-links .mr-link:visited {
+  color: #fff !important;
+  text-decoration: none !important;
+  padding: 8px 12px;
+  border-bottom: 2px solid transparent;
+  opacity: .9;
+  font-size: 17px; /* Increased font size */
+}
+
+header.mr-navbar .mr-links .mr-link:hover {
+  opacity: 1;
+}
+
+header.mr-navbar .mr-links .mr-link.active {
+  border-bottom-color: #fff;
+  opacity: 1;
+}
+
+@media (max-width: 1024px) {
+  header.mr-navbar .mr-links {
+    position: relative;
+    left: auto;
+    transform: none;
+  }
+}
+
+/* ===== END OF TRULY CENTERED NAVBAR STYLES ===== */
