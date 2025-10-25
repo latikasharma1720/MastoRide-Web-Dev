@@ -92,10 +92,12 @@ export default function Login() {
 
             {/* Login Card */}
             <div className="modern-login-card">
-              {/* Header */}
+              {/* Header - UPDATED WITH SPLIT STYLE */}
               <div className="login-header">
-                <h1>Member Login</h1>
-                <p>Welcome back! Please sign in to continue.</p>
+                <h1 className="split-heading">
+                  <span className="split-word-first">Member</span>
+                  <span className="split-word-second">Login</span>
+                </h1>
               </div>
 
               {/* Form */}

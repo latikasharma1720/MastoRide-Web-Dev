@@ -90,9 +90,8 @@ export default function AdminLogin() {
                 {/* Header */}
                 <div className="admin-login-header">
                   <h1 className="admin-brand">
-                    <span className="brand-mastoride">Admin</span>
-                    <span className="brand-ride">Login</span>
                   </h1>
+                  <p className="admin-subtitle">Login to connect to the dashboard</p>
                 </div>
 
                 {/* Form */}
