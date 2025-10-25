@@ -17233,3 +17233,472 @@ header.mr-navbar .mr-links .mr-link.active {
 }
 
 /* ===== END OF TRULY CENTERED NAVBAR STYLES ===== */
+/* ===== ADMIN LOGIN - FINAL CORRECT VERSION ===== */
+/* Replace ALL previous admin login CSS with this */
+
+/* Main Page Container - accounting for navbar */
+.admin-login-page {
+  width: 100%;
+  height: calc(100vh - 80px);
+  margin-top: 80px; /* Space for fixed navbar */
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Split Layout Container */
+.admin-login-split {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* LEFT SIDE - Video Panel (50%) */
+.admin-video-panel {
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #5B7FC7; /* Fallback color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Video - PURE, NO OVERLAY */
+.admin-background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Video Overlay - HIDDEN */
+.admin-video-overlay {
+  display: none;
+}
+
+/* Content on top of video */
+.admin-video-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.admin-tagline {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
+  text-align: left;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.admin-icon-wrapper {
+  display: none; /* Hidden */
+}
+
+.admin-icon-wrapper svg {
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
+}
+
+.admin-icon-wrapper svg circle {
+  fill: #fbbf24;
+}
+
+.admin-icon-wrapper svg path {
+  stroke: #5B7FC7;
+}
+
+.admin-footer-text {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 1s ease-out;
+  align-self: center;
+}
+
+/* Decorative road lines - HIDDEN */
+.road-line {
+  display: none;
+}
+
+/* RIGHT SIDE - Form Panel (50%) - BLACK BACKGROUND */
+.admin-form-panel {
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000; /* Black background */
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.admin-form-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Login Card - DARK CARD ON BLACK BACKGROUND */
+.admin-login-card {
+  width: 100%;
+  background: #1f1f1f; /* Slightly lighter than background */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  padding: 50px 40px;
+  border-radius: 20px;
+  border: 1px solid #2a2a2a; /* Subtle border */
+}
+
+/* Admin Header Styling */
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-brand {
+  font-size: 48px;
+  font-weight: 900;
+  margin: 0 0 12px 0;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.brand-mastoride {
+  color: #ffffff; /* White text on black card */
+}
+
+.brand-ride {
+  color: #fbbf24;
+}
+
+.admin-subtitle {
+  color: #e5e5e5; /* Light gray on black card */
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Form Styling */
+.admin-login-form {
+  width: 100%;
+}
+
+.admin-field {
+  margin-bottom: 24px;
+}
+
+.admin-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff; /* White labels */
+  margin-bottom: 8px;
+}
+
+/* Input with Icon */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 14px 50px 14px 16px;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #2a2a2a; /* Dark input background */
+  color: #ffffff; /* White text */
+}
+
+.input-with-icon input:focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.1);
+  background: #333333;
+}
+
+.input-with-icon input::placeholder {
+  color: #999999; /* Light gray placeholder */
+}
+
+.input-icon {
+  position: absolute;
+  right: 16px;
+  color: #999999; /* Light gray icon */
+  font-size: 18px;
+  pointer-events: none;
+}
+
+/* Remember Me */
+.admin-remember-wrapper {
+  margin: 20px 0 28px 0;
+}
+
+.admin-remember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #e5e5e5; /* Light gray text */
+  cursor: pointer;
+}
+
+.admin-remember input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-remember span {
+  user-select: none;
+}
+
+/* Admin Login Button */
+.admin-login-btn {
+  background: #E5C17E;
+  color: #000000;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(229, 193, 126, 0.3);
+}
+
+.admin-login-btn:hover {
+  background: #d4ae6a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(229, 193, 126, 0.4);
+}
+
+.admin-login-btn:active {
+  transform: translateY(0);
+}
+
+.admin-login-btn span {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Help Text */
+.admin-help-text {
+  text-align: center;
+  font-size: 14px;
+  color: #999999; /* Light gray */
+  margin-top: 28px;
+}
+
+.admin-help-text a {
+  color: #fbbf24; /* Gold link */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-help-text a:hover {
+  text-decoration: underline;
+}
+
+/* Error Banner */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 2px solid #fecaca;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+  animation: slideDown 0.3s ease-out;
+}
+
+.error-banner svg {
+  flex-shrink: 0;
+}
+
+/* Animations */
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px) rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(-45deg);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .admin-login-split {
+    flex-direction: column;
+  }
+
+  .admin-video-panel,
+  .admin-form-panel {
+    flex: none;
+    width: 100%;
+    min-height: 50vh;
+  }
+
+  .admin-tagline {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .admin-icon-wrapper {
+    margin: 40px 0;
+  }
+
+  .admin-icon-wrapper svg {
+    width: 120px;
+    height: 120px;
+  }
+
+  .admin-form-panel {
+    padding: 40px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-login-page {
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+  }
+
+  .admin-login-split {
+    min-height: calc(100vh - 70px);
+  }
+
+  .admin-video-panel {
+    min-height: 40vh;
+    padding: 30px 20px;
+  }
+
+  .admin-tagline {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .admin-brand {
+    font-size: 38px;
+  }
+
+  .admin-subtitle {
+    font-size: 16px;
+  }
+
+  .admin-icon-wrapper svg {
+    width: 100px;
+    height: 100px;
+  }
+
+  .admin-form-panel {
+    padding: 30px 20px;
+    min-height: auto;
+  }
+
+  .admin-login-btn {
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+
+  .road-line {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-brand {
+    font-size: 32px;
+  }
+
+  .admin-subtitle {
+    font-size: 14px;
+  }
+
+  .admin-icon-wrapper svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .input-with-icon input {
+    padding: 12px 45px 12px 14px;
+    font-size: 14px;
+  }
+}
+
+/* ===== END OF ADMIN LOGIN FINAL ===== */
