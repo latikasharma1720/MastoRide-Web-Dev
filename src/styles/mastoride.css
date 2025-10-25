@@ -16112,3 +16112,526 @@ input:focus-visible {
 }
 
 /* ===== END OF ADDITIONS ===== */
+/* ===== ADD THIS TO THE END OF YOUR mastoride.css FILE ===== */
+
+/* Align map with "Book a Ride" heading - Move map DOWN */
+.book-ride-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.book-form-col {
+  width: 100%;
+}
+
+.book-map-col {
+  width: 100%;
+  position: sticky;
+  top: 120px;
+  /* Move map DOWN to align with "Book a Ride" heading */
+  margin-top: 180px; /* Adjust this value - increase to move down more */
+}
+
+/* Remove any negative margins or transforms */
+.book-map-col > div {
+  margin-top: 0 !important;
+}
+
+/* Ensure map container doesn't override */
+.book-map-col .leaflet-container {
+  margin-top: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .book-ride-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .book-map-col {
+    position: static;
+    margin-top: 24px;
+  }
+}
+
+/* ===== END OF ADDITIONS ===== */
+/* ===== ADD THIS TO THE END OF YOUR mastoride.css FILE ===== */
+
+/* Simple Clean Ride Confirmation - Small Card Matching Theme */
+.ride-confirmation-simple {
+  background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%);
+  border-radius: 16px;
+  padding: 24px 36px;
+  margin: 24px auto;
+  max-width: 320px;
+  box-shadow: 0 8px 20px rgba(231, 111, 81, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  animation: slideInUp 0.5s ease-out;
+}
+
+.confirmation-icon-simple {
+  font-size: 44px;
+  line-height: 1;
+  animation: bounce 0.6s ease-out;
+}
+
+.confirmation-title-simple {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+/* Animation */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ride-confirmation-simple {
+    padding: 16px 20px;
+    max-width: 150px;
+  }
+  
+  .confirmation-icon-simple {
+    font-size: 40px;
+  }
+  
+  .confirmation-title-simple {
+    font-size: 20px;
+  }
+}
+
+/* ===== END OF SIMPLE CONFIRMATION STYLES ===== */
+/* ===== ADD THIS TO THE END OF YOUR mastoride.css FILE ===== */
+
+/* Proceed to Payment Button */
+.proceed-payment-btn {
+  background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%) !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  padding: 16px 32px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(231, 111, 81, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  margin-top: 16px !important;
+}
+
+.proceed-payment-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(231, 111, 81, 0.4) !important;
+}
+
+.proceed-payment-btn:active {
+  transform: translateY(0) !important;
+}
+
+/* Payment Confirmed Modal Styling */
+.payment-confirmed-title {
+  font-size: 32px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.payment-confirmed-icon {
+  font-size: 72px !important;
+}
+
+.payment-confirmed-text {
+  font-size: 16px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ===== END OF ADDITIONS ===== */
+/* ===== ADD THIS TO THE END OF YOUR mastoride.css FILE ===== */
+
+/* Payment Page Wrapper with Better Spacing */
+.payment-page-wrapper {
+  padding: 60px 20px 80px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Animated Section Title Cards */
+.payment-section-card {
+  background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%);
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: 0 4px 15px rgba(231, 111, 81, 0.25);
+  animation: slideInDown 0.5s ease-out;
+}
+
+.section-title-card {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Payment Section Spacing */
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Add Payment Button */
+.add-payment-btn {
+  background: transparent;
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.add-payment-btn:hover {
+  border-color: #e76f51;
+  background: rgba(231, 111, 81, 0.05);
+  transform: translateY(-2px);
+}
+
+.add-icon {
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* Payment Method Items with Tick Mark */
+.payment-method-item {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.payment-method-item:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method-item.selected {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.05);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+/* Green Check Mark */
+.check-mark {
+  margin-left: auto;
+  background: #4caf50;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  animation: popIn 0.3s ease-out;
+}
+
+/* Pay Now Button */
+.pay-now-btn {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%) !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  padding: 16px 32px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3) !important;
+  margin-top: 16px !important;
+  animation: slideInUp 0.4s ease-out !important;
+}
+
+.pay-now-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+}
+
+/* Animations */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Method Icons */
+.method-icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.visa-icon {
+  font-weight: 800;
+  color: #1434cb;
+  font-size: 16px;
+}
+
+.apple-icon {
+  font-size: 28px;
+}
+
+.method-content {
+  flex: 1;
+}
+
+.method-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .payment-page-wrapper {
+    padding: 40px 16px 60px;
+  }
+  
+  .payment-section-card {
+    padding: 20px 24px;
+  }
+  
+  .section-title-card {
+    font-size: 20px;
+  }
+  
+  .payment-method-item {
+    padding: 16px;
+  }
+  
+  .check-mark {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+}
+
+/* ===== END OF PAYMENT PAGE IMPROVEMENTS ===== */
+/* ===== ADD THIS TO THE END OF YOUR mastoride.css FILE ===== */
+/* REPLACE YOUR EXISTING payment-confirmed STYLES WITH THIS */
+
+/* Payment Confirmed Overlay */
+.payment-confirmed-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Confirmation Card - Theme Matching */
+.payment-confirmed-card {
+  background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%);
+  border-radius: 24px;
+  padding: 48px 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  animation: modalSlideIn 0.4s ease-out;
+  border: 3px solid #fff;
+}
+
+/* Confirmation Icon */
+.payment-confirmed-icon {
+  font-size: 80px;
+  line-height: 1;
+  animation: celebrationBounce 0.6s ease-out;
+}
+
+/* Confirmation Title - High Contrast */
+.payment-confirmed-title {
+  font-size: 36px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Confirmation Text - High Contrast */
+.payment-confirmed-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Close Button */
+.payment-confirmed-close {
+  background: #2d2d2d !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  padding: 16px 48px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+  margin-top: 8px !important;
+}
+
+.payment-confirmed-close:hover {
+  background: #1a1a1a !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Animations */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes celebrationBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2) rotate(-10deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  75% {
+    transform: scale(1.15) rotate(-5deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .payment-confirmed-card {
+    padding: 40px 32px;
+    border-width: 2px;
+  }
+  
+  .payment-confirmed-icon {
+    font-size: 64px;
+  }
+  
+  .payment-confirmed-title {
+    font-size: 28px;
+  }
+  
+  .payment-confirmed-text {
+    font-size: 16px;
+  }
+  
+  .payment-confirmed-close {
+    padding: 14px 40px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* ===== END OF CONFIRMATION MODAL STYLES ===== */

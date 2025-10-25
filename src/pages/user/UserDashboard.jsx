@@ -137,7 +137,8 @@ export default function UserDashboard() {
 
   const [fare, setFare] = useState(null);
   const [estimating, setEstimating] = useState(false);
-  const [confirmMsg, setConfirmMsg] = useState("");
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   const [availableBadges, setAvailableBadges] = useState([]);
   const [usedBadges, setUsedBadges] = useState([]);
@@ -276,22 +277,6 @@ export default function UserDashboard() {
     const mult = VEHICLES[ride.vehicleType].multiplier;
     const total = (base + distance * perMile) * ride.passengers * mult;
     setTimeout(() => { setFare(total.toFixed(2)); setEstimating(false); }, 300);
-  };
-
-  const handleBookRide = (e) => {
-    e.preventDefault();
-    const { pickup, dropoff, date, time, vehicleType } = ride;
-    if (!pickup || !dropoff) {
-      setConfirmMsg("⚠️ Please enter both pickup and drop-off locations before confirming your ride.");
-      return;
-    }
-    const formattedDate = date
-      ? new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })
-      : "(select date)";
-    const formattedTime = time || "(select time)";
-    setConfirmMsg(
-      `🎉 Ride Confirmed!\n\n📍 **From:** ${pickup}\n🏁 **To:** ${dropoff}\n📅 **Date:** ${formattedDate}\n⏰ **Time:** ${formattedTime}\n🚗 **Vehicle Type:** ${VEHICLES[vehicleType].label}\n\n💬 Your driver will be assigned shortly.`
-    );
   };
 
   const handleUseBadge = (badgeId) => {
@@ -791,9 +776,14 @@ export default function UserDashboard() {
                             {estimating ? "Estimating…" : fare ? `💵 Estimated Fare: $${fare}` : "Estimate Fare"}
                           </button>
                         </div>
-                        <button className="btn wide confirm-btn" onClick={handleBookRide} type="button">Confirm Booking</button>
+                        <button 
+                          className="btn wide proceed-payment-btn" 
+                          onClick={() => setActiveTab("payment")}
+                          type="button"
+                        >
+                          Proceed to Payment →
+                        </button>
                       </form>
-                      {confirmMsg && <div className="confirm-msg">{confirmMsg}</div>}
                     </section>
                   </div>
                   <div className="book-map-col">
@@ -805,40 +795,68 @@ export default function UserDashboard() {
               {/* PAYMENT */}
               {activeTab === "payment" && (
                 <div className="payment-page-wrapper">
-                  <div className="mastoride-cash-card">
-                    <h3 className="cash-title">MastoRide Cash</h3>
-                    <div className="cash-amount">${(0).toFixed(2)}</div>
-                    <p className="cash-subtitle">Plan ahead, budget easier</p>
-                    <div className="cash-actions">
-                      <button className="btn-add-cash">Add cash</button>
-                      <button className="btn-manage">Manage</button>
-                    </div>
+                  <div className="payment-section-card">
+                    <h3 className="section-title-card">Add Payment Method</h3>
                   </div>
-
+                  
                   <div className="payment-section">
-                    <h3 className="section-title">Payment defaults</h3>
-                    <button className="payment-option">
-                      <div className="option-icon"><span>👤</span></div>
-                      <div className="option-content">
-                        <div className="option-title">Personal</div>
-                        <div className="option-subtitle">Visa Card</div>
-                      </div>
-                      <span className="option-arrow">›</span>
+                    <button className="add-payment-btn">
+                      <span className="add-icon">+</span>
+                      <span>Add payment method</span>
                     </button>
                   </div>
 
+                  <div className="payment-section-card">
+                    <h3 className="section-title-card">Choose Payment Method</h3>
+                  </div>
+
                   <div className="payment-section">
-                    <h3 className="section-title">Payment methods</h3>
-                    <div className="payment-method-item">
+                    <div 
+                      className={`payment-method-item ${selectedPayment === 'visa' ? 'selected' : ''}`}
+                      onClick={() => setSelectedPayment('visa')}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className="method-icon"><span className="visa-icon">VISA</span></div>
                       <div className="method-content"><div className="method-title">Visa Card</div></div>
+                      {selectedPayment === 'visa' && <span className="check-mark">✓</span>}
                     </div>
-                    <div className="payment-method-item">
-                      <div className="method-icon"><span className="apple-icon"></span></div>
+                    
+                    <div 
+                      className={`payment-method-item ${selectedPayment === 'apple' ? 'selected' : ''}`}
+                      onClick={() => setSelectedPayment('apple')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="method-icon"><span className="apple-icon">🍎</span></div>
                       <div className="method-content"><div className="method-title">Apple Pay</div></div>
+                      {selectedPayment === 'apple' && <span className="check-mark">✓</span>}
                     </div>
-                    <button className="add-payment-btn"><span className="add-icon">+</span><span>Add payment method</span></button>
+                    
+                    {selectedPayment && (
+                      <button 
+                        className="btn wide pay-now-btn" 
+                        onClick={() => setPaymentConfirmed(true)}
+                        type="button"
+                      >
+                        Pay Now
+                      </button>
+                    )}
                   </div>
+
+                  {paymentConfirmed && (
+                    <div className="payment-confirmed-overlay" onClick={() => setPaymentConfirmed(false)}>
+                      <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()}>
+                        <span className="payment-confirmed-icon">🎉</span>
+                        <h3 className="payment-confirmed-title">RIDE CONFIRMED YAY!</h3>
+                        <p className="payment-confirmed-text">Your ride has been booked successfully!</p>
+                        <button 
+                          className="btn wide payment-confirmed-close" 
+                          onClick={() => setPaymentConfirmed(false)}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -847,7 +865,7 @@ export default function UserDashboard() {
                 <div className="rewards-page-wrapper">
                   <section className="rewards-hero">
                     <h1>Rewards & Badges</h1>
-                    <p>Track your progress, earn rewards, and unlock exclusive perks 🚀</p>
+                    <p>Track your progress, earn rewards, and unlock exclusive perks </p>
                   </section>
 
                   <div className="rewards-points-card">
@@ -860,7 +878,7 @@ export default function UserDashboard() {
                   </div>
 
                   <section className="badges-section">
-                    <h2 className="badges-heading"><span className="badge-emoji">🎯</span> Available Badges</h2>
+                    <h2 className="badges-heading"><span className="badge-emoji"></span> Available Badges</h2>
                     {availableBadges.length > 0 ? (
                       <div className="badges-grid">
                         {availableBadges.map((badge) => (
@@ -874,12 +892,12 @@ export default function UserDashboard() {
                         ))}
                       </div>
                     ) : (
-                      <div className="empty-badges"><p>🎉 No available badges right now. Keep riding to earn more!</p></div>
+                      <div className="empty-badges"><p> No available badges right now. Keep riding to earn more!</p></div>
                     )}
                   </section>
 
                   <section className="badges-section">
-                    <h2 className="badges-heading"><span className="badge-emoji">📜</span> Used Badges</h2>
+                    <h2 className="badges-heading"><span className="badge-emoji"></span> Used Badges</h2>
                     {usedBadges.length > 0 ? (
                       <div className="badges-grid">
                         {usedBadges.map((badge) => (
