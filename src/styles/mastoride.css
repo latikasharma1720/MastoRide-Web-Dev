@@ -15329,3 +15329,786 @@ input:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+/* ===== ADD THESE STYLES AT THE END OF YOUR mastoride.css FILE ===== */
+
+/* Fix spacing between navbar and history section */
+.history-panel {
+  margin-top: 32px !important;
+  padding-top: 24px !important;
+}
+
+/* Add proper spacing between cards */
+.history-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* Increased space between cards */
+  padding: 0;
+  margin: 0;
+}
+
+/* Smooth glide animation for cards */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to each card with staggered delay */
+.ride-history-card {
+  animation: slideInUp 0.6s ease-out forwards;
+  animation-delay: var(--stagger, 0ms);
+  opacity: 0; /* Start invisible */
+  position: relative;
+}
+
+/* Variant 1: Blue Border */
+.ride-history-card.ride-card-variant-1 {
+  background: #ffffff;
+  border-left: 8px solid #2196f3;
+}
+
+/* Variant 2: Orange Border */
+.ride-history-card.ride-card-variant-2 {
+  background: #ffffff;
+  border-left: 8px solid #ff9800;
+}
+
+/* Variant 3: Purple Border */
+.ride-history-card.ride-card-variant-3 {
+  background: #ffffff;
+  border-left: 8px solid #9c27b0;
+}
+
+/* Variant 4: Green Border */
+.ride-history-card.ride-card-variant-4 {
+  background: #ffffff;
+  border-left: 8px solid #4caf50;
+}
+
+/* Add hover effects for better interactivity */
+.ride-history-card.ride-card-variant-1:hover {
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.25);
+  border-left-color: #1976d2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-2:hover {
+  box-shadow: 0 8px 24px rgba(255, 152, 0, 0.25);
+  border-left-color: #f57c00;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-3:hover {
+  box-shadow: 0 8px 24px rgba(156, 39, 176, 0.25);
+  border-left-color: #7b1fa2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-4:hover {
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.25);
+  border-left-color: #388e3c;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Ensure text remains readable */
+.ride-history-card .ride-date-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+.ride-history-card .ride-status-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+/* Ensure the card content stays properly positioned */
+.ride-history-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .history-panel {
+    margin-top: 24px !important;
+    padding-top: 16px !important;
+  }
+  
+  .history-stack {
+    gap: 24px;
+  }
+}
+
+/* ===== END OF ADDITIONS ===== */
+/* ===== ADD THESE STYLES AT THE END OF YOUR mastoride.css FILE ===== */
+
+/* History Stats Grid */
+.history-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease-out;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.history-stat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  transition: all 0.3s ease;
+}
+
+.history-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.history-stat-card .stat-icon {
+  font-size: 56px;
+  flex-shrink: 0;
+}
+
+.history-stat-card .stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-stat-card .stat-value {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1;
+}
+
+.history-stat-card .stat-label {
+  font-size: 13px;
+  color: #a0aec0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* History Filter Bar - Inside White Card */
+.history-filter-bar {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.5s ease-out 0.1s;
+  animation-fill-mode: both;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+}
+
+.filter-select {
+  padding: 12px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2d3748;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232d3748' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 44px;
+}
+
+.filter-select:hover {
+  border-color: #cbd5e0;
+  background-color: #f7fafc;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Empty History State */
+.empty-history {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+  font-size: 16px;
+}
+
+.empty-history p {
+  margin: 0;
+}
+
+/* Fix spacing between navbar and history section */
+.history-panel {
+  margin-top: 32px !important;
+  padding-top: 24px !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Add proper spacing between cards */
+.history-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 0;
+  margin: 0;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Smooth glide animation for cards */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to each card with staggered delay */
+.ride-history-card {
+  animation: slideInUp 0.6s ease-out forwards;
+  animation-delay: var(--stagger, 0ms);
+  opacity: 0;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 32px 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Variant 1: Blue Border */
+.ride-history-card.ride-card-variant-1 {
+  background: #ffffff;
+  border-left: 8px solid #2196f3;
+}
+
+/* Variant 2: Orange Border */
+.ride-history-card.ride-card-variant-2 {
+  background: #ffffff;
+  border-left: 8px solid #ff9800;
+}
+
+/* Variant 3: Purple Border */
+.ride-history-card.ride-card-variant-3 {
+  background: #ffffff;
+  border-left: 8px solid #9c27b0;
+}
+
+/* Variant 4: Green Border */
+.ride-history-card.ride-card-variant-4 {
+  background: #ffffff;
+  border-left: 8px solid #4caf50;
+}
+
+/* Add hover effects for better interactivity */
+.ride-history-card.ride-card-variant-1:hover {
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.25);
+  border-left-color: #1976d2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-2:hover {
+  box-shadow: 0 8px 24px rgba(255, 152, 0, 0.25);
+  border-left-color: #f57c00;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-3:hover {
+  box-shadow: 0 8px 24px rgba(156, 39, 176, 0.25);
+  border-left-color: #7b1fa2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-4:hover {
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.25);
+  border-left-color: #388e3c;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Ensure text remains readable */
+.ride-history-card .ride-date-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+.ride-history-card .ride-status-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+/* Ensure the card content stays properly positioned */
+.ride-history-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .history-stats-grid {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+  }
+  
+  .history-filter-bar {
+    max-width: 900px;
+  }
+  
+  .history-stack {
+    max-width: 900px;
+  }
+  
+  .ride-history-card {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-panel {
+    margin-top: 24px !important;
+    padding-top: 16px !important;
+  }
+  
+  .history-stack {
+    gap: 24px;
+  }
+  
+  .history-stat-card {
+    padding: 20px;
+  }
+  
+  .history-stat-card .stat-icon {
+    font-size: 40px;
+  }
+  
+  .history-stat-card .stat-value {
+    font-size: 28px;
+  }
+  
+  .history-filter-bar {
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
+  
+  .ride-history-card {
+    padding: 24px;
+  }
+}
+
+/* ===== END OF ADDITIONS ===== */
+/* ===== ADD THESE STYLES AT THE END OF YOUR mastoride.css FILE ===== */
+
+/* History Stats Grid */
+.history-stats-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease-out;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.history-stat-card {
+  background: #fff;
+  border-radius: 50%;
+  width: 220px;
+  height: 220px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.history-stat-card:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.history-stat-card .stat-icon {
+  font-size: 64px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.history-stat-card .stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.history-stat-card .stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1;
+}
+
+.history-stat-card .stat-label {
+  font-size: 11px;
+  color: #a0aec0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* History Filter Bar - Inside White Card */
+.history-filter-bar {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.5s ease-out 0.1s;
+  animation-fill-mode: both;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+}
+
+.filter-select {
+  padding: 12px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2d3748;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232d3748' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 44px;
+}
+
+.filter-select:hover {
+  border-color: #cbd5e0;
+  background-color: #f7fafc;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Empty History State */
+.empty-history {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+  font-size: 16px;
+}
+
+.empty-history p {
+  margin: 0;
+}
+
+/* Fix spacing between navbar and history section */
+.history-panel {
+  margin-top: 32px !important;
+  padding-top: 24px !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Add proper spacing between cards */
+.history-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 0;
+  margin: 0;
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Smooth glide animation for cards */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to each card with staggered delay */
+.ride-history-card {
+  animation: slideInUp 0.6s ease-out forwards;
+  animation-delay: var(--stagger, 0ms);
+  opacity: 0;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 32px 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Variant 1: Blue Border */
+.ride-history-card.ride-card-variant-1 {
+  background: #ffffff;
+  border-left: 8px solid #2196f3;
+}
+
+/* Variant 2: Orange Border */
+.ride-history-card.ride-card-variant-2 {
+  background: #ffffff;
+  border-left: 8px solid #ff9800;
+}
+
+/* Variant 3: Purple Border */
+.ride-history-card.ride-card-variant-3 {
+  background: #ffffff;
+  border-left: 8px solid #9c27b0;
+}
+
+/* Variant 4: Green Border */
+.ride-history-card.ride-card-variant-4 {
+  background: #ffffff;
+  border-left: 8px solid #4caf50;
+}
+
+/* Add hover effects for better interactivity */
+.ride-history-card.ride-card-variant-1:hover {
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.25);
+  border-left-color: #1976d2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-2:hover {
+  box-shadow: 0 8px 24px rgba(255, 152, 0, 0.25);
+  border-left-color: #f57c00;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-3:hover {
+  box-shadow: 0 8px 24px rgba(156, 39, 176, 0.25);
+  border-left-color: #7b1fa2;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.ride-history-card.ride-card-variant-4:hover {
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.25);
+  border-left-color: #388e3c;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Ensure text remains readable */
+.ride-history-card .ride-date-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+.ride-history-card .ride-status-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+/* Ensure the card content stays properly positioned */
+.ride-history-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .history-stats-grid {
+    gap: 40px;
+    max-width: 900px;
+  }
+  
+  .history-filter-bar {
+    max-width: 900px;
+  }
+  
+  .history-stack {
+    max-width: 900px;
+  }
+  
+  .ride-history-card {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-panel {
+    margin-top: 24px !important;
+    padding-top: 16px !important;
+  }
+  
+  .history-stats-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .history-stack {
+    gap: 24px;
+  }
+  
+  .history-stat-card {
+    width: 150px;
+    height: 140px;
+    padding: 20px;
+  }
+  
+  .history-stat-card .stat-icon {
+    font-size: 48px;
+  }
+  
+  .history-stat-card .stat-value {
+    font-size: 28px;
+  }
+  
+  .history-stat-card .stat-label {
+    font-size: 10px;
+  }
+  
+  .history-filter-bar {
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
+  
+  .ride-history-card {
+    padding: 24px;
+  }
+}
+
+/* ===== END OF ADDITIONS ===== */

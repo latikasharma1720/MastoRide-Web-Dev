@@ -145,6 +145,11 @@ export default function UserDashboard() {
 
   const [rideHistory, setRideHistory] = useState([]);
 
+  // --- History filter states ---
+  const [filterPeriod, setFilterPeriod] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
+
   // profile inner tabs
   const [profileSubTab, setProfileSubTab] = useState("account");
 
@@ -329,6 +334,50 @@ export default function UserDashboard() {
       pushToast("Opening your email app with the message.", "success");
     }, 300);
   };
+
+  // --- Filter and sort ride history ---
+  const getFilteredAndSortedRides = () => {
+    let filtered = [...rideHistory];
+
+    // Filter by period
+    if (filterPeriod === "month") {
+      const now = new Date();
+      filtered = filtered.filter(ride => {
+        const rideDate = new Date(ride.fullDate);
+        return rideDate.getMonth() === now.getMonth() && rideDate.getFullYear() === now.getFullYear();
+      });
+    } else if (filterPeriod === "year") {
+      const now = new Date();
+      filtered = filtered.filter(ride => {
+        const rideDate = new Date(ride.fullDate);
+        return rideDate.getFullYear() === now.getFullYear();
+      });
+    }
+
+    // Filter by status
+    if (filterStatus !== "all") {
+      filtered = filtered.filter(ride => ride.status.toLowerCase() === filterStatus.toLowerCase());
+    }
+
+    // Sort
+    if (sortBy === "recent") {
+      filtered.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate));
+    } else if (sortBy === "oldest") {
+      filtered.sort((a, b) => new Date(a.fullDate) - new Date(b.fullDate));
+    } else if (sortBy === "price-high") {
+      filtered.sort((a, b) => parseFloat(b.price.replace('$', '')) - parseFloat(a.price.replace('$', '')));
+    } else if (sortBy === "price-low") {
+      filtered.sort((a, b) => parseFloat(a.price.replace('$', '')) - parseFloat(b.price.replace('$', '')));
+    }
+
+    return filtered;
+  };
+
+  const filteredRides = getFilteredAndSortedRides();
+
+  // Calculate total rides and total spent
+  const totalRides = rideHistory.length;
+  const totalSpent = rideHistory.reduce((sum, ride) => sum + parseFloat(ride.price.replace('$', '')), 0).toFixed(2);
 
   return (
     <>
@@ -852,12 +901,61 @@ export default function UserDashboard() {
               {/* HISTORY — centered, desktop-wide cards */}
               {activeTab === "history" && (
                 <section className="ud-panel history-panel">
+                  {/* Stats Cards */}
+                  <div className="history-stats-grid">
+                    <div className="history-stat-card">
+                      <div className="stat-icon">🚗</div>
+                      <div className="stat-content">
+                        <div className="stat-value">{totalRides}</div>
+                        <div className="stat-label">TOTAL RIDES</div>
+                      </div>
+                    </div>
+                    <div className="history-stat-card">
+                      <div className="stat-icon">💰</div>
+                      <div className="stat-content">
+                        <div className="stat-value">${totalSpent}</div>
+                        <div className="stat-label">TOTAL SPENT</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Filter Bar */}
+                  <div className="history-filter-bar">
+                    <div className="filter-group">
+                      <label className="filter-label">Filter:</label>
+                      <select className="filter-select" value={filterPeriod} onChange={(e) => setFilterPeriod(e.target.value)}>
+                        <option value="all">All Rides</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                      </select>
+                    </div>
+                    <div className="filter-group">
+                      <label className="filter-label">Status:</label>
+                      <select className="filter-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                    <div className="filter-group">
+                      <label className="filter-label">Sort by:</label>
+                      <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                        <option value="recent">Recent First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="price-low">Price: Low to High</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Ride Cards */}
                   <div className="history-stack">
-                    {rideHistory.map((item, idx) => (
-                      <div key={item.id} className="ride-history-card" style={{ "--stagger": `${idx * 60}ms` }}>
+                    {filteredRides.length > 0 ? (
+                      filteredRides.map((item, idx) => (
+                        <div key={item.id} className={`ride-history-card ride-card-variant-${(idx % 4) + 1}`} style={{ "--stagger": `${idx * 100}ms` }}>
                         <div className="ride-card-header">
-                          <div className="ride-date-badge">{item.date}</div>
-                          <div className="ride-status-badge">{item.status}</div>
+                          <div className="ride-date-badge">📅 {item.date}</div>
+                          <div className="ride-status-badge">✅ {item.status}</div>
                         </div>
 
                         <div className="ride-card-body">
@@ -865,7 +963,7 @@ export default function UserDashboard() {
                             <div className="route-point">
                               <div className="route-icon pickup-icon">📍</div>
                               <div className="route-details">
-                                <div className="route-label">Pickup</div>
+                                <div className="route-label">PICKUP</div>
                                 <div className="route-location">{item.pickup}</div>
                               </div>
                             </div>
@@ -875,7 +973,7 @@ export default function UserDashboard() {
                             <div className="route-point">
                               <div className="route-icon dropoff-icon">🎯</div>
                               <div className="route-details">
-                                <div className="route-label">Drop-off</div>
+                                <div className="route-label">DROP-OFF</div>
                                 <div className="route-location">{item.dropoff}</div>
                               </div>
                             </div>
@@ -899,12 +997,17 @@ export default function UserDashboard() {
 
                         <div className="ride-card-footer">
                           <div className="ride-price">
-                            <span className="price-label">Total Fare</span>
+                            <span className="price-label">TOTAL FARE</span>
                             <span className="price-amount">{item.price}</span>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    ))
+                    ) : (
+                      <div className="empty-history">
+                        <p>📭 No rides found matching your filters</p>
+                      </div>
+                    )}
                   </div>
                 </section>
               )}
