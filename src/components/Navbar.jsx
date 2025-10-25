@@ -24,7 +24,7 @@ export default function Navbar() {
           <img src={LOGO_SRC} alt="MastoRide logo" className="mr-logo" />
         </Link>
 
-        {/* Center links */}
+        {/* Center links - absolutely centered */}
         <nav className="mr-links" aria-label="Primary">
           <NavLink to="/" end className="mr-link">Home</NavLink>
           <NavLink to="/about" className="mr-link">About</NavLink>
