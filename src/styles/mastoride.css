@@ -17354,7 +17354,7 @@ header.mr-navbar .mr-links .mr-link.active {
   max-width: 480px;
 }
 
-/* Login Card - DARK CARD ON BLACK BACKGROUND */
+/* Login Card - DARK CARD ON BLACK BACKGROUND WITH ANIMATION */
 .admin-login-card {
   width: 100%;
   background: #1f1f1f; /* Slightly lighter than background */
@@ -17362,6 +17362,29 @@ header.mr-navbar .mr-links .mr-link.active {
   padding: 50px 40px;
   border-radius: 20px;
   border: 1px solid #2a2a2a; /* Subtle border */
+  animation: slideInFromRight 0.8s ease-out, subtlePulse 8s ease-in-out infinite 1s;
+}
+
+/* Slide in from right animation */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Subtle pulse animation */
+@keyframes subtlePulse {
+  0%, 100% {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 10px 50px rgba(251, 191, 36, 0.1), 0 0 30px rgba(251, 191, 36, 0.05);
+  }
 }
 
 /* Admin Header Styling */
@@ -17376,19 +17399,42 @@ header.mr-navbar .mr-links .mr-link.active {
   margin: 0 0 12px 0;
   letter-spacing: 2px;
   line-height: 1;
+  animation: fadeInScale 0.6s ease-out;
+}
+
+/* Fade in and scale animation */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .brand-mastoride {
   color: #ffffff; /* White text on black card */
+  transition: text-shadow 0.3s ease;
+}
+
+.admin-brand:hover .brand-mastoride {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .brand-ride {
   color: #fbbf24;
+  transition: text-shadow 0.3s ease;
+}
+
+.admin-brand:hover .brand-ride {
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
 }
 
 .admin-subtitle {
   color: #e5e5e5; /* Light gray on black card */
-  font-size: 18px;
+  font-size: 24px; /* Increased from 18px */
   font-weight: 600;
   margin: 0;
 }
@@ -17400,6 +17446,15 @@ header.mr-navbar .mr-links .mr-link.active {
 
 .admin-field {
   margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.admin-field:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.admin-field:nth-child(2) {
+  animation-delay: 0.3s;
 }
 
 .admin-field label {
@@ -17429,10 +17484,17 @@ header.mr-navbar .mr-links .mr-link.active {
   color: #ffffff; /* White text */
 }
 
+.input-with-icon input:hover {
+  border-color: #444444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 .input-with-icon input:focus {
   border-color: #fbbf24;
-  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.1);
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
   background: #333333;
+  transform: translateY(-2px);
 }
 
 .input-with-icon input::placeholder {
@@ -17445,11 +17507,27 @@ header.mr-navbar .mr-links .mr-link.active {
   color: #999999; /* Light gray icon */
   font-size: 18px;
   pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.input-with-icon input:focus + .input-icon {
+  color: #fbbf24;
+  animation: iconPulse 0.6s ease-out;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 /* Remember Me */
 .admin-remember-wrapper {
   margin: 20px 0 28px 0;
+  animation: fadeInUp 0.6s ease-out 0.4s backwards;
 }
 
 .admin-remember {
@@ -17490,21 +17568,45 @@ header.mr-navbar .mr-links .mr-link.active {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 2px 8px rgba(229, 193, 126, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out 0.5s backwards;
+}
+
+.admin-login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.admin-login-btn:hover::before {
+  left: 100%;
 }
 
 .admin-login-btn:hover {
   background: #d4ae6a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(229, 193, 126, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(229, 193, 126, 0.5);
 }
 
 .admin-login-btn:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(229, 193, 126, 0.4);
 }
 
 .admin-login-btn span {
   font-size: 22px;
   font-weight: 700;
+  transition: transform 0.3s ease;
+}
+
+.admin-login-btn:hover span {
+  transform: translateX(5px);
 }
 
 /* Help Text */
@@ -17513,12 +17615,19 @@ header.mr-navbar .mr-links .mr-link.active {
   font-size: 14px;
   color: #999999; /* Light gray */
   margin-top: 28px;
+  animation: fadeInUp 0.6s ease-out 0.6s backwards;
 }
 
 .admin-help-text a {
   color: #fbbf24; /* Gold link */
   text-decoration: none;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.admin-help-text a:hover {
+  color: #fcd34d;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
 .admin-help-text a:hover {
@@ -17702,3 +17811,84 @@ header.mr-navbar .mr-links .mr-link.active {
 }
 
 /* ===== END OF ADMIN LOGIN FINAL ===== */
+/* ===== SPLIT-WORD HEADING STYLE FOR LOGIN & SIGNUP ===== */
+/* Add this to your mastoride.css file */
+
+/* Split Heading Container */
+.split-heading {
+  font-size: 56px; /* Increased from 48px */
+  font-weight: 900;
+  margin: 0 0 24px 0; /* Increased from 8px to 24px for more space */
+  letter-spacing: 1px;
+  line-height: 1.2;
+  display: block; /* Changed from inline-block to remove gaps */
+}
+
+/* First Word - Default Black/Dark */
+.split-word-first {
+  color: #1a1a1a;
+}
+
+/* Second Word - Darker Gold/Brown for better visibility */
+.split-word-second {
+  color: #d97706; /* Darker orange/gold */
+}
+
+/* Hover Effect - Optional Glow */
+.split-heading:hover .split-word-first {
+  text-shadow: 0 0 15px rgba(26, 26, 26, 0.3);
+  transition: text-shadow 0.3s ease;
+}
+
+.split-heading:hover .split-word-second {
+  text-shadow: 0 0 20px rgba(217, 119, 6, 0.5);
+  transition: text-shadow 0.3s ease;
+}
+
+/* Animation on Page Load */
+.split-heading {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Sizes */
+@media (max-width: 768px) {
+  .split-heading {
+    font-size: 44px; /* Increased from 38px */
+  }
+}
+
+@media (max-width: 480px) {
+  .split-heading {
+    font-size: 36px; /* Increased from 32px */
+  }
+}
+
+/* ===== SPECIFIC ADJUSTMENTS FOR SIGNUP PAGE ===== */
+/* Since signup might have different background */
+.signup-pull-scene .split-word-first {
+  color: #1a1a1a; /* Dark text */
+}
+
+.signup-pull-scene .split-word-second {
+  color: #d97706; /* Darker gold text */
+}
+
+/* If your signup page has a dark background, use this instead: */
+/*
+.signup-pull-scene .split-word-first {
+  color: #ffffff;
+}
+*/
+
+/* ===== END OF SPLIT-WORD HEADING STYLES ===== */
