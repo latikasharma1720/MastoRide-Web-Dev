@@ -535,32 +535,38 @@ export default function AdminDashboard() {
                   </section>
 
                   <div className="analytics-grid">
-                    <section className="ud-panel chart-panel">
-                      <header className="ud-head">
-                        <h2>Monthly Ride Bookings</h2>
-                      </header>
-                      <div className="chart-container">
-                        <LineChart
-                          data={MONTHLY_RIDE_DATA.data}
-                          labels={MONTHLY_RIDE_DATA.labels}
-                          title="Monthly Rides"
-                        />
+                    {/* Line Chart */}
+                    <div>
+                      <div className="chart-heading-card">
+                        <h3>Monthly Ride Bookings</h3>
                       </div>
-                    </section>
+                      <section className="ud-panel chart-panel">
+                        <div className="chart-container">
+                          <LineChart
+                            data={MONTHLY_RIDE_DATA.data}
+                            labels={MONTHLY_RIDE_DATA.labels}
+                            title="Monthly Rides"
+                          />
+                        </div>
+                      </section>
+                    </div>
 
-                    <section className="ud-panel chart-panel">
-                      <header className="ud-head">
-                        <h2>Ride Type Distribution</h2>
-                      </header>
-                      <div className="chart-container pie">
-                        <PieChart
-                          data={RIDE_TYPE_DATA.data}
-                          labels={RIDE_TYPE_DATA.labels}
-                          colors={RIDE_TYPE_DATA.colors}
-                          title="Ride Types"
-                        />
+                    {/* Pie Chart */}
+                    <div>
+                      <div className="chart-heading-card">
+                        <h3>Ride Type Distribution</h3>
                       </div>
-                    </section>
+                      <section className="ud-panel chart-panel">
+                        <div className="chart-container pie">
+                          <PieChart
+                            data={RIDE_TYPE_DATA.data}
+                            labels={RIDE_TYPE_DATA.labels}
+                            colors={RIDE_TYPE_DATA.colors}
+                            title="Ride Types"
+                          />
+                        </div>
+                      </section>
+                    </div>
                   </div>
 
                   {/* (User Feedback section previously removed) */}
