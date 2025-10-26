@@ -18060,3 +18060,152 @@ header.mr-navbar .mr-links .mr-link.active {
 }
 
 /* ===== END OF FORGOT PASSWORD PROPER SPACING ===== */
+/* ===== Footer Alignment Fix ===== */
+/* Add this to the END of your mastoride.css file */
+
+.modern-footer {
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 60px 0 0;
+  margin-top: 80px;
+  position: relative;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px; /* Increased from 24px to push content more to the right */
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px; /* Increased gap for better spacing */
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  justify-items: start; /* Align items to the start (left) of their grid cells */
+  padding-left: 120px; /* Significantly increased to move everything much more to the right */
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.footer-heading {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links li a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-links li a:hover {
+  color: #ffffff;
+}
+
+.social-icons {
+  display: flex;
+  gap: 16px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: #c9a961;
+  transform: translateY(-3px);
+}
+
+.footer-copyright {
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-left: 120px; /* Match the grid's increased left padding */
+  padding-right: 20px;
+}
+
+.footer-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.footer-copy-text {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .footer-content {
+    padding: 0 40px;
+  }
+  
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-footer {
+    padding: 40px 0 0;
+  }
+  
+  .footer-content {
+    padding: 0 24px;
+  }
+  
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    padding-left: 0;
+  }
+  
+  .footer-copyright {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
