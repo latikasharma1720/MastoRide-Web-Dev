@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -11,25 +13,68 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="page-wrapper" style={{ maxWidth: 420 }}>
-      <h2 className="welcome">Reset password</h2>
+    <>
+      <Navbar />
 
-      {msg && <p className="lead" style={{ marginTop: 6 }}>{msg}</p>}
-
-      <form className="stack" onSubmit={onSubmit}>
-        <label>
-          Enter your PFW email
-          <input
-            type="email"
-            placeholder="name@pfw.edu"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+      {/* === Pull-in Scene (image "pulls" the form from left) === */}
+      <main className="signup-pull-scene">
+        {/* Car / Illustration (LEADS) */}
+        <div className="pull-vehicle">
+          <img
+            src="/assets/images/ForgotPassword.png"
+            alt="Forgot Password illustration"
+            className="pull-vehicle-img"
           />
-        </label>
+        </div>
 
-        <button className="btn" type="submit">Send reset link</button>
-      </form>
-    </div>
+        {/* Form (FOLLOWS slightly after) */}
+        <section className="pull-form">
+          {/* Success Message */}
+          {msg && (
+            <div className="success-message-banner">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              {msg}
+            </div>
+          )}
+
+          <h1>Reset Password</h1>
+          <p className="pull-sub">
+            Enter your PFW email to receive a reset link.
+          </p>
+
+          <form className="pull-form-inner" onSubmit={onSubmit} autoComplete="off">
+            <div className="sg-field">
+              <label htmlFor="email">PFW Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@pfw.edu"
+                required
+              />
+            </div>
+
+            <button type="submit" className="signup-cta">
+              Send reset link
+            </button>
+          </form>
+
+          <p className="signup-login">
+            Remember your password? <Link to="/login">Back to login</Link>
+          </p>
+        </section>
+      </main>
+    </>
   );
 }

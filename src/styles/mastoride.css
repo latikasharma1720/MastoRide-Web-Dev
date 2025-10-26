@@ -17892,3 +17892,171 @@ header.mr-navbar .mr-links .mr-link.active {
 */
 
 /* ===== END OF SPLIT-WORD HEADING STYLES ===== */
+/* ===== FORGOT PASSWORD - PROPER SPACING ===== */
+/* Add this to your mastoride.css file */
+
+/* Success Message Banner */
+.success-message-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin: 0 0 32px 0; /* Increased bottom margin */
+  border: 2px solid #10b981;
+  animation: slideDown 0.4s ease-out;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.success-message-banner svg {
+  flex-shrink: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override signup page spacing for forgot password */
+.signup-pull-scene .pull-form {
+  max-width: 480px;
+  padding: 40px;
+}
+
+.signup-pull-scene .split-heading {
+  margin-bottom: 16px; /* Space after heading */
+}
+
+.signup-pull-scene .pull-sub {
+  margin-bottom: 40px; /* More space after subtitle */
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.signup-pull-scene .pull-form-inner {
+  margin-bottom: 32px; /* Space after form */
+}
+
+.signup-pull-scene .sg-field {
+  margin-bottom: 28px; /* More space between fields */
+}
+
+.signup-pull-scene .sg-field label {
+  margin-bottom: 10px; /* Space between label and input */
+  display: block;
+  font-weight: 600;
+}
+
+.signup-pull-scene .signup-cta {
+  margin-top: 32px; /* More space before button */
+  margin-bottom: 0;
+}
+
+.signup-pull-scene .signup-login {
+  margin-top: 28px; /* Space before bottom link */
+  font-size: 15px;
+}
+
+/* ===== END OF FORGOT PASSWORD PROPER SPACING ===== */
+/* ===== FORGOT PASSWORD - PROPER SPACING ===== */
+/* Add this to your mastoride.css file */
+
+/* Make Reset Password heading match Member Login font/size */
+.signup-pull-scene .split-heading {
+  font-size: 30px; /* Same as Member Login */
+  font-weight: 600; /* Same bold weight */
+  margin-bottom: 24px; /* Consistent spacing */
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.signup-pull-scene .split-word-first {
+  color: #1a1a1a;
+  margin-right: 12px;
+  display: inline-block;
+}
+
+.signup-pull-scene .split-word-second {
+  color: #d97706; /* Darker gold like Member Login */
+  display: inline-block;
+}
+
+/* Success Message Banner */
+.success-message-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin: 0 0 32px 0; /* Increased bottom margin */
+  border: 2px solid #10b981;
+  animation: slideDown 0.4s ease-out;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.success-message-banner svg {
+  flex-shrink: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override signup page spacing for forgot password */
+.signup-pull-scene .pull-form {
+  max-width: 480px;
+  padding: 40px;
+}
+
+.signup-pull-scene .pull-sub {
+  margin-bottom: 40px; /* More space after subtitle */
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.signup-pull-scene .pull-form-inner {
+  margin-bottom: 32px; /* Space after form */
+}
+
+.signup-pull-scene .sg-field {
+  margin-bottom: 28px; /* More space between fields */
+}
+
+.signup-pull-scene .sg-field label {
+  margin-bottom: 10px; /* Space between label and input */
+  display: block;
+  font-weight: 600;
+}
+
+.signup-pull-scene .signup-cta {
+  margin-top: 32px; /* More space before button */
+  margin-bottom: 0;
+}
+
+.signup-pull-scene .signup-login {
+  margin-top: 28px; /* Space before bottom link */
+  font-size: 15px;
+}
+
+/* ===== END OF FORGOT PASSWORD PROPER SPACING ===== */
