@@ -13687,3 +13687,119 @@ body {
     font-size: 1.8rem;
   }
 }
+
+/* ===== FEEDBACK PAGE STYLING ===== */
+.feedback-section {
+  background: linear-gradient(to bottom, #d9bb85, #ffd87a);
+  color: #0f0f0f;
+  min-height: 100vh;
+  padding: 50px 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== TITLE ===== */
+.feedback-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f0f0f;
+  margin-bottom: 30px;
+}
+
+/* ===== MESSAGES ===== */
+.loading {
+  color: #333;
+  font-style: italic;
+}
+
+.error-msg {
+  color: #ff7a7a;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.empty {
+  color: #111;
+  font-size: 1.1rem;
+  margin-top: 20px;
+}
+
+/* ===== TABLE ===== */
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.feedback-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fffef9;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.feedback-table th,
+.feedback-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e0c97a;
+  text-align: center;
+}
+
+.feedback-table th {
+  background: #111111;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.feedback-table tr:hover {
+  background: rgba(255, 216, 122, 0.25);
+}
+
+/* ===== STATUS BADGES ===== */
+.status.open {
+  color: #00c27a;
+  font-weight: 600;
+}
+
+.status.closed {
+  color: #d63031;
+  font-weight: 600;
+}
+
+/* ===== BUTTONS ===== */
+.btn-close {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  background: #00c27a;
+  transform: scale(1.05);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .feedback-title {
+    font-size: 1.6rem;
+  }
+
+  .feedback-table th,
+  .feedback-table td {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
