@@ -6,7 +6,7 @@ export default function Services() {
   return (
     <div className="services-page">
       <div className="services-header">
-        <h2>Our Services</h2>
+        <h2 className="welcome">Our Services</h2>
         <p className="intro">
           Affordable, safe, and reliable rides — built exclusively for Purdue
           University students. 🚗

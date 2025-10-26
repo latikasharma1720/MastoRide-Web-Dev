@@ -13,8 +13,6 @@ const NAV_ITEMS = [
   { id: "payment", label: "Payment", icon: "💳" },
   { id: "rewards", label: "Rewards", icon: "🏅" },
   { id: "history", label: "History", icon: "🕘" },
-  { id: "support", label: "Support", icon: "🛟" },
-  { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
 const LS_KEYS = {
@@ -22,6 +20,66 @@ const LS_KEYS = {
   tab: "ud_active_tab",
   sidebar: "ud_sidebar_open",
 };
+
+const getDefaultAvailableBadges = () => [
+  { id: Date.now() + 1, icon: "🚗", title: "10 Rides Completed", date: "Earned on Oct 20, 2025", type: "achievement" },
+  { id: Date.now() + 2, icon: "🏅", title: "Gold Rider", description: "Exclusive 10% off next ride", type: "reward" },
+  { id: Date.now() + 3, icon: "🎯", title: "Early Bird", description: "Book 5 rides before 8 AM", type: "achievement" },
+  { id: Date.now() + 4, icon: "🌟", title: "Weekend Warrior", description: "Complete 10 weekend rides", type: "achievement" },
+];
+
+const VEHICLES = {
+  economy: { label: "🚕 Economy", multiplier: 1 },
+  premium: { label: "🚘 Premium", multiplier: 2 },
+  xl: { label: "🚐 XL", multiplier: 1.5 },
+};
+
+const getRideHistory = () => [
+  {
+    id: 1,
+    date: "09/22",
+    fullDate: "September 22, 2025",
+    pickup: "Campus Center",
+    dropoff: "Jefferson Pointe Mall",
+    destination: "Off-Campus Destination — Fort Wayne",
+    price: "$12.50",
+    paymentMethod: "Visa Card",
+    status: "Completed",
+  },
+  {
+    id: 2,
+    date: "09/19",
+    fullDate: "September 19, 2025",
+    pickup: "Dorms",
+    dropoff: "Fort Wayne International Airport",
+    destination: "Off-Campus Destination — Fort Wayne",
+    price: "$22.75",
+    paymentMethod: "Visa Card",
+    status: "Completed",
+  },
+  {
+    id: 3,
+    date: "09/15",
+    fullDate: "September 15, 2025",
+    pickup: "Library",
+    dropoff: "Student Union",
+    destination: "On-Campus",
+    price: "$5.00",
+    paymentMethod: "Apple Pay",
+    status: "Completed",
+  },
+  {
+    id: 4,
+    date: "09/10",
+    fullDate: "September 10, 2025",
+    pickup: "Engineering Building",
+    dropoff: "Glenbrook Square Mall",
+    destination: "Off-Campus Destination — Fort Wayne",
+    price: "$18.50",
+    paymentMethod: "Visa Card",
+    status: "Completed",
+  },
+];
 
 export default function UserDashboard() {
   const { pushToast } = useToast();
@@ -37,18 +95,27 @@ export default function UserDashboard() {
   const [displayName, setDisplayName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
+
+  // Expanded profile object (longer desktop form)
   const [profile, setProfile] = useState({
     name: "",
     studentId: "",
     email: "",
     phone: "",
+    department: "",
+    year: "",
+    address: "",
+    emergencyContact: "",
+    dob: "",
+    preferredVehicle: "",
+    bio: "",
   });
 
-  const [settings, setSettings] = useState({ 
-    rideAlerts: true, 
+  const [settings, setSettings] = useState({
+    rideAlerts: true,
     marketing: false,
     wheelchairAccess: false,
-    darkMode: false 
+    darkMode: false,
   });
   const [savingSettings, setSavingSettings] = useState(false);
 
@@ -56,7 +123,12 @@ export default function UserDashboard() {
     try {
       const raw = localStorage.getItem(LS_KEYS.ride);
       return JSON.parse(raw) || {
-        pickup: "", dropoff: "", date: "", time: "", passengers: 1, vehicleType: "economy",
+        pickup: "",
+        dropoff: "",
+        date: "",
+        time: "",
+        passengers: 1,
+        vehicleType: "economy",
       };
     } catch {
       return { pickup: "", dropoff: "", date: "", time: "", passengers: 1, vehicleType: "economy" };
@@ -65,13 +137,26 @@ export default function UserDashboard() {
 
   const [fare, setFare] = useState(null);
   const [estimating, setEstimating] = useState(false);
-  const [confirmMsg, setConfirmMsg] = useState("");
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
-  const VEHICLES = {
-    economy: { label: "🚕 Economy", multiplier: 1 },
-    premium: { label: "🚘 Premium", multiplier: 2 },
-    xl: { label: "🚐 XL", multiplier: 1.5 },
-  };
+  const [availableBadges, setAvailableBadges] = useState([]);
+  const [usedBadges, setUsedBadges] = useState([]);
+  const [badgesInitialized, setBadgesInitialized] = useState(false);
+
+  const [rideHistory, setRideHistory] = useState([]);
+
+  // --- History filter states ---
+  const [filterPeriod, setFilterPeriod] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
+
+  // profile inner tabs
+  const [profileSubTab, setProfileSubTab] = useState("account");
+
+  // --- Support form state ---
+  const [supportForm, setSupportForm] = useState({ subject: "", message: "" });
+  const [sendingSupport, setSendingSupport] = useState(false);
 
   useEffect(() => { localStorage.setItem(LS_KEYS.tab, activeTab); }, [activeTab]);
   useEffect(() => { localStorage.setItem(LS_KEYS.sidebar, String(sidebarOpen)); }, [sidebarOpen]);
@@ -85,14 +170,24 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!currentUser) return;
-    const uid = currentUser.id || "demo-user";
+
+    const uid = currentUser.email || currentUser.id || "demo-user";
+
     const stored = getProfile(uid);
     setProfile({
       name: stored.name || currentUser.name || "user1",
       studentId: stored.studentId || currentUser.studentId || "PFW123456",
       email: stored.email || currentUser.email || "user1@pfw.edu",
       phone: stored.phone || currentUser.phone || "",
+      department: stored.department || "",
+      year: stored.year || "",
+      address: stored.address || "",
+      emergencyContact: stored.emergencyContact || "",
+      dob: stored.dob || "",
+      preferredVehicle: stored.preferredVehicle || "",
+      bio: stored.bio || "",
     });
+
     const loadedSettings = getSettings(uid);
     setSettings({
       rideAlerts: loadedSettings.rideAlerts ?? true,
@@ -100,17 +195,37 @@ export default function UserDashboard() {
       wheelchairAccess: loadedSettings.wheelchairAccess ?? false,
       darkMode: loadedSettings.darkMode ?? false,
     });
+
     setDisplayName(stored.name || currentUser.name || "user1");
+
+    try {
+      const a = localStorage.getItem(`badges_available_${uid}`);
+      const u = localStorage.getItem(`badges_used_${uid}`);
+      setAvailableBadges(a ? JSON.parse(a) : getDefaultAvailableBadges());
+      setUsedBadges(u ? JSON.parse(u) : []);
+    } catch {
+      setAvailableBadges(getDefaultAvailableBadges());
+      setUsedBadges([]);
+    }
+    setBadgesInitialized(true);
+
+    setRideHistory(getRideHistory());
   }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser || !badgesInitialized) return;
+    const uid = currentUser.email || currentUser.id || "demo-user";
+    localStorage.setItem(`badges_available_${uid}`, JSON.stringify(availableBadges));
+    localStorage.setItem(`badges_used_${uid}`, JSON.stringify(usedBadges));
+  }, [availableBadges, usedBadges, currentUser, badgesInitialized]);
 
   if (!authChecked) return null;
   if (!currentUser || currentUser.role !== "user") return <Navigate to="/login" replace />;
 
-  const uid = currentUser.id || "demo-user";
+  const uid = currentUser.email || currentUser.id || "demo-user";
 
-  function toggleEditMode() {
-    setIsEditing(!isEditing);
-  }
+  /* Handlers */
+  function toggleEditMode() { setIsEditing((v) => !v); }
 
   function onProfileChange(e) {
     const { name, value } = e.target;
@@ -161,31 +276,109 @@ export default function UserDashboard() {
     const distance = Math.floor(Math.random() * 10) + 1;
     const mult = VEHICLES[ride.vehicleType].multiplier;
     const total = (base + distance * perMile) * ride.passengers * mult;
+    setTimeout(() => { setFare(total.toFixed(2)); setEstimating(false); }, 300);
+  };
+
+  const handleUseBadge = (badgeId) => {
+    const badgeToUse = availableBadges.find((b) => b.id === badgeId);
+    if (!badgeToUse) return;
+
+    const currentDate = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    const usedBadge = { ...badgeToUse, date: `Used on ${currentDate}`, usedDate: new Date().toISOString() };
+    setAvailableBadges((prev) => prev.filter((b) => b.id !== badgeId));
+    setUsedBadges((prev) => [usedBadge, ...prev]);
+    pushToast(`Badge "${badgeToUse.title}" has been used!`, "success");
+  };
+
+  // --- Support submit handler (mailto: support@mastoride.com) ---
+  const onSupportSubmit = (e) => {
+    e.preventDefault();
+    const subject = supportForm.subject.trim();
+    const message = supportForm.message.trim();
+    if (!subject || !message) return;
+
+    setSendingSupport(true);
+
+    const to = "support@mastoride.com";
+    const body = `From: ${profile.email || "unknown@pfw.edu"}\n\n${message}`;
+    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    // open default mail client with the filled message
+    window.location.href = mailto;
+
+    // small UX delay, then clear
     setTimeout(() => {
-      setFare(total.toFixed(2));
-      setEstimating(false);
+      setSendingSupport(false);
+      setSupportForm({ subject: "", message: "" });
+      // toast so user gets immediate feedback
+      pushToast("Opening your email app with the message.", "success");
     }, 300);
   };
 
-  const handleBookRide = (e) => {
-    e.preventDefault();
-    const { pickup, dropoff, date, time, vehicleType } = ride;
-    if (!pickup || !dropoff) {
-      setConfirmMsg("⚠️ Please enter both pickup and drop-off locations before confirming your ride.");
-      return;
+  // --- Filter and sort ride history ---
+  const getFilteredAndSortedRides = () => {
+    let filtered = [...rideHistory];
+
+    // Filter by period
+    if (filterPeriod === "month") {
+      const now = new Date();
+      filtered = filtered.filter(ride => {
+        const rideDate = new Date(ride.fullDate);
+        return rideDate.getMonth() === now.getMonth() && rideDate.getFullYear() === now.getFullYear();
+      });
+    } else if (filterPeriod === "year") {
+      const now = new Date();
+      filtered = filtered.filter(ride => {
+        const rideDate = new Date(ride.fullDate);
+        return rideDate.getFullYear() === now.getFullYear();
+      });
     }
-    const formattedDate = date ? new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) : "(select date)";
-    const formattedTime = time || "(select time)";
-    setConfirmMsg(`🎉 Ride Confirmed!\n\n📍 **From:** ${pickup}\n🏁 **To:** ${dropoff}\n📅 **Date:** ${formattedDate}\n⏰ **Time:** ${formattedTime}\n🚗 **Vehicle Type:** ${VEHICLES[vehicleType].label}\n\n💬 Your driver will be assigned shortly.`);
+
+    // Filter by status
+    if (filterStatus !== "all") {
+      filtered = filtered.filter(ride => ride.status.toLowerCase() === filterStatus.toLowerCase());
+    }
+
+    // Sort
+    if (sortBy === "recent") {
+      filtered.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate));
+    } else if (sortBy === "oldest") {
+      filtered.sort((a, b) => new Date(a.fullDate) - new Date(b.fullDate));
+    } else if (sortBy === "price-high") {
+      filtered.sort((a, b) => parseFloat(b.price.replace('$', '')) - parseFloat(a.price.replace('$', '')));
+    } else if (sortBy === "price-low") {
+      filtered.sort((a, b) => parseFloat(a.price.replace('$', '')) - parseFloat(b.price.replace('$', '')));
+    }
+
+    return filtered;
   };
+
+  const filteredRides = getFilteredAndSortedRides();
+
+  // Calculate total rides and total spent
+  const totalRides = rideHistory.length;
+  const totalSpent = rideHistory.reduce((sum, ride) => sum + parseFloat(ride.price.replace('$', '')), 0).toFixed(2);
 
   return (
     <>
-      <Navbar />
+      <div className="navbar-fix">
+        <Navbar />
+      </div>
+
       <div className={`ud ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
         <div className="dashboard-layout">
           <aside className="sidebar-nav" aria-label="Section navigation">
-            <button className="sidebar-toggle fancy" type="button" onClick={() => setSidebarOpen((v) => !v)} aria-expanded={sidebarOpen}>
+            <button
+              className="sidebar-toggle fancy"
+              type="button"
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-expanded={sidebarOpen}
+            >
               <span className="hamburger">
                 <span className="line top" />
                 <span className="line middle" />
@@ -194,7 +387,13 @@ export default function UserDashboard() {
             </button>
             <nav className="sidebar-tabs">
               {NAV_ITEMS.map(({ id, label, icon }) => (
-                <button key={id} className={`sidebar-btn ${activeTab === id ? "active" : ""}`} onClick={() => setActiveTab(id)} data-tip={label} aria-label={label}>
+                <button
+                  key={id}
+                  className={`sidebar-btn ${activeTab === id ? "active" : ""}`}
+                  onClick={() => setActiveTab(id)}
+                  data-tip={label}
+                  aria-label={label}
+                >
                   <span className="sb-icon" aria-hidden="true">{icon}</span>
                   <span className="sb-label">{label}</span>
                 </button>
@@ -204,116 +403,332 @@ export default function UserDashboard() {
 
           <main className="dashboard-main">
             <div className="dashboard-content-wrapper">
+              {/* PROFILE (includes Account + Settings + Support) */}
               {activeTab === "profile" && (
                 <div className="clean-profile-layout">
-                  <div className="profile-main-card">
+                  <div className="profile-main-card profile-wide">{/* wider desktop card */}
                     <div className="profile-hero">
                       <div className="profile-hero-left">
                         <div className="profile-avatar-large">
-                          <span className="avatar-circle-large">{profile.name.charAt(0).toUpperCase()}</span>
+                          <span className="avatar-circle-large">
+                            {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
+                          </span>
                         </div>
                         <div className="profile-hero-info">
-                          <h2>{profile.name}</h2>
+                          <h2>{profile.name || "User"}</h2>
                           <p>{profile.email}</p>
                         </div>
                       </div>
-                      <button 
-                        className="edit-btn-top" 
-                        type="button"
-                        onClick={toggleEditMode}
-                      >
-                        {isEditing ? 'Cancel' : 'Edit'}
-                      </button>
                     </div>
 
-                    <form className="clean-profile-form" onSubmit={onSaveProfile}>
-                      <div className="form-grid-2col">
-                        <label className="clean-field">
-                          <span>Full Name</span>
-                          <input 
-                            name="name" 
-                            type="text" 
-                            placeholder="Your Full Name" 
-                            value={profile.name} 
-                            onChange={onProfileChange}
-                            disabled={!isEditing}
-                          />
-                        </label>
-                        <label className="clean-field">
-                          <span>Nick Name</span>
-                          <input 
-                            type="text" 
-                            placeholder="Your First Name" 
-                            value={profile.name.split(' ')[0]} 
-                            readOnly
-                            disabled={!isEditing}
-                          />
-                        </label>
-                      </div>
-
-                      <div className="form-grid-2col">
-                        <label className="clean-field">
-                          <span>Gender</span>
-                          <select disabled={!isEditing}>
-                            <option>Select</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                          </select>
-                        </label>
-                        <label className="clean-field">
-                          <span>Country</span>
-                          <select disabled={!isEditing}>
-                            <option>United States</option>
-                          </select>
-                        </label>
-                      </div>
-
-                      <div className="form-grid-2col">
-                        <label className="clean-field">
-                          <span>Language</span>
-                          <select disabled={!isEditing}>
-                            <option>English</option>
-                          </select>
-                        </label>
-                        <label className="clean-field">
-                          <span>Time Zone</span>
-                          <select disabled={!isEditing}>
-                            <option>EST (UTC-5)</option>
-                          </select>
-                        </label>
-                      </div>
-
-                      <div className="email-section">
-                        <h3>My email Address</h3>
-                        <div className="email-item">
-                          <div className="email-icon">📧</div>
-                          <div className="email-info">
-                            <strong>{profile.email}</strong>
-                            <span className="email-time">1 month ago</span>
-                          </div>
-                        </div>
-                        <button 
-                          type="button" 
-                          className="add-email-btn"
-                          disabled={!isEditing}
+                    <div className="profile-tabs">
+                      {["account", "settings", "support"].map((k) => (
+                        <button
+                          key={k}
+                          className={`profile-tab-btn ${profileSubTab === k ? "active" : ""}`}
+                          onClick={() => setProfileSubTab(k)}
+                          type="button"
                         >
-                          + Add Email Address
+                          {k === "account" ? "Account" : k === "settings" ? "Settings" : "Support"}
                         </button>
-                      </div>
+                      ))}
+                    </div>
 
-                      <button 
-                        className="save-btn-bottom" 
-                        type="submit" 
-                        disabled={savingProfile || !isEditing}
-                      >
-                        {savingProfile ? "Saving..." : "Save Changes"}
-                      </button>
-                    </form>
+                    {/* Account – LONG desktop layout */}
+                    {profileSubTab === "account" && (
+                      <section className="profile-section">
+                        <form className="clean-profile-form" onSubmit={onSaveProfile}>
+
+                          {/* Group 1: Personal Info */}
+                          <div className="profile-group">
+                            <div className="group-title">Personal Info</div>
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Full Name</span>
+                                <input
+                                  name="name"
+                                  type="text"
+                                  placeholder="Your Full Name"
+                                  value={profile.name}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Student ID</span>
+                                <input
+                                  name="studentId"
+                                  type="text"
+                                  placeholder="Your ID"
+                                  value={profile.studentId}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Email</span>
+                                <input
+                                  name="email"
+                                  type="email"
+                                  placeholder="you@pfw.edu"
+                                  value={profile.email}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Phone</span>
+                                <input
+                                  name="phone"
+                                  type="tel"
+                                  placeholder="(optional)"
+                                  value={profile.phone}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Department</span>
+                                <input
+                                  name="department"
+                                  type="text"
+                                  placeholder="e.g., Computer Science"
+                                  value={profile.department}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Year of Study</span>
+                                <input
+                                  name="year"
+                                  type="text"
+                                  placeholder="e.g., 2nd Year"
+                                  value={profile.year}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Address</span>
+                                <input
+                                  name="address"
+                                  type="text"
+                                  placeholder="1234 Campus Drive, Fort Wayne"
+                                  value={profile.address}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Emergency Contact</span>
+                                <input
+                                  name="emergencyContact"
+                                  type="tel"
+                                  placeholder="Parent/Guardian number"
+                                  value={profile.emergencyContact}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Date of Birth</span>
+                                <input
+                                  name="dob"
+                                  type="date"
+                                  value={profile.dob}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Preferred Vehicle Type</span>
+                                <select
+                                  name="preferredVehicle"
+                                  value={profile.preferredVehicle}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                >
+                                  <option value="">Select Vehicle</option>
+                                  <option value="economy">Economy</option>
+                                  <option value="premium">Premium</option>
+                                  <option value="xl">XL</option>
+                                </select>
+                              </label>
+                            </div>
+
+                            <div className="grid-one">
+                              <label className="clean-field">
+                                <span>Bio / About You</span>
+                                <textarea
+                                  name="bio"
+                                  rows={4}
+                                  placeholder="Write a short description about yourself..."
+                                  value={profile.bio}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+                          </div>
+
+                          {/* Group 2: Ride Preferences */}
+                          <div className="profile-group">
+                            <div className="group-title">Ride Preferences</div>
+                            <div className="grid-two">
+                              <label className="clean-field">
+                                <span>Default Pickup Notes</span>
+                                <input
+                                  name="pickupNotes"
+                                  type="text"
+                                  placeholder="e.g., Meet near the south entrance"
+                                  value={profile.pickupNotes || ""}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                              <label className="clean-field">
+                                <span>Accessibility Needs</span>
+                                <input
+                                  name="accessNeeds"
+                                  type="text"
+                                  placeholder="e.g., Wheelchair access"
+                                  value={profile.accessNeeds || ""}
+                                  onChange={onProfileChange}
+                                  disabled={!isEditing}
+                                />
+                              </label>
+                            </div>
+                          </div>
+
+                          <div className="profile-actions">
+                            {!isEditing ? (
+                              <button className="btn" type="button" onClick={toggleEditMode}>
+                                Edit
+                              </button>
+                            ) : (
+                              <>
+                                <button className="btn" type="submit" disabled={savingProfile}>
+                                  {savingProfile ? "Saving..." : "Save Changes"}
+                                </button>
+                                <button className="btn ghost" type="button" onClick={toggleEditMode}>
+                                  Cancel
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </form>
+                      </section>
+                    )}
+
+                    {/* Settings (inside Profile) */}
+                    {profileSubTab === "settings" && (
+                      <section className="profile-section">
+                        <header className="ud-head">
+                        </header>
+                        <form className="ud-form" onSubmit={onSaveSettings}>
+                          <div className="setting-item">
+                            <div><strong>Wheelchair Access</strong><p>Request wheelchair-accessible vehicles</p></div>
+                            <label className="toggle">
+                              <input type="checkbox" checked={settings.wheelchairAccess} onChange={() => onToggleSetting("wheelchairAccess")} />
+                              <span />
+                            </label>
+                          </div>
+                          <div className="setting-item">
+                            <div><strong>Dark Mode</strong><p>Use dark theme across the app</p></div>
+                            <label className="toggle">
+                              <input type="checkbox" checked={settings.darkMode} onChange={() => onToggleSetting("darkMode")} />
+                              <span />
+                            </label>
+                          </div>
+                          <div className="setting-item">
+                            <div><strong>Ride Alerts</strong><p>Receive notifications for ride updates</p></div>
+                            <label className="toggle">
+                              <input type="checkbox" checked={settings.rideAlerts} onChange={() => onToggleSetting("rideAlerts")} />
+                              <span />
+                            </label>
+                          </div>
+                          <div className="setting-item">
+                            <div><strong>Marketing Emails</strong><p>Get news and promotions</p></div>
+                            <label className="toggle">
+                              <input type="checkbox" checked={settings.marketing} onChange={() => onToggleSetting("marketing")} />
+                              <span />
+                            </label>
+                          </div>
+                          <button className="btn wide" type="submit" disabled={savingSettings}>
+                            {savingSettings ? "Saving..." : "Save Settings"}
+                          </button>
+                        </form>
+                      </section>
+                    )}
+
+                    {/* Support (inside Profile) */}
+                    {profileSubTab === "support" && (
+                      <section className="profile-section">
+                        <header className="ud-head">
+                        </header>
+
+                        <div className="support-intro">
+                          <p>
+                            You can reach our support team anytime via email at <strong>support@mastoride.com</strong>.
+                          </p>
+                        </div>
+
+                        <form className="support-form" onSubmit={onSupportSubmit}>
+                          <label className="clean-field">
+                            <span>Subject</span>
+                            <input
+                              type="text"
+                              placeholder="Brief summary of the issue"
+                              value={supportForm.subject}
+                              onChange={(e) => setSupportForm((s) => ({ ...s, subject: e.target.value }))}
+                              required
+                            />
+                          </label>
+
+                          <label className="clean-field">
+                            <span>Message</span>
+                            <textarea
+                              rows={6}
+                              placeholder="Describe what happened, steps to reproduce, or add ride details…"
+                              value={supportForm.message}
+                              onChange={(e) => setSupportForm((s) => ({ ...s, message: e.target.value }))}
+                              required
+                            />
+                          </label>
+
+                          <div className="profile-actions">
+                            <button className="btn" type="submit" disabled={sendingSupport}>
+                              {sendingSupport ? "Opening Mail…" : "Contact Support"}
+                            </button>
+                            <button
+                              className="btn ghost"
+                              type="button"
+                              onClick={() => setSupportForm({ subject: "", message: "" })}
+                            >
+                              Clear
+                            </button>
+                          </div>
+                        </form>
+                      </section>
+                    )}
                   </div>
                 </div>
               )}
 
+              {/* BOOK */}
               {activeTab === "book" && (
                 <div className="book-layout">
                   <div className="book-form-col">
@@ -361,9 +776,14 @@ export default function UserDashboard() {
                             {estimating ? "Estimating…" : fare ? `💵 Estimated Fare: $${fare}` : "Estimate Fare"}
                           </button>
                         </div>
-                        <button className="btn wide confirm-btn" onClick={handleBookRide} type="button">Confirm Booking</button>
+                        <button 
+                          className="btn wide proceed-payment-btn" 
+                          onClick={() => setActiveTab("payment")}
+                          type="button"
+                        >
+                          Proceed to Payment →
+                        </button>
                       </form>
-                      {confirmMsg && <div className="confirm-msg">{confirmMsg}</div>}
                     </section>
                   </div>
                   <div className="book-map-col">
@@ -372,140 +792,241 @@ export default function UserDashboard() {
                 </div>
               )}
 
+              {/* PAYMENT */}
               {activeTab === "payment" && (
                 <div className="payment-page-wrapper">
-                  {/* MastoRide Cash Section */}
-                  <div className="mastoride-cash-card">
-                    <h3 className="cash-title">MastoRide Cash</h3>
-                    <div className="cash-amount">${(0).toFixed(2)}</div>
-                    <p className="cash-subtitle">Plan ahead, budget easier</p>
-                    <div className="cash-actions">
-                      <button className="btn-add-cash">Add cash</button>
-                      <button className="btn-manage">Manage</button>
-                    </div>
+                  <div className="payment-section-card">
+                    <h3 className="section-title-card">Add Payment Method</h3>
                   </div>
-
-                  {/* Payment Defaults Section */}
+                  
                   <div className="payment-section">
-                    <h3 className="section-title">Payment defaults</h3>
-                    
-                    <button className="payment-option">
-                      <div className="option-icon">
-                        <span>👤</span>
-                      </div>
-                      <div className="option-content">
-                        <div className="option-title">Personal</div>
-                        <div className="option-subtitle">Visa Card</div>
-                      </div>
-                      <span className="option-arrow">›</span>
-                    </button>
-                  </div>
-
-                  {/* Payment Methods Section */}
-                  <div className="payment-section">
-                    <h3 className="section-title">Payment methods</h3>
-                    
-                    <div className="payment-method-item">
-                      <div className="method-icon">
-                        <span className="visa-icon">VISA</span>
-                      </div>
-                      <div className="method-content">
-                        <div className="method-title">Visa Card</div>
-                      </div>
-                    </div>
-
-                    <div className="payment-method-item">
-                      <div className="method-icon">
-                        <span className="apple-icon"></span>
-                      </div>
-                      <div className="method-content">
-                        <div className="method-title">Apple Pay</div>
-                      </div>
-                    </div>
-
                     <button className="add-payment-btn">
                       <span className="add-icon">+</span>
                       <span>Add payment method</span>
                     </button>
                   </div>
+
+                  <div className="payment-section-card">
+                    <h3 className="section-title-card">Choose Payment Method</h3>
+                  </div>
+
+                  <div className="payment-section">
+                    <div 
+                      className={`payment-method-item ${selectedPayment === 'visa' ? 'selected' : ''}`}
+                      onClick={() => setSelectedPayment('visa')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="method-icon"><span className="visa-icon">VISA</span></div>
+                      <div className="method-content"><div className="method-title">Visa Card</div></div>
+                      {selectedPayment === 'visa' && <span className="check-mark">✓</span>}
+                    </div>
+                    
+                    <div 
+                      className={`payment-method-item ${selectedPayment === 'apple' ? 'selected' : ''}`}
+                      onClick={() => setSelectedPayment('apple')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="method-icon"><span className="apple-icon">🍎</span></div>
+                      <div className="method-content"><div className="method-title">Apple Pay</div></div>
+                      {selectedPayment === 'apple' && <span className="check-mark">✓</span>}
+                    </div>
+                    
+                    {selectedPayment && (
+                      <button 
+                        className="btn wide pay-now-btn" 
+                        onClick={() => setPaymentConfirmed(true)}
+                        type="button"
+                      >
+                        Pay Now
+                      </button>
+                    )}
+                  </div>
+
+                  {paymentConfirmed && (
+                    <div className="payment-confirmed-overlay" onClick={() => setPaymentConfirmed(false)}>
+                      <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()}>
+                        <span className="payment-confirmed-icon">🎉</span>
+                        <h3 className="payment-confirmed-title">RIDE CONFIRMED YAY!</h3>
+                        <p className="payment-confirmed-text">Your ride has been booked successfully!</p>
+                        <button 
+                          className="btn wide payment-confirmed-close" 
+                          onClick={() => setPaymentConfirmed(false)}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
+              {/* REWARDS */}
               {activeTab === "rewards" && (
-                <section className="ud-panel rewards-panel">
-                  <header><h2>Rewards</h2><p>Track points and redeem perks</p></header>
-                  <div className="rewards-content">
-                    <div className="reward-points">🏅 250 Points</div>
-                    <div className="reward-message">Keep riding to reach Gold tier!</div>
-                    <button className="btn">Redeem</button>
+                <div className="rewards-page-wrapper">
+                  <section className="rewards-hero">
+                    <h1>Rewards & Badges</h1>
+                    <p>Track your progress, earn rewards, and unlock exclusive perks </p>
+                  </section>
+
+                  <div className="rewards-points-card">
+                    <div className="points-display">
+                      <span className="trophy-icon">🏆</span>
+                      <span className="points-number">250 Points</span>
+                    </div>
+                    <p className="points-subtitle">Keep riding to reach <strong>Gold Tier</strong></p>
+                    <button className="redeem-points-btn">Redeem Points</button>
                   </div>
-                </section>
+
+                  <section className="badges-section">
+                    <h2 className="badges-heading"><span className="badge-emoji"></span> Available Badges</h2>
+                    {availableBadges.length > 0 ? (
+                      <div className="badges-grid">
+                        {availableBadges.map((badge) => (
+                          <div key={badge.id} className="badge-card available">
+                            <div className="badge-icon">{badge.icon}</div>
+                            <h3 className="badge-title">{badge.title}</h3>
+                            {badge.date && <p className="badge-date">{badge.date}</p>}
+                            {badge.description && <p className="badge-description">{badge.description}</p>}
+                            <button className="use-badge-btn" onClick={() => handleUseBadge(badge.id)}>Use Badge</button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="empty-badges"><p> No available badges right now. Keep riding to earn more!</p></div>
+                    )}
+                  </section>
+
+                  <section className="badges-section">
+                    <h2 className="badges-heading"><span className="badge-emoji"></span> Used Badges</h2>
+                    {usedBadges.length > 0 ? (
+                      <div className="badges-grid">
+                        {usedBadges.map((badge) => (
+                          <div key={badge.id} className="badge-card used">
+                            <div className="badge-icon">{badge.icon}</div>
+                            <h3 className="badge-title">{badge.title}</h3>
+                            <p className="badge-date">{badge.date}</p>
+                            {badge.description && <p className="badge-description">{badge.description}</p>}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="empty-badges"><p>No used badges yet</p></div>
+                    )}
+                  </section>
+                </div>
               )}
 
+              {/* HISTORY — centered, desktop-wide cards */}
               {activeTab === "history" && (
-                <section className="ud-panel">
-                  <header className="ud-head"><h2>Ride History</h2><p>Your recent campus and off-campus rides</p></header>
-                  <ul className="ud-list">
-                    <li className="ud-list-item">
-                      <div className="ud-ride-info">
-                        <strong>09/22</strong> • Campus Center → <b>Jefferson Pointe Mall</b><br />
-                        <span className="ud-destination">📍 Off-Campus Destination — Fort Wayne</span>
+                <section className="ud-panel history-panel">
+                  {/* Stats Cards */}
+                  <div className="history-stats-grid">
+                    <div className="history-stat-card">
+                      <div className="stat-icon">🚗</div>
+                      <div className="stat-content">
+                        <div className="stat-value">{totalRides}</div>
+                        <div className="stat-label">TOTAL RIDES</div>
                       </div>
-                      <div className="ud-ride-meta">
-                        <span className="ud-price">💵 $12.50</span>
-                        <span className="ud-pill">Completed</span>
+                    </div>
+                    <div className="history-stat-card">
+                      <div className="stat-icon">💰</div>
+                      <div className="stat-content">
+                        <div className="stat-value">${totalSpent}</div>
+                        <div className="stat-label">TOTAL SPENT</div>
                       </div>
-                    </li>
-                    <li className="ud-list-item">
-                      <div className="ud-ride-info">
-                        <strong>09/19</strong> • Dorms → <b>Fort Wayne International Airport</b><br />
-                        <span className="ud-destination">📍 Off-Campus Destination — Fort Wayne</span>
-                      </div>
-                      <div className="ud-ride-meta">
-                        <span className="ud-price">💵 $22.75</span>
-                        <span className="ud-pill">Completed</span>
-                      </div>
-                    </li>
-                  </ul>
-                </section>
-              )}
-
-              {activeTab === "support" && (
-                <section className="ud-panel">
-                  <header className="ud-head"><h2>Support</h2><p>We're here to help</p></header>
-                  <div className="ud-empty">
-                    <div className="ud-chip">🛟</div>
-                    <p>Need assistance? Start a ticket or visit the Help Center.</p>
-                    <div className="ud-actions">
-                      <button className="btn">Open Ticket</button>
-                      <button className="btn ghost">Help Center</button>
                     </div>
                   </div>
-                </section>
-              )}
 
-              {activeTab === "settings" && (
-                <section className="ud-panel">
-                  <header className="ud-head"><h2>Settings</h2><p>Customize notifications & preferences</p></header>
-                  <form className="ud-form" onSubmit={onSaveSettings}>
-                    <div className="setting-item">
-                      <div><strong>Wheelchair Access</strong><p>Request wheelchair-accessible vehicles</p></div>
-                      <label className="toggle"><input type="checkbox" checked={settings.wheelchairAccess} onChange={() => onToggleSetting("wheelchairAccess")} /><span /></label>
+                  {/* Filter Bar */}
+                  <div className="history-filter-bar">
+                    <div className="filter-group">
+                      <label className="filter-label">Filter:</label>
+                      <select className="filter-select" value={filterPeriod} onChange={(e) => setFilterPeriod(e.target.value)}>
+                        <option value="all">All Rides</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                      </select>
                     </div>
-                    <div className="setting-item">
-                      <div><strong>Dark Mode</strong><p>Use dark theme across the app</p></div>
-                      <label className="toggle"><input type="checkbox" checked={settings.darkMode} onChange={() => onToggleSetting("darkMode")} /><span /></label>
+                    <div className="filter-group">
+                      <label className="filter-label">Status:</label>
+                      <select className="filter-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
                     </div>
-                    <div className="setting-item">
-                      <div><strong>Ride Alerts</strong><p>Receive notifications for ride updates</p></div>
-                      <label className="toggle"><input type="checkbox" checked={settings.rideAlerts} onChange={() => onToggleSetting("rideAlerts")} /><span /></label>
+                    <div className="filter-group">
+                      <label className="filter-label">Sort by:</label>
+                      <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                        <option value="recent">Recent First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="price-low">Price: Low to High</option>
+                      </select>
                     </div>
-                    <div className="setting-item">
-                      <div><strong>Marketing Emails</strong><p>Get news and promotions</p></div>
-                      <label className="toggle"><input type="checkbox" checked={settings.marketing} onChange={() => onToggleSetting("marketing")} /><span /></label>
-                    </div>
-                    <button className="btn wide" type="submit" disabled={savingSettings}>{savingSettings ? "Saving..." : "Save Settings"}</button>
-                  </form>
+                  </div>
+
+                  {/* Ride Cards */}
+                  <div className="history-stack">
+                    {filteredRides.length > 0 ? (
+                      filteredRides.map((item, idx) => (
+                        <div key={item.id} className={`ride-history-card ride-card-variant-${(idx % 4) + 1}`} style={{ "--stagger": `${idx * 100}ms` }}>
+                        <div className="ride-card-header">
+                          <div className="ride-date-badge">📅 {item.date}</div>
+                          <div className="ride-status-badge">✅ {item.status}</div>
+                        </div>
+
+                        <div className="ride-card-body">
+                          <div className="ride-route">
+                            <div className="route-point">
+                              <div className="route-icon pickup-icon">📍</div>
+                              <div className="route-details">
+                                <div className="route-label">PICKUP</div>
+                                <div className="route-location">{item.pickup}</div>
+                              </div>
+                            </div>
+
+                            <div className="route-line" />
+
+                            <div className="route-point">
+                              <div className="route-icon dropoff-icon">🎯</div>
+                              <div className="route-details">
+                                <div className="route-label">DROP-OFF</div>
+                                <div className="route-location">{item.dropoff}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="ride-card-info">
+                            <div className="info-row">
+                              <span className="info-icon">📅</span>
+                              <span className="info-text">Date Booked: {item.fullDate}</span>
+                            </div>
+                            <div className="info-row">
+                              <span className="info-icon">💳</span>
+                              <span className="info-text">Payment: {item.paymentMethod}</span>
+                            </div>
+                            <div className="info-row">
+                              <span className="info-icon">📌</span>
+                              <span className="info-text">{item.destination}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="ride-card-footer">
+                          <div className="ride-price">
+                            <span className="price-label">TOTAL FARE</span>
+                            <span className="price-amount">{item.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                    ) : (
+                      <div className="empty-history">
+                        <p>📭 No rides found matching your filters</p>
+                      </div>
+                    )}
+                  </div>
                 </section>
               )}
             </div>

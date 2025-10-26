@@ -32,7 +32,7 @@ export default function Pricing() {
 
   return (
     <div className="pricing-section">
-      <h2>Our Pricing Plans</h2>
+      <h2 className="welcome">Our Pricing Plans</h2>
       <p className="intro">Simple, transparent pricing made just for students.</p>
 
       <div className="pricing-grid">

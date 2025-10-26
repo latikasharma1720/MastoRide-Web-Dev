@@ -24,7 +24,7 @@ export default function Navbar() {
           <img src={LOGO_SRC} alt="MastoRide logo" className="mr-logo" />
         </Link>
 
-        {/* Center links */}
+        {/* Center links - absolutely centered */}
         <nav className="mr-links" aria-label="Primary">
           <NavLink to="/" end className="mr-link">Home</NavLink>
           <NavLink to="/about" className="mr-link">About</NavLink>
@@ -48,7 +48,6 @@ export default function Navbar() {
               <Link to="/user/dashboard" className="mr-btn mr-btn-primary">
                 My Profile
               </Link>
-              <span className="mr-email">{user.email}</span>
               <button onClick={signOut} className="mr-btn mr-btn-danger">
                 Sign out
               </button>
@@ -60,8 +59,6 @@ export default function Navbar() {
               <Link to="/admin/profile" className="mr-btn mr-btn-primary">
                 My Profile
               </Link>
-              <span className="mr-badge">Admin</span>
-              <span className="mr-email">{user.email}</span>
               <button onClick={signOut} className="mr-btn mr-btn-danger">
                 Sign out
               </button>
