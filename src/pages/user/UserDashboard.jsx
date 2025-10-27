@@ -138,7 +138,15 @@ export default function UserDashboard() {
   const [fare, setFare] = useState(null);
   const [estimating, setEstimating] = useState(false);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+
+  // Card payment state
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: "",
+    cardholderName: "",
+    expiryDate: "",
+    cvv: "",
+  });
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   const [availableBadges, setAvailableBadges] = useState([]);
   const [usedBadges, setUsedBadges] = useState([]);
@@ -277,6 +285,67 @@ export default function UserDashboard() {
     const mult = VEHICLES[ride.vehicleType].multiplier;
     const total = (base + distance * perMile) * ride.passengers * mult;
     setTimeout(() => { setFare(total.toFixed(2)); setEstimating(false); }, 300);
+  };
+
+  // Card formatting helper functions
+  const formatCardNumber = (value) => {
+    const cleaned = value.replace(/\s/g, '');
+    const match = cleaned.match(/.{1,4}/g);
+    return match ? match.join(' ') : cleaned;
+  };
+
+  const formatExpiryDate = (value) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length >= 2) {
+      return cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4);
+    }
+    return cleaned;
+  };
+
+  const handlePayNow = (e) => {
+    e.preventDefault();
+    
+    // Validate card details
+    if (!cardDetails.cardNumber.trim() || !cardDetails.cardholderName.trim() || 
+        !cardDetails.expiryDate.trim() || !cardDetails.cvv.trim()) {
+      pushToast("Please fill in all card details");
+      return;
+    }
+
+    // Basic card number validation (16 digits)
+    const cleanCardNumber = cardDetails.cardNumber.replace(/\s/g, '');
+    if (cleanCardNumber.length !== 16 || !/^\d+$/.test(cleanCardNumber)) {
+      pushToast("Please enter a valid 16-digit card number");
+      return;
+    }
+
+    // CVV validation (3-4 digits)
+    if (!/^\d{3,4}$/.test(cardDetails.cvv)) {
+      pushToast("Please enter a valid CVV (3-4 digits)");
+      return;
+    }
+
+    // Expiry date validation (MM/YY format)
+    if (!/^\d{2}\/\d{2}$/.test(cardDetails.expiryDate)) {
+      pushToast("Please enter expiry date in MM/YY format");
+      return;
+    }
+
+    setProcessingPayment(true);
+    setTimeout(() => {
+      setProcessingPayment(false);
+      setPaymentConfirmed(true);
+      
+      // Clear card details after successful payment
+      setCardDetails({
+        cardNumber: "",
+        cardholderName: "",
+        expiryDate: "",
+        cvv: "",
+      });
+      
+      pushToast("Payment successful! Ride confirmed!");
+    }, 1500);
   };
 
   const handleUseBadge = (badgeId) => {
@@ -795,55 +864,128 @@ export default function UserDashboard() {
               {/* PAYMENT */}
               {activeTab === "payment" && (
                 <div className="payment-page-wrapper">
-                  <div className="payment-section-card">
-                    <h3 className="section-title-card">Add Payment Method</h3>
-                  </div>
-                  
-                  <div className="payment-section">
-                    <button className="add-payment-btn">
-                      <span className="add-icon">+</span>
-                      <span>Add payment method</span>
-                    </button>
-                  </div>
+                  <section className="payment-hero">
+                    <h1>Complete Your Payment</h1>
+                    <p>Enter your card details to confirm your ride</p>
+                  </section>
 
-                  <div className="payment-section-card">
-                    <h3 className="section-title-card">Choose Payment Method</h3>
-                  </div>
+                  <section className="payment-card-form-container">
+                    <div className="ride-summary-box">
+                      <h3>Ride Summary</h3>
+                      
+                      {/* Map showing pickup and dropoff */}
+                      <div className="ride-summary-map">
+                        <MapBlock pickupText={ride.pickup} dropoffText={ride.dropoff} height={250} />
+                      </div>
 
-                  <div className="payment-section">
-                    <div 
-                      className={`payment-method-item ${selectedPayment === 'visa' ? 'selected' : ''}`}
-                      onClick={() => setSelectedPayment('visa')}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <div className="method-icon"><span className="visa-icon">VISA</span></div>
-                      <div className="method-content"><div className="method-title">Visa Card</div></div>
-                      {selectedPayment === 'visa' && <span className="check-mark">✓</span>}
+                      <div className="summary-row">
+                        <span>📍 Pickup:</span>
+                        <span>{ride.pickup || "Not set"}</span>
+                      </div>
+                      <div className="summary-row">
+                        <span>🎯 Drop-off:</span>
+                        <span>{ride.dropoff || "Not set"}</span>
+                      </div>
+                      <div className="summary-row">
+                        <span>📅 Date:</span>
+                        <span>{ride.date || "Not set"}</span>
+                      </div>
+                      <div className="summary-row">
+                        <span>🕐 Time:</span>
+                        <span>{ride.time || "Not set"}</span>
+                      </div>
+                      <div className="summary-row total-row">
+                        <span>💰 Total Fare:</span>
+                        <span className="fare-total">${fare || "0.00"}</span>
+                      </div>
                     </div>
-                    
-                    <div 
-                      className={`payment-method-item ${selectedPayment === 'apple' ? 'selected' : ''}`}
-                      onClick={() => setSelectedPayment('apple')}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <div className="method-icon"><span className="apple-icon">🍎</span></div>
-                      <div className="method-content"><div className="method-title">Apple Pay</div></div>
-                      {selectedPayment === 'apple' && <span className="check-mark">✓</span>}
-                    </div>
-                    
-                    {selectedPayment && (
+
+                    <form className="card-payment-form" onSubmit={handlePayNow}>
+                      <h2 className="form-title">Card Details</h2>
+                      
+                      <div className="field">
+                        <label>Cardholder Name</label>
+                        <input
+                          type="text"
+                          value={cardDetails.cardholderName}
+                          onChange={(e) => setCardDetails({ ...cardDetails, cardholderName: e.target.value })}
+                          placeholder="John Doe"
+                          required
+                        />
+                      </div>
+
+                      <div className="field">
+                        <label>Card Number</label>
+                        <input
+                          type="text"
+                          value={cardDetails.cardNumber}
+                          onChange={(e) => {
+                            const formatted = formatCardNumber(e.target.value);
+                            if (formatted.replace(/\s/g, '').length <= 16) {
+                              setCardDetails({ ...cardDetails, cardNumber: formatted });
+                            }
+                          }}
+                          placeholder="1234 5678 9012 3456"
+                          maxLength="19"
+                          required
+                        />
+                        <div className="card-icons">
+                          <span className="card-icon">💳</span>
+                        </div>
+                      </div>
+
+                      <div className="form-row-2col">
+                        <div className="field">
+                          <label>Expiry Date</label>
+                          <input
+                            type="text"
+                            value={cardDetails.expiryDate}
+                            onChange={(e) => {
+                              const formatted = formatExpiryDate(e.target.value);
+                              if (formatted.length <= 5) {
+                                setCardDetails({ ...cardDetails, expiryDate: formatted });
+                              }
+                            }}
+                            placeholder="MM/YY"
+                            maxLength="5"
+                            required
+                          />
+                        </div>
+                        <div className="field">
+                          <label>CVV</label>
+                          <input
+                            type="text"
+                            value={cardDetails.cvv}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '');
+                              if (value.length <= 4) {
+                                setCardDetails({ ...cardDetails, cvv: value });
+                              }
+                            }}
+                            placeholder="123"
+                            maxLength="4"
+                            required
+                          />
+                        </div>
+                      </div>
+
                       <button 
-                        className="btn wide pay-now-btn" 
-                        onClick={() => setPaymentConfirmed(true)}
-                        type="button"
+                        type="submit" 
+                        className="btn primary pay-now-btn" 
+                        disabled={processingPayment}
                       >
-                        Pay Now
+                        {processingPayment ? "Processing..." : `Pay Now $${fare || "0.00"}`}
                       </button>
-                    )}
-                  </div>
+
+                      <div className="payment-security-note">
+                        <span className="security-icon">🔒</span>
+                        <span>Your payment information is secure and encrypted</span>
+                      </div>
+                    </form>
+                  </section>
 
                   {paymentConfirmed && (
-                    <div className="payment-confirmed-overlay" onClick={() => setPaymentConfirmed(false)}>
+                    <div className="payment-overlay" onClick={() => setPaymentConfirmed(false)}>
                       <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()}>
                         <span className="payment-confirmed-icon">🎉</span>
                         <h3 className="payment-confirmed-title">RIDE CONFIRMED YAY!</h3>
