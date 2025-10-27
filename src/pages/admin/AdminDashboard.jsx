@@ -198,6 +198,19 @@ export default function AdminDashboard() {
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileSubTab, setProfileSubTab] = useState("account");
 
+  // Password change modal state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  // 2FA modal state
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+
   const [profile, setProfile] = useState({
     name: "Administrator",
     email: "admin@mastoride.edu",
@@ -315,6 +328,60 @@ export default function AdminDashboard() {
     } finally {
       setSavingSettings(false);
     }
+  }
+
+  // Password change handlers
+  function handlePasswordChange(e) {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  function handleChangePassword(e) {
+    e.preventDefault();
+    setChangingPassword(true);
+
+    // Validation
+    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+      pushToast("Please fill in all fields", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      pushToast("New passwords don't match", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 8) {
+      pushToast("Password must be at least 8 characters", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    // Simulate password change (in real app, this would call an API)
+    setTimeout(() => {
+      pushToast("Password changed successfully!", "success");
+      setShowPasswordModal(false);
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setChangingPassword(false);
+    }, 1000);
+  }
+
+  // 2FA handlers
+  function handleEnable2FA() {
+    setShow2FAModal(true);
+  }
+
+  function confirmEnable2FA() {
+    setIs2FAEnabled(true);
+    setShow2FAModal(false);
+    pushToast("Two-Factor Authentication enabled!", "success");
+  }
+
+  function handleDisable2FA() {
+    setIs2FAEnabled(false);
+    pushToast("Two-Factor Authentication disabled", "info");
   }
 
   return (
@@ -893,7 +960,12 @@ export default function AdminDashboard() {
                             <div className="security-content">
                               <h3>Change Password</h3>
                               <p>Update your admin password</p>
-                              <button className="btn ghost">Change Password</button>
+                              <button 
+                                className="btn ghost" 
+                                onClick={() => setShowPasswordModal(true)}
+                              >
+                                Change Password
+                              </button>
                             </div>
                           </div>
                           <div className="security-item">
@@ -901,7 +973,22 @@ export default function AdminDashboard() {
                             <div className="security-content">
                               <h3>Two-Factor Authentication</h3>
                               <p>Add an extra layer of security</p>
-                              <button className="btn ghost">Enable 2FA</button>
+                              {!is2FAEnabled ? (
+                                <button 
+                                  className="btn ghost" 
+                                  onClick={handleEnable2FA}
+                                >
+                                  Enable 2FA
+                                </button>
+                              ) : (
+                                <button 
+                                  className="btn ghost" 
+                                  onClick={handleDisable2FA}
+                                  style={{ background: '#10b981', color: '#fff' }}
+                                >
+                                  ✓ 2FA Enabled
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -914,6 +1001,163 @@ export default function AdminDashboard() {
           </main>
         </div>
       </div>
+
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div className="payment-overlay" onClick={() => setShowPasswordModal(false)}>
+          <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '20px', color: '#000' }}>🔐 Change Password</h2>
+            <form onSubmit={handleChangePassword}>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordForm.currentPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Enter current password"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwordForm.newPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Enter new password (min 8 characters)"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={passwordForm.confirmPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Confirm new password"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '700',
+                    cursor: changingPassword ? 'not-allowed' : 'pointer',
+                    opacity: changingPassword ? 0.6 : 1
+                  }}
+                >
+                  {changingPassword ? 'Changing...' : 'Change Password'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  disabled={changingPassword}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    background: '#e5e5e5',
+                    color: '#333',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: changingPassword ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 2FA Enable Modal */}
+      {show2FAModal && (
+        <div className="payment-overlay" onClick={() => setShow2FAModal(false)}>
+          <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '450px', textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🛡️</div>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '12px', color: '#000' }}>Enable Two-Factor Authentication</h2>
+            <p style={{ color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
+              Two-factor authentication adds an extra layer of security to your account. 
+              You'll need to enter a code from your authenticator app when signing in.
+            </p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={confirmEnable2FA}
+                style={{
+                  flex: 1,
+                  padding: '14px',
+                  background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}
+              >
+                Enable 2FA
+              </button>
+              <button
+                onClick={() => setShow2FAModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '14px',
+                  background: '#e5e5e5',
+                  color: '#333',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
