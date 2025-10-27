@@ -18209,3 +18209,954 @@ header.mr-navbar .mr-links .mr-link.active {
     grid-template-columns: 1fr;
   }
 }
+/* ===== PAYMENT SECTION ONLY - ISOLATED STYLES ===== */
+/* Add this to the END of your mastoride.css file */
+/* These styles will ONLY affect the payment tab and nothing else */
+
+/* Payment page wrapper - only affects payment tab */
+.payment-page-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 20px 20px; /* Increased top padding from 20px to 60px */
+}
+
+/* Payment hero section */
+.payment-page-wrapper .payment-hero {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.payment-page-wrapper .payment-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  color: #000;
+}
+
+.payment-page-wrapper .payment-hero p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Two column layout for payment form */
+.payment-page-wrapper .payment-card-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Ride Summary Box */
+.payment-page-wrapper .ride-summary-box {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe4b3 100%);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.payment-page-wrapper .ride-summary-box h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 24px;
+  color: #000;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 12px;
+}
+
+.payment-page-wrapper .summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 1rem;
+}
+
+.payment-page-wrapper .summary-row:last-child {
+  border-bottom: none;
+}
+
+.payment-page-wrapper .summary-row span:first-child {
+  font-weight: 600;
+  color: #333;
+}
+
+.payment-page-wrapper .summary-row span:last-child {
+  color: #000;
+  font-weight: 500;
+}
+
+.payment-page-wrapper .summary-row.total-row {
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(0, 0, 0, 0.15);
+  border-bottom: none;
+}
+
+.payment-page-wrapper .fare-total {
+  font-size: 1.8rem !important;
+  font-weight: 900 !important;
+  color: #d97706 !important;
+}
+
+/* Card Payment Form */
+.payment-page-wrapper .card-payment-form {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  animation: slideInFromRight 0.6s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.payment-page-wrapper .form-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 28px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payment-page-wrapper .form-title::before {
+  content: "💳";
+  font-size: 2rem;
+}
+
+.payment-page-wrapper .card-payment-form .field {
+  margin-bottom: 24px;
+  position: relative;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+/* Stagger the animation for each field */
+.payment-page-wrapper .card-payment-form .field:nth-child(2) { animation-delay: 0.1s; }
+.payment-page-wrapper .card-payment-form .field:nth-child(3) { animation-delay: 0.2s; }
+.payment-page-wrapper .card-payment-form .field:nth-child(4) { animation-delay: 0.3s; }
+.payment-page-wrapper .form-row-2col { animation-delay: 0.3s; }
+.payment-page-wrapper .pay-now-btn { animation-delay: 0.4s; }
+.payment-page-wrapper .payment-security-note { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.payment-page-wrapper .card-payment-form .field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #000;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.payment-page-wrapper .card-payment-form .field input,
+.payment-page-wrapper .card-payment-form .field select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.payment-page-wrapper .card-payment-form .field input:focus,
+.payment-page-wrapper .card-payment-form .field select:focus {
+  outline: none;
+  border-color: #f8a96f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(248, 169, 111, 0.2);
+  transform: translateY(-2px);
+}
+
+.payment-page-wrapper .card-icons {
+  position: absolute;
+  right: 16px;
+  top: 42px;
+  display: flex;
+  gap: 8px;
+}
+
+.payment-page-wrapper .card-icon {
+  font-size: 1.5rem;
+  opacity: 0.6;
+}
+
+.payment-page-wrapper .form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.payment-page-wrapper .pay-now-btn {
+  width: 100%;
+  padding: 18px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(248, 169, 111, 0.4);
+  margin-top: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(248, 169, 111, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(248, 169, 111, 0.6);
+  }
+}
+
+.payment-page-wrapper .pay-now-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 35px rgba(248, 169, 111, 0.6);
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+}
+
+.payment-page-wrapper .pay-now-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.payment-page-wrapper .pay-now-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Even more specific selector to override any conflicting styles */
+.payment-page-wrapper .card-payment-form button.pay-now-btn,
+.payment-page-wrapper .card-payment-form button[type="submit"].pay-now-btn {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+}
+
+.payment-page-wrapper .payment-security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 14px;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.payment-page-wrapper .security-icon {
+  font-size: 1.2rem;
+}
+
+/* Payment Confirmation Overlay */
+.payment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.payment-overlay .payment-confirmed-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 60px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.payment-overlay .payment-confirmed-icon {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 20px;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.payment-overlay .payment-confirmed-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0 0 12px;
+  color: #000 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.payment-overlay .payment-confirmed-text {
+  font-size: 1.1rem;
+  margin: 0 0 30px;
+  color: #333 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.payment-overlay .payment-confirmed-close {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+  padding: 14px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-overlay .payment-confirmed-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(248, 169, 111, 0.5);
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+}
+
+/* Extra specific selectors to override any conflicts */
+.payment-overlay button.payment-confirmed-close,
+.payment-overlay .payment-confirmed-card button,
+.payment-overlay .payment-confirmed-card .btn.wide {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+}
+
+/* Responsive Design for Payment Section Only */
+@media (max-width: 900px) {
+  .payment-page-wrapper .payment-card-form-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .payment-page-wrapper .ride-summary-box {
+    order: 2;
+  }
+
+  .payment-page-wrapper .card-payment-form {
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-page-wrapper .payment-hero h1 {
+    font-size: 2rem;
+  }
+
+  .payment-page-wrapper .card-payment-form {
+    padding: 30px 24px;
+  }
+
+  .payment-page-wrapper .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .payment-overlay .payment-confirmed-card {
+    padding: 40px 30px;
+    margin: 20px;
+  }
+
+  .payment-overlay .payment-confirmed-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Input validation styles - payment form only */
+.payment-page-wrapper .card-payment-form .field input:invalid:not(:placeholder-shown) {
+  border-color: #dc2626;
+}
+
+.payment-page-wrapper .card-payment-form .field input:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
+/* ===== FORCE CORAL GRADIENT ON PAYMENT BUTTONS ===== */
+/* Add this at the VERY END of your mastoride.css file (after all other styles) */
+
+/* Pay Now button - coral gradient */
+button.pay-now-btn,
+.payment-page-wrapper button.pay-now-btn,
+.payment-page-wrapper .card-payment-form button[type="submit"],
+.payment-page-wrapper .card-payment-form button.btn.primary.pay-now-btn {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(248, 169, 111, 0.4) !important;
+}
+
+button.pay-now-btn:hover:not(:disabled),
+.payment-page-wrapper button.pay-now-btn:hover:not(:disabled),
+.payment-page-wrapper .card-payment-form button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 35px rgba(248, 169, 111, 0.6) !important;
+}
+
+/* Confirmation popup button - coral gradient */
+.payment-overlay .payment-confirmed-close,
+.payment-overlay button.payment-confirmed-close,
+.payment-overlay .payment-confirmed-card button,
+.payment-overlay .payment-confirmed-card .btn,
+.payment-overlay .payment-confirmed-card button.btn.wide {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #ffffff !important;
+}
+
+.payment-overlay .payment-confirmed-close:hover,
+.payment-overlay button.payment-confirmed-close:hover,
+.payment-overlay .payment-confirmed-card button:hover {
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+  color: #ffffff !important;
+}
+/* ===== PAYMENT SECTION ONLY - ISOLATED STYLES ===== */
+/* Add this to the END of your mastoride.css file */
+/* These styles will ONLY affect the payment tab and nothing else */
+
+/* Payment page wrapper - only affects payment tab */
+.payment-page-wrapper {
+  max-width: 1400px; /* Increased from 1000px to 1400px */
+  margin: 0 auto;
+  padding: 60px 40px 40px; /* Added more horizontal padding */
+}
+
+/* Payment hero section */
+.payment-page-wrapper .payment-hero {
+  text-align: center;
+  margin-bottom: 50px; /* Increased from 40px */
+  animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.payment-page-wrapper .payment-hero h1 {
+  font-size: 3rem; /* Increased from 2.5rem */
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: #000;
+}
+
+.payment-page-wrapper .payment-hero p {
+  font-size: 1.2rem; /* Increased from 1.1rem */
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Two column layout for payment form */
+.payment-page-wrapper .payment-card-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Equal columns instead of 1fr 1.2fr */
+  gap: 50px; /* Increased from 40px */
+  align-items: start;
+}
+
+/* Ride Summary Box */
+.payment-page-wrapper .ride-summary-box {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe4b3 100%);
+  border-radius: 20px; /* Increased from 16px */
+  padding: 40px; /* Increased from 30px */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  animation: slideInFromLeft 0.6s ease-out;
+  min-height: 600px; /* Added minimum height */
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.payment-page-wrapper .ride-summary-box h3 {
+  font-size: 1.8rem; /* Increased from 1.5rem */
+  font-weight: 800;
+  margin: 0 0 30px; /* Increased bottom margin */
+  color: #000;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 16px; /* Increased from 12px */
+}
+
+/* Map container for ride summary */
+.payment-page-wrapper .ride-summary-map {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-page-wrapper .ride-summary-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.payment-page-wrapper .summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0; /* Increased from 12px */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 1.05rem; /* Increased from 1rem */
+}
+
+.payment-page-wrapper .summary-row:last-child {
+  border-bottom: none;
+}
+
+.payment-page-wrapper .summary-row span:first-child {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.05rem; /* Added size */
+}
+
+.payment-page-wrapper .summary-row span:last-child {
+  color: #000;
+  font-weight: 500;
+  font-size: 1.05rem; /* Added size */
+}
+
+.payment-page-wrapper .summary-row.total-row {
+  margin-top: 20px; /* Increased from 16px */
+  padding-top: 24px; /* Increased from 20px */
+  border-top: 2px solid rgba(0, 0, 0, 0.15);
+  border-bottom: none;
+}
+
+.payment-page-wrapper .fare-total {
+  font-size: 2.2rem !important; /* Increased from 1.8rem */
+  font-weight: 900 !important;
+  color: #d97706 !important;
+}
+
+/* Card Payment Form */
+.payment-page-wrapper .card-payment-form {
+  background: #fff;
+  border-radius: 20px; /* Increased from 16px */
+  padding: 50px; /* Increased from 40px */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  animation: slideInFromRight 0.6s ease-out;
+  min-height: 600px; /* Match ride summary height */
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.payment-page-wrapper .form-title {
+  font-size: 2rem; /* Increased from 1.8rem */
+  font-weight: 800;
+  margin: 0 0 35px; /* Increased bottom margin */
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 14px; /* Increased from 12px */
+}
+
+.payment-page-wrapper .form-title::before {
+  content: "💳";
+  font-size: 2.3rem; /* Increased from 2rem */
+}
+
+.payment-page-wrapper .card-payment-form .field {
+  margin-bottom: 28px; /* Increased from 24px */
+  position: relative;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+/* Stagger the animation for each field */
+.payment-page-wrapper .card-payment-form .field:nth-child(2) { animation-delay: 0.1s; }
+.payment-page-wrapper .card-payment-form .field:nth-child(3) { animation-delay: 0.2s; }
+.payment-page-wrapper .card-payment-form .field:nth-child(4) { animation-delay: 0.3s; }
+.payment-page-wrapper .form-row-2col { animation-delay: 0.3s; }
+.payment-page-wrapper .pay-now-btn { animation-delay: 0.4s; }
+.payment-page-wrapper .payment-security-note { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.payment-page-wrapper .card-payment-form .field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 10px; /* Increased from 8px */
+  color: #000;
+  font-size: 1rem; /* Increased from 0.95rem */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.payment-page-wrapper .card-payment-form .field input,
+.payment-page-wrapper .card-payment-form .field select {
+  width: 100%;
+  padding: 16px 18px; /* Increased from 14px 16px */
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px; /* Increased from 10px */
+  font-size: 1.05rem; /* Increased from 1rem */
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.payment-page-wrapper .card-payment-form .field input:focus,
+.payment-page-wrapper .card-payment-form .field select:focus {
+  outline: none;
+  border-color: #f8a96f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(248, 169, 111, 0.2);
+  transform: translateY(-2px);
+}
+
+.payment-page-wrapper .card-icons {
+  position: absolute;
+  right: 16px;
+  top: 42px;
+  display: flex;
+  gap: 8px;
+}
+
+.payment-page-wrapper .card-icon {
+  font-size: 1.5rem;
+  opacity: 0.6;
+}
+
+.payment-page-wrapper .form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.payment-page-wrapper .pay-now-btn {
+  width: 100%;
+  padding: 20px; /* Increased from 18px */
+  font-size: 1.3rem; /* Increased from 1.2rem */
+  font-weight: 800;
+  border-radius: 14px; /* Increased from 12px */
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(248, 169, 111, 0.4);
+  margin-top: 16px; /* Increased from 12px */
+  text-transform: uppercase;
+  letter-spacing: 1.2px; /* Increased from 1px */
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(248, 169, 111, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(248, 169, 111, 0.6);
+  }
+}
+
+.payment-page-wrapper .pay-now-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 35px rgba(248, 169, 111, 0.6);
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+}
+
+.payment-page-wrapper .pay-now-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.payment-page-wrapper .pay-now-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Even more specific selector to override any conflicting styles */
+.payment-page-wrapper .card-payment-form button.pay-now-btn,
+.payment-page-wrapper .card-payment-form button[type="submit"].pay-now-btn {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+}
+
+.payment-page-wrapper .payment-security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 14px;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.payment-page-wrapper .security-icon {
+  font-size: 1.2rem;
+}
+
+/* Payment Confirmation Overlay */
+.payment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.payment-overlay .payment-confirmed-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 60px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.payment-overlay .payment-confirmed-icon {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 20px;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.payment-overlay .payment-confirmed-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0 0 12px;
+  color: #000 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.payment-overlay .payment-confirmed-text {
+  font-size: 1.1rem;
+  margin: 0 0 30px;
+  color: #333 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.payment-overlay .payment-confirmed-close {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+  padding: 14px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-overlay .payment-confirmed-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(248, 169, 111, 0.5);
+  background: linear-gradient(135deg, #f9b585 0%, #f69d7b 100%) !important;
+}
+
+/* Extra specific selectors to override any conflicts */
+.payment-overlay button.payment-confirmed-close,
+.payment-overlay .payment-confirmed-card button,
+.payment-overlay .payment-confirmed-card .btn.wide {
+  background: linear-gradient(135deg, #f8a96f 0%, #f58c65 100%) !important;
+  color: #fff !important;
+}
+
+/* Responsive Design for Payment Section Only */
+@media (max-width: 900px) {
+  .payment-page-wrapper .payment-card-form-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .payment-page-wrapper .ride-summary-box {
+    order: 2;
+  }
+
+  .payment-page-wrapper .card-payment-form {
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-page-wrapper .payment-hero h1 {
+    font-size: 2rem;
+  }
+
+  .payment-page-wrapper .card-payment-form {
+    padding: 30px 24px;
+  }
+
+  .payment-page-wrapper .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .payment-overlay .payment-confirmed-card {
+    padding: 40px 30px;
+    margin: 20px;
+  }
+
+  .payment-overlay .payment-confirmed-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Input validation styles - payment form only */
+.payment-page-wrapper .card-payment-form .field input:invalid:not(:placeholder-shown) {
+  border-color: #dc2626;
+}
+
+.payment-page-wrapper .card-payment-form .field input:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
