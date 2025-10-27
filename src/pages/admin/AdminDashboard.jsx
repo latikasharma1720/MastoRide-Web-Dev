@@ -285,6 +285,7 @@ export default function AdminDashboard() {
     try {
       if (!/\S+@\S+\.\S+/.test(profile.email)) {
         pushToast("Please enter a valid email.", "error");
+        setSavingProfile(false);
         return;
       }
       const adminId = currentUser.id || "admin-demo";
@@ -777,7 +778,17 @@ export default function AdminDashboard() {
 
                           <div className="profile-actions">
                             {!isEditing ? (
-                              <button className="btn" type="button" onClick={() => setIsEditing(true)}>
+                              <button 
+                                className="btn" 
+                                type="button" 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  console.log('Edit Profile button clicked! Current isEditing:', isEditing);
+                                  setIsEditing(true);
+                                  console.log('Set isEditing to true');
+                                }}
+                              >
                                 Edit Profile
                               </button>
                             ) : (
@@ -788,7 +799,12 @@ export default function AdminDashboard() {
                                 <button
                                   className="btn ghost"
                                   type="button"
-                                  onClick={() => setIsEditing(false)}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Cancel button clicked!');
+                                    setIsEditing(false);
+                                  }}
                                 >
                                   Cancel
                                 </button>
