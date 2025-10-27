@@ -93,7 +93,7 @@ export default function UserDashboard() {
   });
 
   const [displayName, setDisplayName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
 
   // Expanded profile object (longer desktop form)
