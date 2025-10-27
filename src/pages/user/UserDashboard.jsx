@@ -93,7 +93,7 @@ export default function UserDashboard() {
   });
 
   const [displayName, setDisplayName] = useState("");
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
 
   // Expanded profile object (longer desktop form)
@@ -227,13 +227,27 @@ export default function UserDashboard() {
     localStorage.setItem(`badges_used_${uid}`, JSON.stringify(usedBadges));
   }, [availableBadges, usedBadges, currentUser, badgesInitialized]);
 
+  // Apply dark mode to body element when setting changes
+  useEffect(() => {
+    if (settings.darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [settings.darkMode]);
+
   if (!authChecked) return null;
   if (!currentUser || currentUser.role !== "user") return <Navigate to="/login" replace />;
 
   const uid = currentUser.email || currentUser.id || "demo-user";
 
   /* Handlers */
-  function toggleEditMode() { setIsEditing((v) => !v); }
+  function toggleEditMode() { 
+    setIsEditing((v) => {
+      console.log('Toggling edit mode from', v, 'to', !v);
+      return !v;
+    }); 
+  }
 
   function onProfileChange(e) {
     const { name, value } = e.target;
@@ -684,7 +698,16 @@ export default function UserDashboard() {
 
                           <div className="profile-actions">
                             {!isEditing ? (
-                              <button className="btn" type="button" onClick={toggleEditMode}>
+                              <button 
+                                className="btn" 
+                                type="button" 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  console.log('Edit button clicked!');
+                                  toggleEditMode();
+                                }}
+                              >
                                 Edit
                               </button>
                             ) : (
@@ -692,7 +715,16 @@ export default function UserDashboard() {
                                 <button className="btn" type="submit" disabled={savingProfile}>
                                   {savingProfile ? "Saving..." : "Save Changes"}
                                 </button>
-                                <button className="btn ghost" type="button" onClick={toggleEditMode}>
+                                <button 
+                                  className="btn ghost" 
+                                  type="button" 
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Cancel button clicked!');
+                                    toggleEditMode();
+                                  }}
+                                >
                                   Cancel
                                 </button>
                               </>
@@ -712,13 +744,6 @@ export default function UserDashboard() {
                             <div><strong>Wheelchair Access</strong><p>Request wheelchair-accessible vehicles</p></div>
                             <label className="toggle">
                               <input type="checkbox" checked={settings.wheelchairAccess} onChange={() => onToggleSetting("wheelchairAccess")} />
-                              <span />
-                            </label>
-                          </div>
-                          <div className="setting-item">
-                            <div><strong>Dark Mode</strong><p>Use dark theme across the app</p></div>
-                            <label className="toggle">
-                              <input type="checkbox" checked={settings.darkMode} onChange={() => onToggleSetting("darkMode")} />
                               <span />
                             </label>
                           </div>
