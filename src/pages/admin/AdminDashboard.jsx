@@ -9,7 +9,6 @@ import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/
 const NAV_ITEMS = [
   { id: "feedback", label: "Feedback", icon: "💬" },
   { id: "users", label: "Users", icon: "👥" },
-  { id: "rides", label: "Rides", icon: "🚗" },
   { id: "analytics", label: "Analytics", icon: "📈" },
   { id: "profile", label: "Profile", icon: "👤" },
 ];
@@ -198,6 +197,39 @@ export default function AdminDashboard() {
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileSubTab, setProfileSubTab] = useState("account");
 
+  // Password change modal state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [changingPassword, setChangingPassword] = useState(false);
+
+  // 2FA modal state
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+
+  // Users management state
+  const [users, setUsers] = useState(RECENT_USERS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  // Filter users based on search query
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Delete user handler
+  const handleDeleteUser = (userId, userName) => {
+    if (window.confirm(`Are you sure you want to delete ${userName}?`)) {
+      setUsers(users.filter(u => u.id !== userId));
+      setSelectedUsers(selectedUsers.filter(id => id !== userId));
+      pushToast(`${userName} has been deleted`, "success");
+    }
+  };
+
   const [profile, setProfile] = useState({
     name: "Administrator",
     email: "admin@mastoride.edu",
@@ -285,6 +317,7 @@ export default function AdminDashboard() {
     try {
       if (!/\S+@\S+\.\S+/.test(profile.email)) {
         pushToast("Please enter a valid email.", "error");
+        setSavingProfile(false);
         return;
       }
       const adminId = currentUser.id || "admin-demo";
@@ -314,6 +347,60 @@ export default function AdminDashboard() {
     } finally {
       setSavingSettings(false);
     }
+  }
+
+  // Password change handlers
+  function handlePasswordChange(e) {
+    const { name, value } = e.target;
+    setPasswordForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  function handleChangePassword(e) {
+    e.preventDefault();
+    setChangingPassword(true);
+
+    // Validation
+    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+      pushToast("Please fill in all fields", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      pushToast("New passwords don't match", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 8) {
+      pushToast("Password must be at least 8 characters", "error");
+      setChangingPassword(false);
+      return;
+    }
+
+    // Simulate password change (in real app, this would call an API)
+    setTimeout(() => {
+      pushToast("Password changed successfully!", "success");
+      setShowPasswordModal(false);
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setChangingPassword(false);
+    }, 1000);
+  }
+
+  // 2FA handlers
+  function handleEnable2FA() {
+    setShow2FAModal(true);
+  }
+
+  function confirmEnable2FA() {
+    setIs2FAEnabled(true);
+    setShow2FAModal(false);
+    pushToast("Two-Factor Authentication enabled!", "success");
+  }
+
+  function handleDisable2FA() {
+    setIs2FAEnabled(false);
+    pushToast("Two-Factor Authentication disabled", "info");
   }
 
   return (
@@ -435,99 +522,315 @@ export default function AdminDashboard() {
 
               {/* USERS */}
               {activeTab === "users" && (
-                <div className="users-layout">
-                  <section className="ud-hero">
-                    <h1>User Management 👥</h1>
-                    <p>View and manage all registered users</p>
-                  </section>
+                <div className="users-layout" style={{ padding: '40px 60px', maxWidth: '1400px', margin: '0 auto' }}>
+                  {/* Header Card */}
+                  <div style={{ 
+                    background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                    padding: '28px 40px',
+                    borderRadius: '16px',
+                    marginBottom: '32px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 12px rgba(248, 169, 111, 0.25)',
+                    animation: 'fadeInDown 0.5s ease-out'
+                  }}>
+                    <h1 style={{ 
+                      fontSize: '2rem', 
+                      fontWeight: '900', 
+                      marginBottom: '8px', 
+                      color: '#000',
+                      textShadow: 'none'
+                    }}>
+                      User Management
+                    </h1>
+                    <p style={{ 
+                      fontSize: '1rem', 
+                      color: 'rgba(0,0,0,0.7)', 
+                      maxWidth: '700px', 
+                      margin: '0 auto',
+                      lineHeight: '1.5'
+                    }}>
+                      Manage all users in one place. Control access, assign roles, and monitor activity!
+                    </p>
+                  </div>
 
-                  <section className="ud-panel">
-                    <header className="ud-head">
-                      <h2>Recent Users</h2>
-                      <button className="btn ghost">Export CSV</button>
-                    </header>
-                    <div className="data-table">
-                      <table>
+                  {/* Search Bar */}
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '16px', 
+                    marginBottom: '32px',
+                    alignItems: 'center',
+                    animation: 'fadeInUp 0.6s ease-out 0.1s backwards'
+                  }}>
+                    {/* Search */}
+                    <div style={{ flex: '1', position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem', color: '#9ca3af' }}>🔍</span>
+                      <input 
+                        type="text" 
+                        placeholder="Search users by name or email..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '14px 16px 14px 48px',
+                          border: '2px solid #e5e7eb',
+                          borderRadius: '12px',
+                          fontSize: '1rem',
+                          outline: 'none',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#f8a96f'}
+                        onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                      />
+                    </div>
+
+                    {/* Export Button */}
+                    <button style={{
+                      padding: '14px 28px',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      background: '#fff',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = '#f8a96f';
+                      e.currentTarget.style.background = '#fff5f0';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = '#e5e7eb';
+                      e.currentTarget.style.background = '#fff';
+                    }}
+                    onClick={() => pushToast("Exporting users...", "success")}>
+                      <span style={{ fontSize: '1.2rem' }}>📤</span>
+                      Export
+                    </button>
+
+                    {/* Add User Button */}
+                    <button style={{
+                      padding: '14px 28px',
+                      background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      color: '#fff',
+                      fontSize: '1rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(248, 169, 111, 0.4)',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(248, 169, 111, 0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(248, 169, 111, 0.4)';
+                    }}
+                    onClick={() => pushToast("Add user functionality coming soon!", "info")}>
+                      <span style={{ fontSize: '1.2rem' }}>➕</span>
+                      Add User
+                    </button>
+                  </div>
+
+                  {/* Table */}
+                  <div style={{ 
+                    background: '#fff',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    animation: 'fadeInUp 0.6s ease-out 0.2s backwards'
+                  }}>
+                    <div style={{ overflowX: 'auto' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Joined</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                          <tr style={{ background: '#374151', color: '#fff' }}>
+                            <th style={{ padding: '16px 20px', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem', width: '40px' }}>
+                              <input 
+                                type="checkbox" 
+                                style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                                checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedUsers(filteredUsers.map(u => u.id));
+                                  } else {
+                                    setSelectedUsers([]);
+                                  }
+                                }}
+                              />
+                            </th>
+                            <th style={{ padding: '16px 20px', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem' }}>Full Name</th>
+                            <th style={{ padding: '16px 20px', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem' }}>Email</th>
+                            <th style={{ padding: '16px 20px', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem' }}>Joined Date</th>
+                            <th style={{ padding: '16px 20px', textAlign: 'left', fontWeight: '600', fontSize: '0.9rem' }}>Status</th>
+                            <th style={{ padding: '16px 20px', textAlign: 'center', fontWeight: '600', fontSize: '0.9rem' }}>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {RECENT_USERS.map((user) => (
-                            <tr key={user.id}>
-                              <td><strong>{user.name}</strong></td>
-                              <td>{user.email}</td>
-                              <td>{user.joined}</td>
-                              <td>
-                                <span className={`status-badge ${user.status.toLowerCase()}`}>
-                                  {user.status}
-                                </span>
-                              </td>
-                              <td>
-                                <button className="btn-icon" title="View Details">👁️</button>
-                                <button className="btn-icon" title="Edit">✏️</button>
+                          {filteredUsers.length === 0 ? (
+                            <tr>
+                              <td colSpan="6" style={{ padding: '40px', textAlign: 'center', color: '#9ca3af' }}>
+                                <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔍</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '8px' }}>No users found</div>
+                                <div>Try adjusting your search query</div>
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            filteredUsers.map((user, index) => (
+                              <tr 
+                                key={user.id}
+                                style={{ 
+                                  borderBottom: '1px solid #f3f4f6',
+                                  transition: 'all 0.2s ease',
+                                  animation: `fadeInUp 0.4s ease-out ${0.3 + index * 0.1}s backwards`
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = '#fafafa'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                              >
+                                <td style={{ padding: '16px 20px' }}>
+                                  <input 
+                                    type="checkbox" 
+                                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                                    checked={selectedUsers.includes(user.id)}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectedUsers([...selectedUsers, user.id]);
+                                      } else {
+                                        setSelectedUsers(selectedUsers.filter(id => id !== user.id));
+                                      }
+                                    }}
+                                  />
+                                </td>
+                                <td style={{ padding: '16px 20px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ 
+                                      width: '40px', 
+                                      height: '40px', 
+                                      borderRadius: '50%', 
+                                      background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '1.4rem',
+                                      fontWeight: '700',
+                                      color: '#fff'
+                                    }}>
+                                      {user.name.charAt(0)}
+                                    </div>
+                                    <span style={{ fontWeight: '600', color: '#1f2937' }}>{user.name}</span>
+                                  </div>
+                                </td>
+                                <td style={{ padding: '16px 20px', color: '#6b7280' }}>{user.email}</td>
+                                <td style={{ padding: '16px 20px', color: '#6b7280' }}>{user.joined}</td>
+                                <td style={{ padding: '16px 20px' }}>
+                                  <span style={{
+                                    padding: '6px 12px',
+                                    borderRadius: '20px',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '600',
+                                    background: user.status === 'Active' ? '#d1fae5' : '#fee2e2',
+                                    color: user.status === 'Active' ? '#065f46' : '#991b1b'
+                                  }}>
+                                    {user.status}
+                                  </span>
+                                </td>
+                                <td style={{ padding: '16px 20px' }}>
+                                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                    <button 
+                                      style={{
+                                        padding: '8px 16px',
+                                        background: '#fee2e2',
+                                        border: 'none',
+                                        borderRadius: '10px',
+                                        cursor: 'pointer',
+                                        fontSize: '1.2rem',
+                                        transition: 'all 0.2s ease'
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = '#ef4444';
+                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = '#fee2e2';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                      }}
+                                      title="Delete User"
+                                      onClick={() => handleDeleteUser(user.id, user.name)}
+                                    >
+                                      🗑️
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
-                  </section>
+
+                    {/* Results Info */}
+                    {filteredUsers.length > 0 && (
+                      <div style={{ 
+                        padding: '16px 24px',
+                        borderTop: '1px solid #f3f4f6',
+                        background: '#fafafa',
+                        color: '#6b7280',
+                        fontSize: '0.95rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}>
+                        <div>
+                          Showing <strong>{filteredUsers.length}</strong> of <strong>{users.length}</strong> users
+                          {selectedUsers.length > 0 && (
+                            <span style={{ marginLeft: '16px' }}>
+                              • <strong>{selectedUsers.length}</strong> selected
+                            </span>
+                          )}
+                        </div>
+                        {selectedUsers.length > 0 && (
+                          <button
+                            style={{
+                              padding: '8px 20px',
+                              background: '#ef4444',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: '8px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = '#dc2626';
+                              e.currentTarget.style.transform = 'scale(1.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = '#ef4444';
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                            onClick={() => {
+                              if (window.confirm(`Delete ${selectedUsers.length} selected user(s)?`)) {
+                                setUsers(users.filter(u => !selectedUsers.includes(u.id)));
+                                pushToast(`Deleted ${selectedUsers.length} user(s)`, "success");
+                                setSelectedUsers([]);
+                              }
+                            }}
+                          >
+                            🗑️ Delete Selected ({selectedUsers.length})
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-
-              {/* RIDES */}
-              {activeTab === "rides" && (
-                <div className="rides-layout">
-                  <section className="ud-hero">
-                    <h1>Ride Management 🚗</h1>
-                    <p>Track and manage all ride bookings</p>
-                  </section>
-
-                  <section className="ud-panel">
-                    <header className="ud-head">
-                      <h2>Recent Rides</h2>
-                      <button className="btn ghost">Filter</button>
-                    </header>
-                    <div className="data-table">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>User</th>
-                            <th>Pickup</th>
-                            <th>Dropoff</th>
-                            <th>Fare</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {RECENT_RIDES.map((ride) => (
-                            <tr key={ride.id}>
-                              <td><strong>{ride.user}</strong></td>
-                              <td>{ride.pickup}</td>
-                              <td>{ride.dropoff}</td>
-                              <td><strong>{ride.fare}</strong></td>
-                              <td>{ride.date}</td>
-                              <td>
-                                <span className={`status-badge ${ride.status.toLowerCase()}`}>
-                                  {ride.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </section>
-                </div>
-              )}
-
+              )}                            
               {/* ANALYTICS */}
               {activeTab === "analytics" && (
                 <div className="analytics-layout">
@@ -777,7 +1080,17 @@ export default function AdminDashboard() {
 
                           <div className="profile-actions">
                             {!isEditing ? (
-                              <button className="btn" type="button" onClick={() => setIsEditing(true)}>
+                              <button 
+                                className="btn" 
+                                type="button" 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  console.log('Edit Profile button clicked! Current isEditing:', isEditing);
+                                  setIsEditing(true);
+                                  console.log('Set isEditing to true');
+                                }}
+                              >
                                 Edit Profile
                               </button>
                             ) : (
@@ -788,7 +1101,12 @@ export default function AdminDashboard() {
                                 <button
                                   className="btn ghost"
                                   type="button"
-                                  onClick={() => setIsEditing(false)}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Cancel button clicked!');
+                                    setIsEditing(false);
+                                  }}
                                 >
                                   Cancel
                                 </button>
@@ -877,7 +1195,12 @@ export default function AdminDashboard() {
                             <div className="security-content">
                               <h3>Change Password</h3>
                               <p>Update your admin password</p>
-                              <button className="btn ghost">Change Password</button>
+                              <button 
+                                className="btn ghost" 
+                                onClick={() => setShowPasswordModal(true)}
+                              >
+                                Change Password
+                              </button>
                             </div>
                           </div>
                           <div className="security-item">
@@ -885,7 +1208,22 @@ export default function AdminDashboard() {
                             <div className="security-content">
                               <h3>Two-Factor Authentication</h3>
                               <p>Add an extra layer of security</p>
-                              <button className="btn ghost">Enable 2FA</button>
+                              {!is2FAEnabled ? (
+                                <button 
+                                  className="btn ghost" 
+                                  onClick={handleEnable2FA}
+                                >
+                                  Enable 2FA
+                                </button>
+                              ) : (
+                                <button 
+                                  className="btn ghost" 
+                                  onClick={handleDisable2FA}
+                                  style={{ background: '#10b981', color: '#fff' }}
+                                >
+                                  ✓ 2FA Enabled
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -898,6 +1236,163 @@ export default function AdminDashboard() {
           </main>
         </div>
       </div>
+
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div className="payment-overlay" onClick={() => setShowPasswordModal(false)}>
+          <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '20px', color: '#000' }}>🔐 Change Password</h2>
+            <form onSubmit={handleChangePassword}>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordForm.currentPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Enter current password"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwordForm.newPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Enter new password (min 8 characters)"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#000' }}>
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={passwordForm.confirmPassword}
+                  onChange={handlePasswordChange}
+                  placeholder="Confirm new password"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '2px solid #ddd',
+                    borderRadius: '8px',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '700',
+                    cursor: changingPassword ? 'not-allowed' : 'pointer',
+                    opacity: changingPassword ? 0.6 : 1
+                  }}
+                >
+                  {changingPassword ? 'Changing...' : 'Change Password'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  disabled={changingPassword}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    background: '#e5e5e5',
+                    color: '#333',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: changingPassword ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 2FA Enable Modal */}
+      {show2FAModal && (
+        <div className="payment-overlay" onClick={() => setShow2FAModal(false)}>
+          <div className="payment-confirmed-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '450px', textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🛡️</div>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '12px', color: '#000' }}>Enable Two-Factor Authentication</h2>
+            <p style={{ color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
+              Two-factor authentication adds an extra layer of security to your account. 
+              You'll need to enter a code from your authenticator app when signing in.
+            </p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button
+                onClick={confirmEnable2FA}
+                style={{
+                  flex: 1,
+                  padding: '14px',
+                  background: 'linear-gradient(135deg, #f8a96f 0%, #f58c65 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}
+              >
+                Enable 2FA
+              </button>
+              <button
+                onClick={() => setShow2FAModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '14px',
+                  background: '#e5e5e5',
+                  color: '#333',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
