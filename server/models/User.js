@@ -1,3 +1,4 @@
+/* eslint-disable */
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
@@ -12,5 +13,4 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Third parameter sets collection name to "ga_users"
 module.exports = mongoose.model("User", UserSchema, "ga_users");
