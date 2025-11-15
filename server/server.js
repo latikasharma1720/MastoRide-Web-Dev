@@ -1,31 +1,45 @@
-/* eslint-disable */
+// server.js
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth");
-
 const app = express();
 
-// Middleware
-app.use(cors());
+// ✅ Allow frontend on localhost:3000
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+
+// ✅ Parse JSON request bodies
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("✅ Connected to MongoDB (mastoride database, ga_users collection)"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+console.log("Starting server...");
 
-// Routes
+// ✅ Connect to MongoDB using MONGO_URL from .env
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB error:", err));
+
+// ✅ Auth routes
+const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
-// Health check
+// ✅ Simple test routes
 app.get("/", (req, res) => {
-  res.json({ message: "MastoRide Auth API is running" });
+  res.json({ message: "Server is running" });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", time: new Date().toISOString() });
 });
+
+const PORT = 5001;   // 👈 hard-coded, ignore env
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+});
+
