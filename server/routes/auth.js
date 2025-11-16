@@ -1,12 +1,12 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto"); // built-in Node module
 const User = require("../models/User");
 
 const router = express.Router();
 
 /**
  * POST /api/auth/signup
- * (same behaviour as before, just using the updated model)
  */
 router.post("/signup", async (req, res) => {
   try {
@@ -61,8 +61,8 @@ router.post("/signup", async (req, res) => {
 });
 
 /**
- * ✅ NEW: POST /api/auth/login
- * Handles RETURNING users
+ * POST /api/auth/login
+ * Returning users
  */
 router.post("/login", async (req, res) => {
   try {
@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // 🔁 UPDATE returning-user fields
+    // 🔁 update returning-user fields
     user.lastLoginAt = new Date();
     user.loginCount = (user.loginCount || 0) + 1;
     user.loginHistory.push({
@@ -104,7 +104,6 @@ router.post("/login", async (req, res) => {
       loginCount: user.loginCount,
     });
 
-    // Send minimal info for frontend
     return res.json({
       message: "Login successful",
       user: {
@@ -118,6 +117,104 @@ router.post("/login", async (req, res) => {
     });
   } catch (err) {
     console.error("=== LOGIN ERROR ===");
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * 🔐 POST /api/auth/forgot-password
+ * Store reset token + expiry when user says "I forgot my password"
+ */
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required." });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      // For security: respond the same whether or not the user exists
+      return res.json({
+        message:
+          "If an account exists with that email, a reset link has been created.",
+      });
+    }
+
+    // Generate a secure random token
+    const token = crypto.randomBytes(32).toString("hex");
+
+    user.resetToken = token;
+    user.resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+    await user.save();
+
+    console.log("=== PASSWORD RESET TOKEN GENERATED ===");
+    console.log("Email:", user.email);
+    console.log("Token:", token);
+    console.log("Expires:", user.resetTokenExpiry);
+
+    // In a real app we'd email this token.
+    // For your project, we return it so you can show/log it.
+    return res.json({
+      message:
+        "If an account exists with that email, a reset link has been created.",
+      resetToken: token,
+      expiresAt: user.resetTokenExpiry,
+    });
+  } catch (err) {
+    console.error("=== FORGOT PASSWORD ERROR ===");
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * 🔐 POST /api/auth/reset-password
+ * Use token + new password to actually change the password
+ */
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res
+        .status(400)
+        .json({ error: "Token and new password are required." });
+    }
+
+    if (newPassword.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 8 characters." });
+    }
+
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: new Date() }, // not expired
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "Invalid or expired reset token." });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+
+    await user.save();
+
+    console.log("=== PASSWORD RESET SUCCESS ===", user.email);
+
+    return res.json({ message: "Password has been reset successfully." });
+  } catch (err) {
+    console.error("=== RESET PASSWORD ERROR ===");
     console.error(err);
     return res.status(500).json({ error: "Server error" });
   }
