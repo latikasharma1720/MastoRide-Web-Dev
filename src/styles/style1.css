@@ -1,0 +1,412 @@
+/* ============================
+   SERVICES PAGE STYLING
+   ============================ */
+
+.page-wrapper {
+  max-width: 1200px;
+  margin: 120px auto 80px;
+  padding: 0 20px;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.services-header .welcome {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.services-header .intro {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ==== GRID ==== */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+/* ==== CARD STYLE (Matches Beige Theme) ==== */
+.service-card {
+  background: #fffdf5;
+  border-radius: 16px;
+  padding: 26px 24px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+}
+
+.service-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.service-card p {
+  margin: 0;
+  opacity: 0.75;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ==== Fade-in Animation ==== */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add slight stagger effect */
+.service-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2) { animation-delay: 0.2s; }
+.service-card:nth-child(3) { animation-delay: 0.3s; }
+.service-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .services-header .welcome {
+    font-size: 1.9rem;
+  }
+
+  .service-card {
+    padding: 22px;
+  }
+}
+
+/* =======================================
+   PRICING PAGE — Matches MastoRide Theme
+   ======================================= */
+
+.pricing-section {
+  max-width: 1200px;
+  margin: 120px auto 80px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.pricing-section .welcome {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.pricing-section .intro {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.5;
+}
+
+/* ========== GRID ========== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 20px;
+}
+
+/* ========== CARD STYLING ========== */
+.pricing-card {
+  background: #fffdf5;
+  border-radius: 18px;
+  padding: 32px 28px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: fadeInUp 0.7s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.pricing-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+}
+
+/* Premium golden highlight */
+.pricing-card.premium {
+  background: linear-gradient(135deg, #fff7e1, #f3d79a);
+  border: 2px solid #e2b861;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.15);
+}
+
+/* ========== HEADERS & PRICE ========== */
+.pricing-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.pricing-card .price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: #111;
+}
+
+.pricing-card .price span {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+/* ========== FEATURES LIST ========== */
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+.pricing-card li {
+  font-size: 0.95rem;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  opacity: 0.85;
+}
+
+/* ========== BUTTON ========== */
+.pricing-card button {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.pricing-card button:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+.pricing-card.premium button {
+  background: #e2b861;
+  color: #000;
+  font-weight: 800;
+}
+
+.pricing-card.premium button:hover {
+  background: #efc76c;
+}
+
+/* ========== ANIMATION ========== */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation */
+.pricing-card:nth-child(1) { animation-delay: 0.1s; }
+.pricing-card:nth-child(2) { animation-delay: 0.2s; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .pricing-section .welcome {
+    font-size: 1.9rem;
+  }
+
+  .pricing-card {
+    padding: 28px 22px;
+  }
+}
+
+/* =====================================
+   CONTACT PAGE — MASTORIDE THEME
+   ===================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 120px auto 80px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* ===== CONTACT FORM CARD ===== */
+.contact-form {
+  background: #fffdf5;
+  padding: 40px 32px;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  animation: fadeInUp 0.7s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.contact-form h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.contact-form form {
+  display: grid;
+  gap: 18px;
+}
+
+/* ===== FORM FIELDS ===== */
+.contact-form label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.contact-form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: #c9a961;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.contact-form button {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s ease, background 0.25s ease;
+}
+
+.contact-form button:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+/* ===== CONTACT INFO — RIGHT SIDE ===== */
+.contact-info {
+  background: #fff8e7;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.contact-info h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #111;
+}
+
+.info-item {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  margin-bottom: 16px;
+}
+
+.info-item strong {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.info-item p {
+  margin: 8px 0 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ===== IMAGE SECTION ===== */
+.contact-img {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 10px auto;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info {
+    order: -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-form,
+  .contact-info {
+    padding: 28px 22px;
+  }
+}
+
+/* Fix select color for Contact page */
+.contact-form select {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid #ddd !important;
+}
+
+/* Also dropdown options inside the select */
+.contact-form select option {
+  color: #000 !important;
+  background: #fff !important;
+}
+
