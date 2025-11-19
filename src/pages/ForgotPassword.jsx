@@ -5,20 +5,69 @@ import Navbar from "../components/Navbar";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: hook your real reset endpoint here
-    setMsg(`If an account exists for ${email}, a reset link was sent.`);
+    setMsg("");
+    setError("");
+
+    const trimmed = email.trim();
+
+    // Simple validation
+    if (!/\S+@\S+\.\S+/.test(trimmed)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!trimmed.endsWith("@pfw.edu")) {
+      setError("Please use your @pfw.edu email.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5001/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: trimmed }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      // For demo: log token to console (so you can manually test reset)
+      if (data.resetToken) {
+        console.log("Reset token for testing:", data.resetToken);
+      }
+
+      setMsg(
+        data.message ||
+          `If an account exists for ${trimmed}, a reset link has been created.`
+      );
+      setEmail("");
+    } catch (err) {
+      console.error("Forgot password request error:", err);
+      setError("Cannot connect to server. Make sure backend is running.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <Navbar />
 
-      {/* === Pull-in Scene (image "pulls" the form from left) === */}
       <main className="signup-pull-scene">
-        {/* Car / Illustration (LEADS) */}
+        {/* Illustration */}
         <div className="pull-vehicle">
           <img
             src="/assets/images/ForgotPassword.png"
@@ -27,7 +76,7 @@ export default function ForgotPassword() {
           />
         </div>
 
-        {/* Form (FOLLOWS slightly after) */}
+        {/* Form */}
         <section className="pull-form">
           {/* Success Message */}
           {msg && (
@@ -47,12 +96,23 @@ export default function ForgotPassword() {
             </div>
           )}
 
+          {/* Error Message */}
+          {error && (
+            <div className="error-text" style={{ marginBottom: "0.75rem" }}>
+              {error}
+            </div>
+          )}
+
           <h1>Reset Password</h1>
           <p className="pull-sub">
             Enter your PFW email to receive a reset link.
           </p>
 
-          <form className="pull-form-inner" onSubmit={onSubmit} autoComplete="off">
+          <form
+            className="pull-form-inner"
+            onSubmit={onSubmit}
+            autoComplete="off"
+          >
             <div className="sg-field">
               <label htmlFor="email">PFW Email</label>
               <input
@@ -62,11 +122,16 @@ export default function ForgotPassword() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@pfw.edu"
                 required
+                disabled={loading}
               />
             </div>
 
-            <button type="submit" className="signup-cta">
-              Send reset link
+            <button
+              type="submit"
+              className="signup-cta"
+              disabled={loading}
+            >
+              {loading ? "Sending..." : "Send reset link"}
             </button>
           </form>
 

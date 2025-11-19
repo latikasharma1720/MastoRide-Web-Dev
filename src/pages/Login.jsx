@@ -6,11 +6,13 @@ import Navbar from "../components/Navbar";
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState(location.state?.message || "");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (successMsg) {
@@ -19,7 +21,7 @@ export default function Login() {
     }
   }, [successMsg]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = {};
 
@@ -32,26 +34,68 @@ export default function Login() {
 
     setErrors(errs);
 
-    if (Object.keys(errs).length === 0) {
-      const emailLower = email.trim().toLowerCase();
+    if (Object.keys(errs).length !== 0) {
+      return;
+    }
 
-      if (emailLower === "admin@mastoride.app") {
-        setUser({
-          id: "a1",
-          name: "Admin",
-          email: "admin@mastoride.app",
-          role: "admin",
-        });
+    const emailLower = email.trim().toLowerCase();
+
+    // ✅ KEEP EXISTING ADMIN SHORTCUT
+    if (emailLower === "admin@mastoride.app") {
+      setUser({
+        id: "a1",
+        name: "Admin",
+        email: "admin@mastoride.app",
+        role: "admin",
+      });
+      navigate("/admin/profile", { replace: true });
+      return;
+    }
+
+    // ✅ Normal users → talk to backend
+    try {
+      setLoading(true);
+
+      const response = await fetch("http://localhost:5001/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: emailLower,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ api: data.error || "Login failed" });
+        return;
+      }
+
+      // Save user from DB into session
+      setUser({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role,
+        lastLoginAt: data.user.lastLoginAt,
+        loginCount: data.user.loginCount,
+      });
+
+      if (data.user.role === "admin") {
         navigate("/admin/profile", { replace: true });
       } else {
-        setUser({
-          id: "u1",
-          name: emailLower.split("@")[0],
-          email: emailLower,
-          role: "user",
-        });
         navigate("/user/dashboard", { replace: true });
       }
+    } catch (error) {
+      console.error("Login request error:", error);
+      setErrors({
+        api: "Cannot connect to server. Make sure backend is running.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +103,6 @@ export default function Login() {
     <>
       <Navbar />
       <div className="modern-login-page">
-        {/* NEW layout wrapper: image on the left, form on the right */}
         <div className="modern-login-layout">
           {/* Left animated image */}
           <div className="login-image-container">
@@ -70,7 +113,7 @@ export default function Login() {
             />
           </div>
 
-          {/* Right: existing login container */}
+          {/* Right: login container */}
           <div className="modern-login-container">
             {/* Success Message */}
             {successMsg && (
@@ -92,7 +135,6 @@ export default function Login() {
 
             {/* Login Card */}
             <div className="modern-login-card">
-              {/* Header - UPDATED WITH SPLIT STYLE */}
               <div className="login-header">
                 <h1 className="split-heading">
                   <span className="split-word-first">Member</span>
@@ -112,6 +154,7 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@pfw.edu"
                     className={errors.email ? "error" : ""}
+                    disabled={loading}
                   />
                   {errors.email && (
                     <span className="error-text">{errors.email}</span>
@@ -128,11 +171,19 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     className={errors.password ? "error" : ""}
+                    disabled={loading}
                   />
                   {errors.password && (
                     <span className="error-text">{errors.password}</span>
                   )}
                 </div>
+
+                {/* API Error */}
+                {errors.api && (
+                  <div className="error-text" style={{ marginBottom: "0.75rem" }}>
+                    {errors.api}
+                  </div>
+                )}
 
                 {/* Remember Me & Forgot Password */}
                 <div className="login-options">
@@ -141,6 +192,7 @@ export default function Login() {
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
+                      disabled={loading}
                     />
                     <span>Remember me</span>
                   </label>
@@ -150,8 +202,12 @@ export default function Login() {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="modern-login-btn">
-                  Login
+                <button
+                  type="submit"
+                  className="modern-login-btn"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login"}
                 </button>
 
                 {/* Sign Up Link */}
@@ -162,7 +218,6 @@ export default function Login() {
             </div>
           </div>
         </div>
-        {/* /modern-login-layout */}
       </div>
     </>
   );
