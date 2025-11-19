@@ -16,11 +16,10 @@ const UserSchema = new mongoose.Schema({
   },
 
   role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user",
-  },
-
+  type: String,
+  enum: ["user", "admin", "student", "rider"],
+  default: "user",
+},
   studentId: String,
   phone: String,
   resetToken: String,

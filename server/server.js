@@ -20,14 +20,24 @@ app.use(express.json());
 console.log("Starting server...");
 
 // ✅ Connect to MongoDB using MONGO_URL from .env
+// If MONGO_URL isn't set, fall back to a local MongoDB instance.
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/mastoride";
+if (!process.env.MONGO_URL) {
+  console.warn("Warning: MONGO_URL not set — using fallback:", mongoUrl);
+}
+
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(mongoUrl)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
 // ✅ Auth routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
+
+// ✅ Student routes
+const studentRoutes = require("./routes/student");
+app.use("/api/student", studentRoutes);
 
 // ✅ Simple test routes
 app.get("/", (req, res) => {
