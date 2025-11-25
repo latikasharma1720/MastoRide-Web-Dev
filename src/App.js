@@ -28,10 +28,10 @@ const AdminRoute = ({ children }) => {
   return user && user.role === "admin" ? children : <Navigate to="/admin/login" replace />;
 };
 
-// Protected route for users
+// Protected route for users (includes students)
 const UserRoute = ({ children }) => {
   const user = getUser();
-  return user && user.role === "user" ? children : <Navigate to="/login" replace />;
+  return user && (user.role === "user" || user.role === "student") ? children : <Navigate to="/login" replace />;
 };
 
 export default function App() {

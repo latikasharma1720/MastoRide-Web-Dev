@@ -39,6 +39,14 @@ app.use("/api/auth", authRoutes);
 const studentRoutes = require("./routes/student");
 app.use("/api/student", studentRoutes);
 
+// ✅ Booking routes
+const bookingRoutes = require("./routes/booking");
+app.use("/api/booking", bookingRoutes);
+
+// ✅ Ride History routes
+const rideHistoryRoutes = require("./routes/rideHistory");
+app.use("/api/ride-history", rideHistoryRoutes);
+
 // ✅ Simple test routes
 app.get("/", (req, res) => {
   res.json({ message: "Server is running" });

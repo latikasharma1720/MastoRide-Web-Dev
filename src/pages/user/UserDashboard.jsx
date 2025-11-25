@@ -237,7 +237,7 @@ export default function UserDashboard() {
   }, [settings.darkMode]);
 
   if (!authChecked) return null;
-  if (!currentUser || currentUser.role !== "user") return <Navigate to="/login" replace />;
+  if (!currentUser || (currentUser.role !== "user" && currentUser.role !== "student")) return <Navigate to="/login" replace />;
 
   const uid = currentUser.email || currentUser.id || "demo-user";
 

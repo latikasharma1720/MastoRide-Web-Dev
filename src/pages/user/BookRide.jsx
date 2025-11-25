@@ -25,11 +25,48 @@ export default function BookRide() {
     setFare(total.toFixed(2));
   };
 
-  const handleBookRide = (e) => {
+  const handleBookRide = async (e) => {
     e.preventDefault();
-    setConfirmMsg(
-      `✅ Ride confirmed for ${ride.date} at ${ride.time} from ${ride.pickup} to ${ride.dropoff}.`
-    );
+    
+    if (!ride.pickup || !ride.dropoff || !ride.date || !ride.time) {
+      setConfirmMsg("❌ Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5001/api/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId: user?.email?.split("@")[0] || "student",
+          studentEmail: user?.email || "",
+          studentName: user?.name || "",
+          pickup: ride.pickup,
+          dropoff: ride.dropoff,
+          rideDate: ride.date,
+          rideTime: ride.time,
+          passengers: ride.passengers,
+          vehicleType: "economy",
+          estimatedFare: fare ? parseFloat(fare) : 0,
+          paymentMethod: "Visa Card",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setConfirmMsg(
+          `✅ Ride confirmed for ${ride.date} at ${ride.time} from ${ride.pickup} to ${ride.dropoff}. Booking ID: ${data.booking._id}`
+        );
+      } else {
+        setConfirmMsg(`❌ ${data.error || "Booking failed"}`);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      setConfirmMsg("❌ Cannot connect to server. Please try again.");
+    }
   };
 
   return (
