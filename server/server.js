@@ -35,6 +35,7 @@ mongoose
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+
 // ✅ Student routes
 const studentRoutes = require("./routes/student");
 app.use("/api/student", studentRoutes);
@@ -46,6 +47,11 @@ app.use("/api/booking", bookingRoutes);
 // ✅ Ride History routes
 const rideHistoryRoutes = require("./routes/rideHistory");
 app.use("/api/ride-history", rideHistoryRoutes);
+
+
+
+const adminRoutes = require("./routes/admin");
+app.use("/api/admin", adminRoutes);
 
 // ✅ Simple test routes
 app.get("/", (req, res) => {

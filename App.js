@@ -28,13 +28,12 @@ const AdminRoute = ({ children }) => {
   return user && user.role === "admin" ? children : <Navigate to="/admin/login" replace />;
 };
 
-
-// Protected route for users (includes students)
+// Protected route for users
 const UserRoute = ({ children }) => {
   const user = getUser();
-  return user && (user.role === "user" || user.role === "student") ? children : <Navigate to="/login" replace />;
+  return user && user.role === "user" ? children : <Navigate to="/login" replace />;
 };
-// Protected route for users
+
 export default function App() {
   return (
     <ToastProvider>
