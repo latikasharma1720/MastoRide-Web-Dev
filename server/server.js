@@ -29,9 +29,12 @@ mongoose
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+<<<<<<< HEAD
 const adminRoutes = require("./routes/admin");
 app.use("/api/admin", adminRoutes);
 
+=======
+>>>>>>> origin/final-backend
 // ✅ Simple test routes
 app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
