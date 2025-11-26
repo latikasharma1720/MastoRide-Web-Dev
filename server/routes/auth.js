@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto"); // built-in Node module
 const User = require("../models/User");
+const Student = require("../models/Student");
 
 const router = express.Router();
 
@@ -20,12 +21,16 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "Email and password required" });
     }
 
-    if (!email.endsWith("@pfw.edu")) {
+    const emailLower = email.toLowerCase();
+    const isStudentDomain =
+      emailLower.endsWith("@pfw.edu") || emailLower.endsWith("@purdue.edu");
+
+    if (!isStudentDomain) {
       console.log("Invalid email domain");
-      return res.status(400).json({ error: "Use @pfw.edu email" });
+      return res.status(400).json({ error: "Use @pfw.edu or @purdue.edu email" });
     }
 
-    const existing = await User.findOne({ email: email.toLowerCase() });
+    const existing = await User.findOne({ email: emailLower });
     if (existing) {
       console.log("Email already exists");
       return res.status(400).json({ error: "Email already registered" });
@@ -37,21 +42,49 @@ router.post("/signup", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const name = email.split("@")[0];
+    const name = req.body.name || emailLower.split("@")[0];
 
-    const newUser = await User.create({
+    // Generate studentId from email if not provided
+    const providedStudentId = req.body.studentId || emailLower.split("@")[0];
+    const phone = req.body.phone;
+    const major = req.body.major;
+
+    // Check if student already exists in students collection
+    const existingStudent = await Student.findOne({
+      $or: [{ email: emailLower }, { studentId: providedStudentId }],
+    });
+    if (existingStudent) {
+      console.log("Student already exists in students collection");
+      return res.status(400).json({ error: "Student already registered" });
+    }
+
+    // Create Student record first
+    const student = await Student.create({
       name,
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      role: "user",
+      email: emailLower,
+      studentId: providedStudentId,
+      phone,
+      major,
     });
 
-    console.log("=== USER CREATED SUCCESSFULLY ===");
+    // Create User record with role=student
+    const newUser = await User.create({
+      name,
+      email: emailLower,
+      password: hashedPassword,
+      role: "student",
+      studentId: student.studentId,
+    });
+
+    console.log("=== STUDENT USER CREATED SUCCESSFULLY ===");
     console.log("User ID:", newUser._id);
+    console.log("Student ID:", student._id);
 
     return res.status(201).json({
-      message: "Account created successfully",
+      message: "Student account created successfully",
       userId: newUser._id,
+      role: newUser.role,
+      studentId: student.studentId,
     });
   } catch (err) {
     console.error("=== SIGNUP ERROR ===");
@@ -99,9 +132,20 @@ router.post("/login", async (req, res) => {
 
     await user.save();
 
+    // If this is a student user, also fetch student profile
+    let studentProfile = null;
+    if (user.role === "student") {
+      try {
+        studentProfile = await Student.findOne({ email: user.email.toLowerCase() }).lean();
+      } catch (e) {
+        console.error("[login] Failed to fetch student profile:", e);
+      }
+    }
+
     console.log("=== LOGIN SUCCESS ===", {
       email: user.email,
       loginCount: user.loginCount,
+      role: user.role,
     });
 
     return res.json({
@@ -114,6 +158,7 @@ router.post("/login", async (req, res) => {
         lastLoginAt: user.lastLoginAt,
         loginCount: user.loginCount,
       },
+      student: studentProfile,
     });
   } catch (err) {
     console.error("=== LOGIN ERROR ===");
