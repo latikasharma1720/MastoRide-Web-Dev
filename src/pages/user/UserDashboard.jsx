@@ -222,20 +222,79 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!currentUser || !badgesInitialized) return;
-    const uid = currentUser.email || currentUser.id || "demo-user";
-    localStorage.setItem(`badges_available_${uid}`, JSON.stringify(availableBadges));
-    localStorage.setItem(`badges_used_${uid}`, JSON.stringify(usedBadges));
-  }, [availableBadges, usedBadges, currentUser, badgesInitialized]);
+    setTimeout(() => {
+      (async () => {
+        try {
+          // Simulate payment success, then persist booking to backend
+          const studentEmail = currentUser?.email || profile.email || "";
+          const studentName = currentUser?.name || profile.name || "";
+          const studentId = (studentEmail.split("@")[0]) || profile.studentId || "student";
 
-  // Apply dark mode to body element when setting changes
-  useEffect(() => {
-    if (settings.darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-  }, [settings.darkMode]);
+          const payload = {
+            studentId,
+            studentEmail,
+            studentName,
+            pickup: ride.pickup || "",
+            dropoff: ride.dropoff || "",
+            rideDate: ride.date || "",
+            rideTime: ride.time || "",
+            passengers: ride.passengers || 1,
+            vehicleType: ride.vehicleType || "economy",
+            estimatedFare: fare ? parseFloat(fare) : 0,
+            paymentMethod: "Card",
+            pickupNotes: profile.pickupNotes || "",
+            accessibilityNeeds: settings.wheelchairAccess ? "Wheelchair access" : "",
+          };
 
+          // Basic client-side validation before hitting backend
+          if (!payload.pickup || !payload.dropoff || !payload.rideDate || !payload.rideTime || !payload.studentEmail) {
+            pushToast("Please complete ride details before payment.", "error");
+          } else {
+            // Create booking
+            const createRes = await fetch("http://localhost:5001/api/booking", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const createData = await createRes.json();
+
+            if (!createRes.ok) {
+              pushToast(createData.error || "Failed to create booking", "error");
+            } else {
+              const bookingId = createData.booking?._id;
+              // Mark booking completed to generate ride history
+              if (bookingId) {
+                await fetch(`http://localhost:5001/api/booking/${bookingId}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    status: "completed",
+                    actualFare: fare ? parseFloat(fare) : payload.estimatedFare || 0,
+                    paymentStatus: "completed",
+                  }),
+                });
+              }
+
+              pushToast("Payment successful! Ride confirmed!", "success");
+            }
+          }
+        } catch (err) {
+          console.error("[payment->booking] error", err);
+          pushToast("Could not save booking. Please try again.", "error");
+        } finally {
+          setProcessingPayment(false);
+          setPaymentConfirmed(true);
+          // Clear card details after successful payment
+          setCardDetails({
+            cardNumber: "",
+            cardholderName: "",
+            expiryDate: "",
+            cvv: "",
+          });
+        }
+      })();
+    }, 800);
+  }, [currentUser, badgesInitialized, fare, ride, settings, profile]);
   if (!authChecked) return null;
   if (!currentUser || (currentUser.role !== "user" && currentUser.role !== "student")) return <Navigate to="/login" replace />;
 
