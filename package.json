@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:cy": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
-    "baseline-browser-mapping": "^2.8.31"
+    "baseline-browser-mapping": "^2.8.31",
+    "cypress": "^15.7.0"
   }
 }
