@@ -55,11 +55,6 @@ router.get("/stats", async (req, res) => {
   }
 });
 
-module.exports = router;
-const User = require("../models/User");
-
-const router = express.Router();
-
 
 /**
  * GET /api/admin/users
