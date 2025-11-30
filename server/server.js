@@ -42,4 +42,3 @@ const PORT = 5001;   // 👈 hard-coded, ignore env
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
-
