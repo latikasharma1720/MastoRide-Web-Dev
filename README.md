@@ -4,7 +4,7 @@
 
 ### **Full Stack Web Development — Group Project**
 
-**Instructor:** Thomas Bolinger
+**Instructor:** Professor Thomas Bolinger
 
 **Submitted By:**
 
