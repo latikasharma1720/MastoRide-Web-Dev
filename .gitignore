@@ -1,18 +1,22 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 node_modules
 =======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+=======
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files
+>>>>>>> 59c14ebf48079574c399ae2442fc800172e66d72
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # production
-/build
+build
 
 # misc
 .DS_Store

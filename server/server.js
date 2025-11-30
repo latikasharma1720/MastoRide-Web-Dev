@@ -20,9 +20,7 @@ app.use(express.json());
 console.log("Starting server...");
 
 // MongoDB connect
-// Use MongoDB Atlas for both test and production environments
 const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/mastoride";
-
 if (!process.env.MONGO_URL) {
   console.warn("Warning: MONGO_URL not set — using fallback:", mongoUrl);
 }
