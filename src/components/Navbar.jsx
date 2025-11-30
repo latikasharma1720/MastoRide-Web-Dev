@@ -7,18 +7,15 @@ const LOGO_SRC = "/assets/images/ourlogos.jpeg";
 export default function Navbar() {
   const nav = useNavigate();
   const user = getUser();
-
-  // ✅ DEBUG - check what user is
-  console.log("Navbar user value:", user);
-
-  const isUser = user && user.role === "user";
-  const isAdmin = user && user.role === "admin";
+  const isLoggedIn = !!user;           // ✅ simple: any user object = logged in
+  const isAdmin = user?.role === "admin";
 
   const signOut = () => {
     clearUser();
     nav("/", { replace: true });
   };
 
+  // Show login buttons only when nobody is logged in
   return (
     <header className="mr-navbar">
       <div className="mr-nav-inner">
@@ -29,38 +26,47 @@ export default function Navbar() {
 
         {/* Center links */}
         <nav className="mr-links" aria-label="Primary">
-          <NavLink to="/" end className="mr-link">Home</NavLink>
-          <NavLink to="/about" className="mr-link">About</NavLink>
-          <NavLink to="/services" className="mr-link">Services</NavLink>
-          <NavLink to="/pricing" className="mr-link">Pricing</NavLink>
-          <NavLink to="/contact" className="mr-link">Contact us</NavLink>
+          <NavLink to="/" end className="mr-link">
+            Home
+          </NavLink>
+          <NavLink to="/about" className="mr-link">
+            About
+          </NavLink>
+          <NavLink to="/services" className="mr-link">
+            Services
+          </NavLink>
+          <NavLink to="/pricing" className="mr-link">
+            Pricing
+          </NavLink>
+          <NavLink to="/contact" className="mr-link">
+            Contact us
+          </NavLink>
         </nav>
 
         {/* Right side actions */}
         <div className="mr-actions">
-          {/* ✅ TEMP: always show login buttons */}
-          {true && (
+          {/* 🙋 Public (not logged in) */}
+          {!isLoggedIn && (
             <>
-              <Link to="/login" className="mr-btn mr-btn-ghost">Log in</Link>
-              <Link to="/signup" className="mr-btn">Sign up</Link>
-              <Link to="/admin/login" className="mr-btn mr-btn-warn">Log in as Admin</Link>
-            </>
-          )}
-
-          {isUser && (
-            <>
-              <Link to="/user/dashboard" className="mr-btn mr-btn-primary">
-                My Profile
+              <Link to="/login" className="mr-btn mr-btn-ghost">
+                Log in
               </Link>
-              <button onClick={signOut} className="mr-btn mr-btn-danger">
-                Sign out
-              </button>
+              <Link to="/signup" className="mr-btn">
+                Sign up
+              </Link>
+              <Link to="/admin/login" className="mr-btn mr-btn-warn">
+                Log in as Admin
+              </Link>
             </>
           )}
 
-          {isAdmin && (
+          {/* 👤 Logged in (user or admin) – show on ALL pages */}
+          {isLoggedIn && (
             <>
-              <Link to="/admin/profile" className="mr-btn mr-btn-primary">
+              <Link
+                to={isAdmin ? "/admin/dashboard" : "/user/dashboard"}
+                className="mr-btn mr-btn-primary"
+              >
                 My Profile
               </Link>
               <button onClick={signOut} className="mr-btn mr-btn-danger">
