@@ -76,7 +76,7 @@ export default function Pricing() {
                 <li key={f}>{f}</li>
               ))}
             </ul>
-            <button onClick={() => navigate('/user/book-ride')}>{plan.button}</button>
+            <button onClick={() => navigate('/user/dashboard')}>{plan.button}</button>
           </div>
         ))}
       </div>
@@ -89,7 +89,7 @@ export default function Pricing() {
           No hidden fees or charges. Final price total includes all applicable fees. We accept credit card, debit card, and digital wallet payments.
         </p>
         <button 
-          onClick={() => navigate('/user/book-ride')}
+          onClick={() => navigate('/user/dashboard')}
           className="pricing-card button"
           style={{ marginTop: '1rem', width: 'auto', padding: '12px 32px', fontSize: '1.1rem' }}
         >

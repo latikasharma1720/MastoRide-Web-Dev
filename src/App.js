@@ -15,7 +15,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 
 // User pages
 import UserDashboard from "./pages/user/UserDashboard";
-import BookRide from "./pages/user/BookRide"; // ✅ NEW
 
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -60,14 +59,6 @@ export default function App() {
               element={
                 <UserRoute>
                   <UserDashboard />
-                </UserRoute>
-              }
-            />
-            <Route
-              path="/user/book-ride"              // ✅ NEW
-              element={
-                <UserRoute>
-                  <BookRide />
                 </UserRoute>
               }
             />

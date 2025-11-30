@@ -84,10 +84,10 @@ export default function Services() {
       <div style={{ textAlign: 'center', marginTop: '3rem', padding: '2rem' }}>
         <h2>Ready to Ride?</h2>
         <p style={{ marginBottom: '1.5rem' }}>Book your ride now and experience safe, affordable student transportation.</p>
-        <a href="/user/book-ride" style={{ textDecoration: 'none' }}>
+        <a href="/user/dashboard" style={{ textDecoration: 'none' }}>
           <button 
             className="pricing-card button"
-            onClick={() => navigate('/user/book-ride')}
+            onClick={() => navigate('/user/dashboard')}
             style={{ width: 'auto', padding: '12px 32px', fontSize: '1.1rem' }}
           >
             Book a Ride Now
