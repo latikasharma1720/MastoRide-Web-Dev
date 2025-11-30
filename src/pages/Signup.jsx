@@ -25,19 +25,16 @@ export default function Signup() {
       setLoading(true);
 
       try {
-        const response = await fetch(
-          "https://mastoride-web-dev-production.up.railway.app/api/auth/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: email,
-              password: password,
-            }),
-          }
-        );
+        const response = await fetch("http://localhost:5001/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
 
         const data = await response.json();
 
@@ -50,7 +47,7 @@ export default function Signup() {
           setErrors({ api: data.error || "Signup failed" });
         }
       } catch (error) {
-        console.error("Signup request error:", error);
+        console.error("Signup request error:", error); // 👈 extra debug info
         setErrors({
           api: "Cannot connect to server. Make sure backend is running.",
         });
@@ -109,7 +106,7 @@ export default function Signup() {
                 className={errors.password ? "error" : ""}
                 disabled={loading}
               />
-              {errors.password && (
+            {errors.password && (
                 <span className="sg-error">{errors.password}</span>
               )}
             </div>

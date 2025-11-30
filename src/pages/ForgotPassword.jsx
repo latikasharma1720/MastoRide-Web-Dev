@@ -29,7 +29,7 @@ export default function ForgotPassword() {
       setLoading(true);
 
       const response = await fetch(
-        "https://mastoride-web-dev-production.up.railway.app/api/auth/forgot-password",
+        "http://localhost:5001/api/auth/forgot-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -126,7 +126,11 @@ export default function ForgotPassword() {
               />
             </div>
 
-            <button type="submit" className="signup-cta" disabled={loading}>
+            <button
+              type="submit"
+              className="signup-cta"
+              disabled={loading}
+            >
               {loading ? "Sending..." : "Send reset link"}
             </button>
           </form>
