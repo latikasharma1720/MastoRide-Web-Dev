@@ -20,12 +20,10 @@ app.use(express.json());
 console.log("Starting server...");
 
 // MongoDB connect
-// Use test database in test environment, otherwise use production/dev database
-const mongoUrl = process.env.NODE_ENV === 'test' 
-  ? "mongodb://127.0.0.1:27017/mastoride_test"
-  : (process.env.MONGO_URL || "mongodb://127.0.0.1:27017/mastoride");
+// Use MongoDB Atlas for both test and production environments
+const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/mastoride";
 
-if (!process.env.MONGO_URL && process.env.NODE_ENV !== 'test') {
+if (!process.env.MONGO_URL) {
   console.warn("Warning: MONGO_URL not set — using fallback:", mongoUrl);
 }
 

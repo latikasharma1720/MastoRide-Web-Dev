@@ -107,27 +107,31 @@ describe("Student Database API", () => {
     });
 
     test("Should return all students sorted by enrolledAt", async () => {
-      // Create multiple students
-      await Student.create([
-        {
-          name: "Alice",
-          email: "alice@pfw.edu",
-          studentId: "PFW001",
-          major: "CS",
-        },
-        {
-          name: "Bob",
-          email: "bob@pfw.edu",
-          studentId: "PFW002",
-          major: "Math",
-        },
-        {
-          name: "Charlie",
-          email: "charlie@pfw.edu",
-          studentId: "PFW003",
-          major: "Physics",
-        },
-      ]);
+      // Create students with explicit timestamps to ensure proper sorting
+      const now = Date.now();
+      await Student.create({
+        name: "Alice",
+        email: "alice@pfw.edu",
+        studentId: "PFW001",
+        major: "CS",
+        enrolledAt: new Date(now - 2000),
+      });
+      
+      await Student.create({
+        name: "Bob",
+        email: "bob@pfw.edu",
+        studentId: "PFW002",
+        major: "Math",
+        enrolledAt: new Date(now - 1000),
+      });
+      
+      await Student.create({
+        name: "Charlie",
+        email: "charlie@pfw.edu",
+        studentId: "PFW003",
+        major: "Physics",
+        enrolledAt: new Date(now),
+      });
 
       const res = await request(app).get("/api/student");
 

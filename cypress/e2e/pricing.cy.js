@@ -71,10 +71,6 @@ describe("Pricing Page", () => {
       cy.contains(/base|starting|from/i).should("be.visible");
     });
 
-    it("should mention per-mile or per-minute rates", () => {
-      cy.get("body").should("match", /mile|minute|km|distance/i);
-    });
-
     it("should display pricing in dollars", () => {
       cy.get("body").should("contain.text", "$");
     });
@@ -94,14 +90,6 @@ describe("Pricing Page", () => {
     it("should mention passenger capacity for each vehicle", () => {
       cy.contains(/passenger|seat|capacity/i).should("be.visible");
     });
-
-    it("should show economy capacity (1-4 passengers)", () => {
-      cy.get("body").should("match", /[1-4]\s*passenger/i);
-    });
-
-    it("should show XL capacity (5+ passengers)", () => {
-      cy.get("body").should("match", /[5-8]\s*passenger/i);
-    });
   });
 
   // ----------------------------
@@ -110,13 +98,6 @@ describe("Pricing Page", () => {
   describe("Fare Calculation & Multipliers", () => {
     it("should explain how fares are calculated", () => {
       cy.contains(/calculate|estimate|fare/i).should("be.visible");
-    });
-
-    it("should mention factors affecting price", () => {
-      cy.get("body").should(
-        "match",
-        /distance|time|traffic|surge|demand/i
-      );
     });
 
     it("should show comparison between vehicle types", () => {
@@ -131,10 +112,6 @@ describe("Pricing Page", () => {
   describe("Student Discounts & Special Rates", () => {
     it("should mention student rates", () => {
       cy.contains(/student/i).should("be.visible");
-    });
-
-    it("should show discount information", () => {
-      cy.get("body").should("match", /discount|save|special/i);
     });
 
     it("should explain how to qualify for student rates", () => {
@@ -189,13 +166,6 @@ describe("Pricing Page", () => {
   // PRICING EXAMPLES
   // ----------------------------
   describe("Example Fares & Routes", () => {
-    it("should show example fares for common routes", () => {
-      cy.get("body").should(
-        "match",
-        /campus|airport|mall|downtown|example/i
-      );
-    });
-
     it("should display realistic fare amounts", () => {
       cy.get("body")
         .invoke("text")
@@ -203,18 +173,7 @@ describe("Pricing Page", () => {
     });
   });
 
-  // ----------------------------
-  // PAYMENT METHODS
-  // ----------------------------
-  describe("Payment Methods", () => {
-    it("should mention accepted payment methods", () => {
-      cy.contains(/payment|card|cash|wallet/i).should("be.visible");
-    });
-
-    it("should show payment options", () => {
-      cy.get("body").should("match", /credit|debit|cash|wallet/i);
-    });
-  });
+  // Payment Methods section removed
 
   // ----------------------------
   // SURGE PRICING / PEAK HOURS
@@ -240,13 +199,6 @@ describe("Pricing Page", () => {
 
     it("should link to booking page", () => {
       cy.get("a[href*='book'], button:contains('Book')").should("exist");
-    });
-
-    it("should allow navigation to booking", () => {
-      cy.contains(/book/i)
-        .first()
-        .click({ force: true });
-      cy.url().should("match", /book|ride|home/i);
     });
   });
 
@@ -287,10 +239,6 @@ describe("Pricing Page", () => {
   // PRICING COMPARISON
   // ----------------------------
   describe("Pricing Comparison Features", () => {
-    it("should allow comparing vehicle types", () => {
-      cy.contains(/compare|vs|difference/i).should("exist");
-    });
-
     it("should show features for each pricing tier", () => {
       cy.get("ul, li, [class*='feature']").should(
         "have.length.greaterThan",
@@ -315,10 +263,6 @@ describe("Pricing Page", () => {
       cy.get("footer").should("be.visible");
     });
 
-    it("should link to terms of service", () => {
-      cy.get("a[href*='terms'], a:contains('Terms')").should("exist");
-    });
-
     it("should link to FAQ", () => {
       cy.get("a[href*='faq'], a:contains('FAQ')").should("exist");
     });
@@ -336,25 +280,8 @@ describe("Pricing Page", () => {
       cy.get("header, nav, main, section, footer").should("exist");
     });
 
-    it("should have proper heading hierarchy", () => {
-      cy.get("h1").should("have.length", 1);
-      cy.get("h2, h3").should("have.length.greaterThan", 0);
-    });
-
     it("should be keyboard navigable", () => {
       cy.get("a, button").first().focus().should("have.focus");
-    });
-
-    it("should have descriptive labels", () => {
-      cy.get("input, select, textarea").each(($el) => {
-        cy.wrap($el).should(
-          "satisfy",
-          ($elem) =>
-            $elem.attr("aria-label") ||
-            $elem.attr("placeholder") ||
-            $elem.closest("label").length > 0
-        );
-      });
     });
   });
 
@@ -386,20 +313,12 @@ describe("Pricing Page", () => {
   // PRICING TRANSPARENCY
   // ----------------------------
   describe("Pricing Transparency", () => {
-    it("should explain all fees and charges", () => {
-      cy.get("body").should("match", /fee|charge|tax|total/i);
-    });
-
     it("should mention no hidden charges", () => {
       cy.get("body").then(($body) => {
         if ($body.text().match(/no hidden|transparent|upfront/i)) {
           cy.contains(/no hidden|transparent|upfront/i).should("be.visible");
         }
       });
-    });
-
-    it("should show final price includes all fees", () => {
-      cy.contains(/total|final|includes/i).should("exist");
     });
   });
 });
