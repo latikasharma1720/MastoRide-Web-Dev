@@ -18,25 +18,11 @@ const LS_KEYS = {
   sidebar: "admin_sidebar_open",
 };
 
-const STATS = [
-  { id: "users", label: "Total Users", value: "1,247", icon: "👥", trend: "+12%" },
-  { id: "rides", label: "Total Rides", value: "3,856", icon: "🚗", trend: "+23%" },
-  { id: "drivers", label: "Active Drivers", value: "42", icon: "👨‍✈️", trend: "+5%" },
-  { id: "revenue", label: "Revenue", value: "$18,450", icon: "💰", trend: "+18%" },
-];
-
 const RECENT_USERS = [
   { id: 1, name: "John Doe", email: "john@pfw.edu", joined: "Oct 20, 2025", status: "Active" },
   { id: 2, name: "Sarah Smith", email: "sarah@pfw.edu", joined: "Oct 18, 2025", status: "Active" },
   { id: 3, name: "Mike Johnson", email: "mike@pfw.edu", joined: "Oct 15, 2025", status: "Inactive" },
   { id: 4, name: "Emily Davis", email: "emily@pfw.edu", joined: "Oct 12, 2025", status: "Active" },
-];
-
-const RECENT_RIDES = [
-  { id: 1, user: "John Doe", pickup: "Campus Center", dropoff: "Jefferson Pointe", fare: "$12.50", date: "Oct 22", status: "Completed" },
-  { id: 2, user: "Sarah Smith", pickup: "Dorms", dropoff: "Airport", fare: "$22.75", date: "Oct 21", status: "Completed" },
-  { id: 3, user: "Mike Johnson", pickup: "Library", dropoff: "Union", fare: "$5.00", date: "Oct 20", status: "Completed" },
-  { id: 4, user: "Emily Davis", pickup: "Engineering", dropoff: "Mall", fare: "$18.50", date: "Oct 19", status: "Cancelled" },
 ];
 
 // Monthly ride data for line chart
@@ -442,7 +428,7 @@ export default function AdminDashboard() {
 
           <main className="dashboard-main">
             <div className="dashboard-content-wrapper">
-              {/* OVERVIEW */}
+              {/* FEEDBACK */}
               {activeTab === "feedback" && (
                 <div className="feedback-layout">
                   <section className="ud-hero">
@@ -830,7 +816,8 @@ export default function AdminDashboard() {
                     )}
                   </div>
                 </div>
-              )}                            
+              )}
+
               {/* ANALYTICS */}
               {activeTab === "analytics" && (
                 <div className="analytics-layout">
@@ -1052,7 +1039,6 @@ export default function AdminDashboard() {
                             </div>
                           </div>
 
-                          
                           <div className="profile-group">
                             <div className="group-title">About</div>
                             <label className="clean-field">
@@ -1086,9 +1072,7 @@ export default function AdminDashboard() {
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
-                                  console.log('Edit Profile button clicked! Current isEditing:', isEditing);
                                   setIsEditing(true);
-                                  console.log('Set isEditing to true');
                                 }}
                               >
                                 Edit Profile
@@ -1104,7 +1088,6 @@ export default function AdminDashboard() {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    console.log('Cancel button clicked!');
                                     setIsEditing(false);
                                   }}
                                 >
