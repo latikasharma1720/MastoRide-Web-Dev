@@ -159,9 +159,9 @@ MastoRide ensures affordability, accountability, and ease of use through role-ba
 
 ---
 
-### **2. Project Management (Jira)**
+### **2. Project Management 
 
-* All user stories tracked through Jira
+* All user stories tracked through TRELLO BOARD
 * Backlog grooming and sprint planning
 * Transparent visibility of task assignments and progress
 
