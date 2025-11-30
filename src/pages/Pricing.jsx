@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Pricing() {
+  const navigate = useNavigate();
   const plans = [
     {
       name: "Basic Plan",
@@ -50,7 +52,7 @@ export default function Pricing() {
                 <li key={f}>{f}</li>
               ))}
             </ul>
-            <button>{plan.button}</button>
+            <button onClick={() => navigate('/user/book-ride')}>{plan.button}</button>
           </div>
         ))}
       </div>

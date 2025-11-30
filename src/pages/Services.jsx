@@ -1,8 +1,9 @@
 // src/pages/Services.jsx
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Services() {
+  const navigate = useNavigate();
   return (
     <div className="page-wrapper">
       <div className="services-header">
@@ -42,6 +43,27 @@ export default function Services() {
             pre-scheduled, shared rides.
           </p>
         </div>
+      </div>
+
+      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <button 
+          className="cta-button" 
+          onClick={() => navigate('/user/book-ride')}
+          style={{
+            padding: '12px 32px',
+            fontSize: '1.1rem',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+          onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+        >
+          Book a Ride Now
+        </button>
       </div>
     </div>
   );
