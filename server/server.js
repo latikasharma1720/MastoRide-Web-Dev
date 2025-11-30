@@ -27,7 +27,7 @@ if (!process.env.MONGO_URL) {
 
 mongoose
   .connect(mongoUrl)
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => console.log("✅ MongoDB connected to:", mongoUrl))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
 // Routes
