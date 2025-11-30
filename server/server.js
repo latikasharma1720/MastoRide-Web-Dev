@@ -1,4 +1,4 @@
-// server.js
+// ✅ UPDATED server.js
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -7,15 +7,13 @@ require("dotenv").config();
 
 const app = express();
 
-// 🔐 CORS: allow local dev + Railway frontend
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://grateful-happiness-production.up.railway.app",
-];
-
+// ✅ Allow requests from your deployed frontend + local frontend
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [
+      "http://localhost:3000",
+      "https://grateful-happiness-production.up.railway.app",
+    ],
   })
 );
 
@@ -43,8 +41,10 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
-// ✅ Use Railway's port in production, 5001 locally
+// ✅ FIXED PORT — Railway gives PORT automatically
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+const HOST = '0.0.0.0'; // ✅ THIS IS THE KEY CHANGE
+
+app.listen(PORT, HOST, () => {
+  console.log(`✅ Server running on http://${HOST}:${PORT}`);
 });
