@@ -43,8 +43,9 @@ app.use("/api/booking", bookingRoutes);
 const rideHistoryRoutes = require("./routes/rideHistory");
 app.use("/api/ride-history", rideHistoryRoutes);
 
-const adminRoutes = require("./routes/admin");
-app.use("/api/admin", adminRoutes);
+// 🚫 Removed admin routes (admin file does NOT exist)
+// const adminRoutes = require("./routes/admin");
+// app.use("/api/admin", adminRoutes);
 
 // Test routes
 app.get("/", (req, res) => {
