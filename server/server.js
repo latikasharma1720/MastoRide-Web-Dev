@@ -7,10 +7,15 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ Allow frontend on localhost:3000
+// 🔐 CORS: allow local dev + Railway frontend
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://grateful-happiness-production.up.railway.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: allowedOrigins,
   })
 );
 
@@ -38,7 +43,8 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
-const PORT = 5001;   // 👈 hard-coded, ignore env
+// ✅ Use Railway's port in production, 5001 locally
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
