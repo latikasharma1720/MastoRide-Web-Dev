@@ -2,9 +2,13 @@
 
 const request = require("supertest");
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const { MongoMemoryServer } = require('mongodb-memory-server');
 let app;
 let mongoServer;
+=======
+const app = require("../server");
+>>>>>>> origin/main
 const User = require("../models/User");
 
 describe("Guest User Auth API", () => {
@@ -20,6 +24,7 @@ describe("Guest User Auth API", () => {
     await User.deleteMany({});
   });
 
+<<<<<<< HEAD
   // Start in-memory MongoDB and require server after URI is available
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -43,6 +48,11 @@ describe("Guest User Auth API", () => {
     if (mongoServer) {
       await mongoServer.stop();
     }
+=======
+  // After all tests, close the existing connection
+  afterAll(async () => {
+    await mongoose.connection.close();
+>>>>>>> origin/main
   });
 
   // ----------------------------
@@ -167,6 +177,212 @@ describe("Guest User Auth API", () => {
   });
 
   // ----------------------------
+<<<<<<< HEAD
+=======
+  // STUDENT LOGIN TESTS
+  // ----------------------------
+  describe("Student Login Tests", () => {
+    const bcrypt = require("bcryptjs");
+    const Student = require("../models/Student");
+
+    beforeEach(async () => {
+      await Student.deleteMany({});
+    });
+
+    test("Student login succeeds with valid credentials and returns student profile", async () => {
+      const hashed = await bcrypt.hash("student123", 10);
+
+      // Create student record
+      await Student.create({
+        name: "John Doe",
+        email: "johndoe@pfw.edu",
+        studentId: "johndoe",
+        phone: "123-456-7890",
+        major: "Computer Science",
+      });
+
+      // Create user record with role=student
+      await User.create({
+        name: "John Doe",
+        email: "johndoe@pfw.edu",
+        password: hashed,
+        role: "student",
+        studentId: "johndoe",
+      });
+
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "johndoe@pfw.edu",
+          password: "student123",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe("Login successful");
+      expect(res.body.user).toBeDefined();
+      expect(res.body.user.email).toBe("johndoe@pfw.edu");
+      expect(res.body.user.role).toBe("student");
+      expect(res.body.student).toBeDefined();
+      expect(res.body.student.studentId).toBe("johndoe");
+      expect(res.body.student.major).toBe("Computer Science");
+    });
+
+    test("Student login updates lastLoginAt and loginCount", async () => {
+      const hashed = await bcrypt.hash("student123", 10);
+
+      await Student.create({
+        name: "Jane Smith",
+        email: "janesmith@pfw.edu",
+        studentId: "janesmith",
+      });
+
+      await User.create({
+        name: "Jane Smith",
+        email: "janesmith@pfw.edu",
+        password: hashed,
+        role: "student",
+        studentId: "janesmith",
+        loginCount: 0,
+      });
+
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "janesmith@pfw.edu",
+          password: "student123",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.user.lastLoginAt).toBeDefined();
+      expect(res.body.user.loginCount).toBe(1);
+
+      // Login again
+      const res2 = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "janesmith@pfw.edu",
+          password: "student123",
+        });
+
+      expect(res2.status).toBe(200);
+      expect(res2.body.user.loginCount).toBe(2);
+    });
+
+    test("Student login with case-insensitive email", async () => {
+      const hashed = await bcrypt.hash("student123", 10);
+
+      await Student.create({
+        name: "Test Student",
+        email: "teststudent@pfw.edu",
+        studentId: "teststudent",
+      });
+
+      await User.create({
+        name: "Test Student",
+        email: "teststudent@pfw.edu",
+        password: hashed,
+        role: "student",
+        studentId: "teststudent",
+      });
+
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "TestStudent@PFW.EDU",
+          password: "student123",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe("Login successful");
+      expect(res.body.user.email).toBe("teststudent@pfw.edu");
+    });
+
+    test("Student login fails with incorrect password", async () => {
+      const hashed = await bcrypt.hash("correctpassword", 10);
+
+      await Student.create({
+        name: "Failed Student",
+        email: "failedstudent@pfw.edu",
+        studentId: "failedstudent",
+      });
+
+      await User.create({
+        name: "Failed Student",
+        email: "failedstudent@pfw.edu",
+        password: hashed,
+        role: "student",
+        studentId: "failedstudent",
+      });
+
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "failedstudent@pfw.edu",
+          password: "wrongpassword",
+        });
+
+      expect(res.status).toBe(401);
+      expect(res.body.error).toBe("Invalid email or password");
+    });
+
+    test("Student login fails with missing credentials", async () => {
+      const res1 = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "student@pfw.edu",
+        });
+
+      expect(res1.status).toBe(400);
+      expect(res1.body.error).toBe("Email and password required");
+
+      const res2 = await request(app)
+        .post("/api/auth/login")
+        .send({
+          password: "password123",
+        });
+
+      expect(res2.status).toBe(400);
+      expect(res2.body.error).toBe("Email and password required");
+    });
+
+    test("Student login fails for non-existent student", async () => {
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "nonexistent@pfw.edu",
+          password: "password123",
+        });
+
+      expect(res.status).toBe(401);
+      expect(res.body.error).toBe("Invalid email or password");
+    });
+
+    test("Student login returns student profile only for student role", async () => {
+      const hashed = await bcrypt.hash("adminpass", 10);
+
+      // Create a non-student user
+      await User.create({
+        name: "Admin User",
+        email: "admin@pfw.edu",
+        password: hashed,
+        role: "admin",
+      });
+
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "admin@pfw.edu",
+          password: "adminpass",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.user.role).toBe("admin");
+      expect(res.body.student).toBeNull();
+    });
+  });
+
+  // ----------------------------
+>>>>>>> origin/main
   // FORGOT PASSWORD
   // ----------------------------
   test("Forgot-password returns generic message always", async () => {

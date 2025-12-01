@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+=======
+const { defineConfig } = require("cypress");
+
+module.exports = defineConfig({
+>>>>>>> origin/main
   e2e: {
     baseUrl: "http://localhost:3000",   // your React app
   },

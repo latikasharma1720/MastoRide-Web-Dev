@@ -15,7 +15,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 
 // User pages
 import UserDashboard from "./pages/user/UserDashboard";
+<<<<<<< HEAD
 import BookRide from "./pages/user/BookRide"; // ✅ NEW
+=======
+>>>>>>> origin/main
 
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -63,6 +66,7 @@ export default function App() {
                 </UserRoute>
               }
             />
+<<<<<<< HEAD
             <Route
               path="/user/book-ride"              // ✅ NEW
               element={
@@ -71,6 +75,8 @@ export default function App() {
                 </UserRoute>
               }
             />
+=======
+>>>>>>> origin/main
 
             {/* Admin */}
             <Route path="/admin/login" element={<AdminLogin />} />
