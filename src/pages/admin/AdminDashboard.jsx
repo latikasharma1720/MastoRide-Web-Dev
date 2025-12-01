@@ -25,12 +25,6 @@ const STATS = [
   { id: "revenue", label: "Revenue", value: "$18,450", icon: "💰", trend: "+18%" },
 ];
 
-const RECENT_USERS = [
-  { id: 1, name: "John Doe", email: "john@pfw.edu", joined: "Oct 20, 2025", status: "Active" },
-  { id: 2, name: "Sarah Smith", email: "sarah@pfw.edu", joined: "Oct 18, 2025", status: "Active" },
-  { id: 3, name: "Mike Johnson", email: "mike@pfw.edu", joined: "Oct 15, 2025", status: "Inactive" },
-  { id: 4, name: "Emily Davis", email: "emily@pfw.edu", joined: "Oct 12, 2025", status: "Active" },
-];
 
 const RECENT_RIDES = [
   { id: 1, user: "John Doe", pickup: "Campus Center", dropoff: "Jefferson Pointe", fare: "$12.50", date: "Oct 22", status: "Completed" },
@@ -39,18 +33,6 @@ const RECENT_RIDES = [
   { id: 4, user: "Emily Davis", pickup: "Engineering", dropoff: "Mall", fare: "$18.50", date: "Oct 19", status: "Cancelled" },
 ];
 
-// Monthly ride data for line chart
-const MONTHLY_RIDE_DATA = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  data: [245, 198, 312, 289, 401, 456, 523, 489, 612, 578, 445, 398],
-};
-
-// Ride type distribution for pie chart
-const RIDE_TYPE_DATA = {
-  labels: ['Economy', 'Premium', 'XL', 'Shared'],
-  data: [45, 25, 15, 15],
-  colors: ['#3B82F6', '#F59E0B', '#10B981', '#EF4444'],
-};
 
 // Line Chart (Chart.js via CDN)
 function LineChart({ data, labels, title }) {
@@ -211,9 +193,25 @@ export default function AdminDashboard() {
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
 
   // Users management state
-  const [users, setUsers] = useState(RECENT_USERS);
+  const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+
+  // Monthly ride data state
+  const [monthlyRideData, setMonthlyRideData] = useState({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  });
+  const [loadingMonthlyRides, setLoadingMonthlyRides] = useState(false);
+
+  // Ride type data state
+  const [rideTypeData, setRideTypeData] = useState({
+    labels: ['Economy', 'Premium', 'XL'],
+    data: [0, 0, 0],
+    colors: ['#3B82F6', '#F59E0B', '#10B981'],
+  });
+  const [loadingRideTypes, setLoadingRideTypes] = useState(false);
 
   // Filter users based on search query
   const filteredUsers = users.filter(user => 
@@ -221,12 +219,139 @@ export default function AdminDashboard() {
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Fetch users from backend
+  const fetchUsers = async () => {
+    setLoadingUsers(true);
+    try {
+      const response = await fetch('http://localhost:5001/api/admin/users');
+      const data = await response.json();
+      
+      if (data.success) {
+        setUsers(data.users);
+        console.log(`Loaded ${data.count} users from database`);
+      } else {
+        pushToast("Failed to load users", "error");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      pushToast("Error loading users from server", "error");
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  // Fetch monthly ride statistics from backend
+  const fetchMonthlyRides = async () => {
+    setLoadingMonthlyRides(true);
+    try {
+      const response = await fetch('http://localhost:5001/api/admin/monthly-rides');
+      const data = await response.json();
+      
+      if (data.success) {
+        setMonthlyRideData({
+          labels: data.labels,
+          data: data.counts,
+        });
+        console.log('Loaded monthly ride statistics from database');
+      } else {
+        pushToast("Failed to load monthly ride data", "error");
+      }
+    } catch (error) {
+      console.error("Error fetching monthly rides:", error);
+      pushToast("Error loading monthly ride data from server", "error");
+    } finally {
+      setLoadingMonthlyRides(false);
+    }
+  };
+
+  // Fetch ride type distribution from backend
+  const fetchRideTypes = async () => {
+    setLoadingRideTypes(true);
+    try {
+      const response = await fetch('http://localhost:5001/api/admin/ride-types');
+      const data = await response.json();
+      
+      if (data.success) {
+        setRideTypeData({
+          labels: data.labels,
+          data: data.data,
+          colors: data.colors,
+        });
+        console.log('Loaded ride type distribution from database');
+      } else {
+        pushToast("Failed to load ride type data", "error");
+      }
+    } catch (error) {
+      console.error("Error fetching ride types:", error);
+      pushToast("Error loading ride type data from server", "error");
+    } finally {
+      setLoadingRideTypes(false);
+    }
+  };
+
   // Delete user handler
-  const handleDeleteUser = (userId, userName) => {
+  const handleDeleteUser = async (userId, userName) => {
     if (window.confirm(`Are you sure you want to delete ${userName}?`)) {
-      setUsers(users.filter(u => u.id !== userId));
-      setSelectedUsers(selectedUsers.filter(id => id !== userId));
-      pushToast(`${userName} has been deleted`, "success");
+      try {
+        const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+          method: 'DELETE',
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          setUsers(users.filter(u => u.id !== userId));
+          setSelectedUsers(selectedUsers.filter(id => id !== userId));
+          pushToast(`${userName} has been deleted`, "success");
+        } else {
+          pushToast(data.error || "Failed to delete user", "error");
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        pushToast("Error deleting user from server", "error");
+      }
+    }
+  };
+
+  // Bulk delete users handler
+  const handleBulkDelete = async () => {
+    if (selectedUsers.length === 0) {
+      pushToast("No users selected", "error");
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to delete ${selectedUsers.length} selected user(s)? This action cannot be undone.`)) {
+      try {
+        // Delete each user using the correct admin API endpoint
+        const deletePromises = selectedUsers.map(userId =>
+          fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+            method: 'DELETE',
+          }).then(response => response.json())
+        );
+        
+        const results = await Promise.all(deletePromises);
+        
+        // Check if all deletions were successful
+        const successCount = results.filter(result => result.success).length;
+        const failCount = results.length - successCount;
+        
+        if (successCount > 0) {
+          // Remove successfully deleted users from the UI
+          setUsers(users.filter(u => !selectedUsers.includes(u.id)));
+          setSelectedUsers([]);
+          
+          if (failCount === 0) {
+            pushToast(`Successfully deleted ${successCount} user(s)`, "success");
+          } else {
+            pushToast(`Deleted ${successCount} user(s), ${failCount} failed`, "warning");
+          }
+        } else {
+          pushToast("Failed to delete users", "error");
+        }
+      } catch (error) {
+        console.error("Error deleting users:", error);
+        pushToast("Error deleting users from server", "error");
+      }
     }
   };
 
@@ -266,6 +391,21 @@ export default function AdminDashboard() {
     setCurrentUser(u);
     setAuthChecked(true);
   }, []);
+
+  // Fetch users when component mounts or when activeTab changes to "users"
+  useEffect(() => {
+    if (currentUser && activeTab === "users") {
+      fetchUsers();
+    }
+  }, [currentUser, activeTab]);
+
+  // Fetch monthly ride data when component mounts or when activeTab changes to "analytics"
+  useEffect(() => {
+    if (currentUser && activeTab === "analytics") {
+      fetchMonthlyRides();
+      fetchRideTypes();
+    }
+  }, [currentUser, activeTab]);
 
   // Load profile/settings
   useEffect(() => {
@@ -815,13 +955,7 @@ export default function AdminDashboard() {
                               e.currentTarget.style.background = '#ef4444';
                               e.currentTarget.style.transform = 'scale(1)';
                             }}
-                            onClick={() => {
-                              if (window.confirm(`Delete ${selectedUsers.length} selected user(s)?`)) {
-                                setUsers(users.filter(u => !selectedUsers.includes(u.id)));
-                                pushToast(`Deleted ${selectedUsers.length} user(s)`, "success");
-                                setSelectedUsers([]);
-                              }
-                            }}
+                            onClick={handleBulkDelete}
                           >
                             🗑️ Delete Selected ({selectedUsers.length})
                           </button>
@@ -845,11 +979,24 @@ export default function AdminDashboard() {
                       </div>
                       <section className="ud-panel chart-panel">
                         <div className="chart-container">
-                          <LineChart
-                            data={MONTHLY_RIDE_DATA.data}
-                            labels={MONTHLY_RIDE_DATA.labels}
-                            title="Monthly Rides"
-                          />
+                          {loadingMonthlyRides ? (
+                            <div style={{ 
+                              display: 'flex', 
+                              justifyContent: 'center', 
+                              alignItems: 'center', 
+                              height: '300px',
+                              fontSize: '1.2rem',
+                              color: '#666'
+                            }}>
+                              Loading monthly ride data...
+                            </div>
+                          ) : (
+                            <LineChart
+                              data={monthlyRideData.data}
+                              labels={monthlyRideData.labels}
+                              title="Monthly Rides"
+                            />
+                          )}
                         </div>
                       </section>
                     </div>
@@ -861,12 +1008,25 @@ export default function AdminDashboard() {
                       </div>
                       <section className="ud-panel chart-panel">
                         <div className="chart-container pie">
-                          <PieChart
-                            data={RIDE_TYPE_DATA.data}
-                            labels={RIDE_TYPE_DATA.labels}
-                            colors={RIDE_TYPE_DATA.colors}
-                            title="Ride Types"
-                          />
+                          {loadingRideTypes ? (
+                            <div style={{ 
+                              display: 'flex', 
+                              justifyContent: 'center', 
+                              alignItems: 'center', 
+                              height: '300px',
+                              fontSize: '1.2rem',
+                              color: '#666'
+                            }}>
+                              Loading ride type data...
+                            </div>
+                          ) : (
+                            <PieChart
+                              data={rideTypeData.data}
+                              labels={rideTypeData.labels}
+                              colors={rideTypeData.colors}
+                              title="Ride Types"
+                            />
+                          )}
                         </div>
                       </section>
                     </div>
