@@ -8,9 +8,6 @@ export default function Navbar() {
   const nav = useNavigate();
   const user = getUser();
 
-  // ✅ DEBUG - check what user is
-  console.log("Navbar user value:", user);
-
   const isUser = user && user.role === "user";
   const isAdmin = user && user.role === "admin";
 
@@ -27,7 +24,7 @@ export default function Navbar() {
           <img src={LOGO_SRC} alt="MastoRide logo" className="mr-logo" />
         </Link>
 
-        {/* Center links */}
+        {/* Center links - absolutely centered */}
         <nav className="mr-links" aria-label="Primary">
           <NavLink to="/" end className="mr-link">Home</NavLink>
           <NavLink to="/about" className="mr-link">About</NavLink>
@@ -38,7 +35,6 @@ export default function Navbar() {
 
         {/* Right side actions */}
         <div className="mr-actions">
-          {/* ✅ TEMP: always show login buttons */}
           {!user && (
             <>
               <Link to="/login" className="mr-btn mr-btn-ghost">Log in</Link>
