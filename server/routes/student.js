@@ -9,7 +9,7 @@ const router = express.Router();
  */
 router.post("/", async (req, res) => {
   try {
-    const { name, email, studentId, phone, major, status } = req.body;
+    const { name, email, studentId, phone, major } = req.body;
 
     if (!name || !email || !studentId) {
       return res.status(400).json({ error: "name, email and studentId required" });
@@ -20,20 +20,13 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Student with that email or studentId already exists" });
     }
 
-    const studentData = {
+    const student = await Student.create({
       name,
       email: email.toLowerCase(),
       studentId,
       phone,
       major,
-    };
-
-    // Only add status if provided
-    if (status) {
-      studentData.status = status;
-    }
-
-    const student = await Student.create(studentData);
+    });
 
     return res.status(201).json({ message: "Student created", student });
   } catch (err) {

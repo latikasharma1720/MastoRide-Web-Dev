@@ -33,6 +33,18 @@ const RECENT_RIDES = [
   { id: 4, user: "Emily Davis", pickup: "Engineering", dropoff: "Mall", fare: "$18.50", date: "Oct 19", status: "Cancelled" },
 ];
 
+// Monthly ride data for line chart
+const MONTHLY_RIDE_DATA = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  data: [245, 198, 312, 289, 401, 456, 523, 489, 612, 578, 445, 398],
+};
+
+// Ride type distribution for pie chart
+const RIDE_TYPE_DATA = {
+  labels: ['Economy', 'Premium', 'XL', 'Shared'],
+  data: [45, 25, 15, 15],
+  colors: ['#3B82F6', '#F59E0B', '#10B981', '#EF4444'],
+};
 
 // Line Chart (Chart.js via CDN)
 function LineChart({ data, labels, title }) {
@@ -198,21 +210,6 @@ export default function AdminDashboard() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
 
-  // Monthly ride data state
-  const [monthlyRideData, setMonthlyRideData] = useState({
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  });
-  const [loadingMonthlyRides, setLoadingMonthlyRides] = useState(false);
-
-  // Ride type data state
-  const [rideTypeData, setRideTypeData] = useState({
-    labels: ['Economy', 'Premium', 'XL'],
-    data: [0, 0, 0],
-    colors: ['#3B82F6', '#F59E0B', '#10B981'],
-  });
-  const [loadingRideTypes, setLoadingRideTypes] = useState(false);
-
   // Filter users based on search query
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -237,55 +234,6 @@ export default function AdminDashboard() {
       pushToast("Error loading users from server", "error");
     } finally {
       setLoadingUsers(false);
-    }
-  };
-
-  // Fetch monthly ride statistics from backend
-  const fetchMonthlyRides = async () => {
-    setLoadingMonthlyRides(true);
-    try {
-      const response = await fetch('http://localhost:5001/api/admin/monthly-rides');
-      const data = await response.json();
-      
-      if (data.success) {
-        setMonthlyRideData({
-          labels: data.labels,
-          data: data.counts,
-        });
-        console.log('Loaded monthly ride statistics from database');
-      } else {
-        pushToast("Failed to load monthly ride data", "error");
-      }
-    } catch (error) {
-      console.error("Error fetching monthly rides:", error);
-      pushToast("Error loading monthly ride data from server", "error");
-    } finally {
-      setLoadingMonthlyRides(false);
-    }
-  };
-
-  // Fetch ride type distribution from backend
-  const fetchRideTypes = async () => {
-    setLoadingRideTypes(true);
-    try {
-      const response = await fetch('http://localhost:5001/api/admin/ride-types');
-      const data = await response.json();
-      
-      if (data.success) {
-        setRideTypeData({
-          labels: data.labels,
-          data: data.data,
-          colors: data.colors,
-        });
-        console.log('Loaded ride type distribution from database');
-      } else {
-        pushToast("Failed to load ride type data", "error");
-      }
-    } catch (error) {
-      console.error("Error fetching ride types:", error);
-      pushToast("Error loading ride type data from server", "error");
-    } finally {
-      setLoadingRideTypes(false);
     }
   };
 
@@ -396,14 +344,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (currentUser && activeTab === "users") {
       fetchUsers();
-    }
-  }, [currentUser, activeTab]);
-
-  // Fetch monthly ride data when component mounts or when activeTab changes to "analytics"
-  useEffect(() => {
-    if (currentUser && activeTab === "analytics") {
-      fetchMonthlyRides();
-      fetchRideTypes();
     }
   }, [currentUser, activeTab]);
 
@@ -979,24 +919,11 @@ export default function AdminDashboard() {
                       </div>
                       <section className="ud-panel chart-panel">
                         <div className="chart-container">
-                          {loadingMonthlyRides ? (
-                            <div style={{ 
-                              display: 'flex', 
-                              justifyContent: 'center', 
-                              alignItems: 'center', 
-                              height: '300px',
-                              fontSize: '1.2rem',
-                              color: '#666'
-                            }}>
-                              Loading monthly ride data...
-                            </div>
-                          ) : (
-                            <LineChart
-                              data={monthlyRideData.data}
-                              labels={monthlyRideData.labels}
-                              title="Monthly Rides"
-                            />
-                          )}
+                          <LineChart
+                            data={MONTHLY_RIDE_DATA.data}
+                            labels={MONTHLY_RIDE_DATA.labels}
+                            title="Monthly Rides"
+                          />
                         </div>
                       </section>
                     </div>
@@ -1008,25 +935,12 @@ export default function AdminDashboard() {
                       </div>
                       <section className="ud-panel chart-panel">
                         <div className="chart-container pie">
-                          {loadingRideTypes ? (
-                            <div style={{ 
-                              display: 'flex', 
-                              justifyContent: 'center', 
-                              alignItems: 'center', 
-                              height: '300px',
-                              fontSize: '1.2rem',
-                              color: '#666'
-                            }}>
-                              Loading ride type data...
-                            </div>
-                          ) : (
-                            <PieChart
-                              data={rideTypeData.data}
-                              labels={rideTypeData.labels}
-                              colors={rideTypeData.colors}
-                              title="Ride Types"
-                            />
-                          )}
+                          <PieChart
+                            data={RIDE_TYPE_DATA.data}
+                            labels={RIDE_TYPE_DATA.labels}
+                            colors={RIDE_TYPE_DATA.colors}
+                            title="Ride Types"
+                          />
                         </div>
                       </section>
                     </div>
