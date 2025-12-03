@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { setUser } from "../utils/session";
 import Navbar from "../components/Navbar";
+import API_BASE_URL from "../utils/api";
 
 export default function Login() {
   const navigate = useNavigate();

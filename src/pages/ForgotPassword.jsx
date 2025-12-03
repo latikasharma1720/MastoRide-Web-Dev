@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import API_BASE_URL from "../utils/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
