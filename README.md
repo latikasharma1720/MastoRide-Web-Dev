@@ -1,6 +1,6 @@
 
 
-#  **MastoRide — Ride-Booking Platform for PFW Students**
+#  MastoRide — Ride-Booking Platform for PFW Students
 
 ### **Full Stack Web Development — Group Project**
 
