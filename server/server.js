@@ -65,3 +65,4 @@ if (process.env.NODE_ENV !== "test") {
 
 // VERY IMPORTANT: Export app for testing
 module.exports = app;
+
