@@ -29,10 +29,11 @@ export default function ForgotPassword() {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5001/api/auth/forgot-password",
+        `${API_BASE_URL}/api/auth/forgot-password`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ email: trimmed }),
         }
       );

@@ -251,9 +251,10 @@ export default function UserDashboard() {
             pushToast("Please complete ride details before payment.", "error");
           } else {
             // Create booking
-            const createRes = await fetch("http://localhost:5001/api/booking", {
+            const createRes = await fetch(`${API_BASE_URL}/api/booking`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify(payload),
             });
             const createData = await createRes.json();
@@ -264,9 +265,10 @@ export default function UserDashboard() {
               const bookingId = createData.booking?._id;
               // Mark booking completed to generate ride history
               if (bookingId) {
-                await fetch(`http://localhost:5001/api/booking/${bookingId}`, {
+                await fetch(`${API_BASE_URL}/api/booking/${bookingId}`, {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
+                  credentials: "include",
                   body: JSON.stringify({
                     status: "completed",
                     actualFare: fare ? parseFloat(fare) : payload.estimatedFare || 0,

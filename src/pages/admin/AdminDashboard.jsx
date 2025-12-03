@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import { getUser } from "../../utils/session";
 import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
+import API_BASE_URL from "../../utils/api";
 
 const NAV_ITEMS = [
   { id: "feedback", label: "Feedback", icon: "💬" },
@@ -223,7 +224,9 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
-      const response = await fetch('http://localhost:5001/api/admin/users');
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
+        credentials: "include",
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -244,7 +247,9 @@ export default function AdminDashboard() {
   const fetchMonthlyRides = async () => {
     setLoadingMonthlyRides(true);
     try {
-      const response = await fetch('http://localhost:5001/api/admin/monthly-rides');
+      const response = await fetch(`${API_BASE_URL}/api/admin/monthly-rides`, {
+        credentials: "include",
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -268,7 +273,9 @@ export default function AdminDashboard() {
   const fetchRideTypes = async () => {
     setLoadingRideTypes(true);
     try {
-      const response = await fetch('http://localhost:5001/api/admin/ride-types');
+      const response = await fetch(`${API_BASE_URL}/api/admin/ride-types`, {
+        credentials: "include",
+      });
       const data = await response.json();
       
       if (data.success) {
@@ -293,8 +300,9 @@ export default function AdminDashboard() {
   const handleDeleteUser = async (userId, userName) => {
     if (window.confirm(`Are you sure you want to delete ${userName}?`)) {
       try {
-        const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
           method: 'DELETE',
+          credentials: "include",
         });
         
         const data = await response.json();
@@ -324,8 +332,9 @@ export default function AdminDashboard() {
       try {
         // Delete each user using the correct admin API endpoint
         const deletePromises = selectedUsers.map(userId =>
-          fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+          fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
             method: 'DELETE',
+            credentials: "include",
           }).then(response => response.json())
         );
         
