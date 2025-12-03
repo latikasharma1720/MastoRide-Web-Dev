@@ -26,7 +26,10 @@ export default function Signup() {
       setLoading(true);
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+        const apiUrl = `${API_BASE_URL}/api/auth/signup`;
+        console.log("🔍 Attempting signup to:", apiUrl);
+        
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -46,10 +49,16 @@ export default function Signup() {
             state: { message: "Account created! Please log in." },
           });
         } else {
+          console.error("❌ Signup failed:", data);
           setErrors({ api: data.error || "Signup failed" });
         }
       } catch (error) {
-        console.error("Signup request error:", error); // 👈 extra debug info
+        console.error("🚨 Signup request error:", error);
+        console.error("Error details:", {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
         setErrors({
           api: "Cannot connect to server. Make sure backend is running.",
         });
