@@ -7,30 +7,19 @@ require("dotenv").config();
 
 const app = express();
 
-// ---------- CORS ----------
-const allowedOrigins = [
-  "http://localhost:3000", // local dev
-  "https://mastoride-frontend-deploy-production.up.railway.app", // 👈 your Railway frontend
-];
-
+// CORS
 app.use(
   cors({
-    origin(origin, cb) {
-      // allow tools like Postman / curl (no origin header)
-      if (!origin) return cb(null, true);
-      if (allowedOrigins.includes(origin)) return cb(null, true);
-      return cb(new Error("CORS not allowed"), false);
-    },
-    credentials: true,
+    origin: "http://localhost:3000",
   })
 );
 
-// ---------- JSON body parser ----------
+// JSON body parser
 app.use(express.json());
 
 console.log("Starting server...");
 
-// ---------- MongoDB connect ----------
+// MongoDB connect
 const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/mastoride";
 if (!process.env.MONGO_URL) {
   console.warn("Warning: MONGO_URL not set — using fallback:", mongoUrl);
@@ -41,7 +30,7 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
-// ---------- Routes ----------
+// Routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
@@ -57,7 +46,7 @@ app.use("/api/ride-history", rideHistoryRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/api/admin", adminRoutes);
 
-// ---------- Test routes ----------
+// Test routes
 app.get("/", (req, res) => {
   res.json({ message: "Server is running" });
 });
@@ -66,12 +55,14 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
-// ---------- Start server (except in tests) ----------
+// Only start server if NOT in test mode
 if (process.env.NODE_ENV !== "test") {
-  const PORT = process.env.PORT || 5001; // 👈 IMPORTANT for Railway
+  const PORT = 5001;
   app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`✅ Server running on http://localhost:${PORT}`);
   });
 }
 
+// VERY IMPORTANT: Export app for testing
 module.exports = app;
+
