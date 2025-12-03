@@ -297,6 +297,7 @@ export default function UserDashboard() {
         }
       })();
     }, 800);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, badgesInitialized, fare, ride, settings, profile]);
   if (!authChecked) return null;
   if (!currentUser || (currentUser.role !== "user" && currentUser.role !== "student")) return <Navigate to="/login" replace />;

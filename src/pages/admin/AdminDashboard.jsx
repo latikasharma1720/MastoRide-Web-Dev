@@ -414,6 +414,7 @@ export default function AdminDashboard() {
       fetchMonthlyRides();
       fetchRideTypes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, activeTab]);
 
   // Load profile/settings
