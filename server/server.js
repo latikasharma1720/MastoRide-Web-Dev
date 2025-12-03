@@ -11,6 +11,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://mastoride.vercel.app",
+  "https://mastoride-web-dev-production-d469.up.railway.app",
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -21,7 +22,7 @@ app.use(
     origin: function (origin, callback) {
       console.log("🌍 Request from origin:", origin);
       
-      // Allow requests with no origin (like mobile apps or curl requests)
+      // Allow requests with no origin (same-domain requests, mobile apps, curl)
       if (!origin) return callback(null, true);
       
       if (allowedOrigins.indexOf(origin) !== -1) {
