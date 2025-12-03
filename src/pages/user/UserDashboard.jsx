@@ -6,6 +6,7 @@ import { getUser } from "../../utils/session";
 import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
 import MapBlock from "../../components/MapBlock";
+import API_BASE_URL from "../../utils/api";
 
 const NAV_ITEMS = [
   { id: "profile", label: "Profile", icon: "👤" },
