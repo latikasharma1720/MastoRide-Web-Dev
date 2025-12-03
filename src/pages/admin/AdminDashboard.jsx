@@ -19,20 +19,20 @@ const LS_KEYS = {
   sidebar: "admin_sidebar_open",
 };
 
-const STATS = [
-  { id: "users", label: "Total Users", value: "1,247", icon: "👥", trend: "+12%" },
-  { id: "rides", label: "Total Rides", value: "3,856", icon: "🚗", trend: "+23%" },
-  { id: "drivers", label: "Active Drivers", value: "42", icon: "👨‍✈️", trend: "+5%" },
-  { id: "revenue", label: "Revenue", value: "$18,450", icon: "💰", trend: "+18%" },
-];
+// const STATS = [
+//   { id: "users", label: "Total Users", value: "1,247", icon: "👥", trend: "+12%" },
+//   { id: "rides", label: "Total Rides", value: "3,856", icon: "🚗", trend: "+23%" },
+//   { id: "drivers", label: "Active Drivers", value: "42", icon: "👨‍✈️", trend: "+5%" },
+//   { id: "revenue", label: "Revenue", value: "$18,450", icon: "💰", trend: "+18%" },
+// ];
 
 
-const RECENT_RIDES = [
-  { id: 1, user: "John Doe", pickup: "Campus Center", dropoff: "Jefferson Pointe", fare: "$12.50", date: "Oct 22", status: "Completed" },
-  { id: 2, user: "Sarah Smith", pickup: "Dorms", dropoff: "Airport", fare: "$22.75", date: "Oct 21", status: "Completed" },
-  { id: 3, user: "Mike Johnson", pickup: "Library", dropoff: "Union", fare: "$5.00", date: "Oct 20", status: "Completed" },
-  { id: 4, user: "Emily Davis", pickup: "Engineering", dropoff: "Mall", fare: "$18.50", date: "Oct 19", status: "Cancelled" },
-];
+// const RECENT_RIDES = [
+//   { id: 1, user: "John Doe", pickup: "Campus Center", dropoff: "Jefferson Pointe", fare: "$12.50", date: "Oct 22", status: "Completed" },
+//   { id: 2, user: "Sarah Smith", pickup: "Dorms", dropoff: "Airport", fare: "$22.75", date: "Oct 21", status: "Completed" },
+//   { id: 3, user: "Mike Johnson", pickup: "Library", dropoff: "Union", fare: "$5.00", date: "Oct 20", status: "Completed" },
+//   { id: 4, user: "Emily Davis", pickup: "Engineering", dropoff: "Mall", fare: "$18.50", date: "Oct 19", status: "Cancelled" },
+// ];
 
 
 // Line Chart (Chart.js via CDN)
@@ -197,7 +197,6 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(false);
 
   // Monthly ride data state
   const [monthlyRideData, setMonthlyRideData] = useState({
@@ -222,7 +221,6 @@ export default function AdminDashboard() {
 
   // Fetch users from backend
   const fetchUsers = async () => {
-    setLoadingUsers(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         credentials: "include",
@@ -238,8 +236,6 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error fetching users:", error);
       pushToast("Error loading users from server", "error");
-    } finally {
-      setLoadingUsers(false);
     }
   };
 
@@ -406,6 +402,7 @@ export default function AdminDashboard() {
     if (currentUser && activeTab === "users") {
       fetchUsers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, activeTab]);
 
   // Fetch monthly ride data when component mounts or when activeTab changes to "analytics"
