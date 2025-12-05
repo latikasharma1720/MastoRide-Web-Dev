@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { getUser } from "../../utils/session";
+import API_BASE_URL from "../../utils/api";
 
 export default function BookRide() {
   const user = getUser();
@@ -34,11 +35,12 @@ export default function BookRide() {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/booking", {
+      const response = await fetch(`${API_BASE_URL}/api/booking`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           studentId: user?.email?.split("@")[0] || "student",
           studentEmail: user?.email || "",

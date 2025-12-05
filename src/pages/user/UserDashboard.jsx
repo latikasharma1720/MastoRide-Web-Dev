@@ -6,6 +6,7 @@ import { getUser } from "../../utils/session";
 import { useToast } from "../../components/ui-kit";
 import { getProfile, saveProfile, getSettings, saveSettings } from "../../utils/data";
 import MapBlock from "../../components/MapBlock";
+import API_BASE_URL from "../../utils/api";
 
 const NAV_ITEMS = [
   { id: "profile", label: "Profile", icon: "👤" },
@@ -251,9 +252,10 @@ export default function UserDashboard() {
             pushToast("Please complete ride details before payment.", "error");
           } else {
             // Create booking
-            const createRes = await fetch("http://localhost:5001/api/booking", {
+            const createRes = await fetch(`${API_BASE_URL}/api/booking`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify(payload),
             });
             const createData = await createRes.json();
@@ -264,9 +266,10 @@ export default function UserDashboard() {
               const bookingId = createData.booking?._id;
               // Mark booking completed to generate ride history
               if (bookingId) {
-                await fetch(`http://localhost:5001/api/booking/${bookingId}`, {
+                await fetch(`${API_BASE_URL}/api/booking/${bookingId}`, {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
+                  credentials: "include",
                   body: JSON.stringify({
                     status: "completed",
                     actualFare: fare ? parseFloat(fare) : payload.estimatedFare || 0,
@@ -294,6 +297,7 @@ export default function UserDashboard() {
         }
       })();
     }, 800);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, badgesInitialized, fare, ride, settings, profile]);
   if (!authChecked) return null;
   if (!currentUser || (currentUser.role !== "user" && currentUser.role !== "student")) return <Navigate to="/login" replace />;

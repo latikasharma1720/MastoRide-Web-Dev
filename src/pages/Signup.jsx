@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import API_BASE_URL from "../utils/api";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -25,11 +26,15 @@ export default function Signup() {
       setLoading(true);
 
       try {
-        const response = await fetch("http://localhost:5001/api/auth/signup", {
+        const apiUrl = `${API_BASE_URL}/api/auth/signup`;
+        console.log("🔍 Attempting signup to:", apiUrl);
+        
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             email: email,
             password: password,
@@ -44,10 +49,16 @@ export default function Signup() {
             state: { message: "Account created! Please log in." },
           });
         } else {
+          console.error("❌ Signup failed:", data);
           setErrors({ api: data.error || "Signup failed" });
         }
       } catch (error) {
-        console.error("Signup request error:", error); // 👈 extra debug info
+        console.error("🚨 Signup request error:", error);
+        console.error("Error details:", {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
         setErrors({
           api: "Cannot connect to server. Make sure backend is running.",
         });

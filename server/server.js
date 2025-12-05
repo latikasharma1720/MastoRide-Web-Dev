@@ -7,10 +7,33 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS
+// CORS - Allow both local development and production frontend
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://mastoride.vercel.app",
+  "https://mastoride-web-dev-production-d469.up.railway.app",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+console.log("🔐 Allowed CORS origins:", allowedOrigins);
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: function (origin, callback) {
+      console.log("🌍 Request from origin:", origin);
+      
+      // Allow requests with no origin (same-domain requests, mobile apps, curl)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        console.log("✅ Origin allowed:", origin);
+        callback(null, true);
+      } else {
+        console.log("❌ Origin blocked:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 
@@ -57,7 +80,7 @@ app.get("/health", (req, res) => {
 
 // Only start server if NOT in test mode
 if (process.env.NODE_ENV !== "test") {
-  const PORT = 5001;
+  const PORT = process.env.PORT || 5001;
   app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
   });
